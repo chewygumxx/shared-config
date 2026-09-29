@@ -71,4 +71,4 @@ jobs:
             - name: Publish
               env:
                   DIR: ${{ steps.package.outputs.dir }}
-              run: npm publish --workspace "$DIR"
+              run: npm stage publish --workspace "$DIR"

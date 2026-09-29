@@ -2,7 +2,8 @@
 
 remark-lint's recommended and consistency presets with frontmatter and GFM
 support, `-` list bullets, and an 80-column limit on prose. Code, headings,
-tables and unbreakable links may exceed it.
+tables and unbreakable links may exceed it. GitHub alerts such as
+`> [!NOTE]` are not mistaken for undefined references.
 
 ```sh
 npm install --save-dev remark-cli @chewygumxx/remark-preset

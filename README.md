@@ -8,6 +8,7 @@ that each repository's local hooks and its CI apply the same rules.
 | [`@chewygumxx/commitlint-config`](packages/commitlint-config) | commitlint rules and the commitizen prompt   |
 | [`@chewygumxx/biome-config`](packages/biome-config)           | Biome formatting, linting and import sorting |
 | [`@chewygumxx/remark-preset`](packages/remark-preset)         | remark-lint rules for Markdown               |
+| [`@chewygumxx/yamllint-config`](packages/yamllint-config)     | yamllint rules that agree with prettier      |
 
 Shared CI lives in
 [`chewygumxx/.github`](https://github.com/chewygumxx/.github); new repositories

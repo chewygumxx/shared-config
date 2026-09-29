@@ -33,5 +33,10 @@ export default defineConfig({
             fullName: "yamllint",
             description: "@chewygumxx/yamllint-config",
         },
+        {
+            name: "create-repo",
+            fullName: "create-repo",
+            description: "@chewygumxx/create-repo",
+        },
     ],
 });

@@ -8,7 +8,15 @@
         "noEmit": true,
         "allowJs": true,
         "checkJs": true,
+        "types": ["node"],
         "skipLibCheck": true
     },
-    "include": [".commitlintrc.mts", "packages/*/*.js", "packages/*/*.d.ts"]
+    "include": [
+        ".commitlintrc.mts",
+        "packages/*/*.js",
+        "packages/*/*.d.ts",
+        "packages/*/bin/*.js",
+        "packages/*/lib/*.js",
+        "packages/*/test/*.js"
+    ]
 }

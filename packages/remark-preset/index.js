@@ -14,6 +14,7 @@
 import remarkFrontmatter from "remark-frontmatter";
 import remarkGfm from "remark-gfm";
 import remarkLintMaximumLineLength from "remark-lint-maximum-line-length";
+import remarkLintNoUndefinedReferences from "remark-lint-no-undefined-references";
 import remarkPresetLintConsistent from "remark-preset-lint-consistent";
 import remarkPresetLintRecommended from "remark-preset-lint-recommended";
 
@@ -31,6 +32,12 @@ const preset = {
         // remark-lint drops a warning positioned after the last node, so an
         // over-long final line of a file goes unreported.
         [remarkLintMaximumLineLength, 80],
+        // GitHub renders `> [!NOTE]` and its siblings as alerts, not as
+        // references.
+        [
+            remarkLintNoUndefinedReferences,
+            { allow: [/^!(?:note|tip|important|warning|caution)$/i] },
+        ],
     ],
 };
 

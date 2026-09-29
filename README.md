@@ -30,4 +30,5 @@ npm run check
 
 Each package is versioned independently. Bump its `version`, commit, and push a
 tag named `<package>@<version>`, such as `biome-config@1.1.0`; the publish
-workflow releases that package with provenance.
+workflow stages that package with provenance. Approve the staged version on
+npmjs.com to release it.

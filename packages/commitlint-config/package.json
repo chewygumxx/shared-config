@@ -1,0 +1,43 @@
+{
+    "name": "@chewygumxx/commitlint-config",
+    "version": "1.0.0",
+    "description": "Shared commitlint configuration for chewygumxx repositories",
+    "keywords": [
+        "commitlint",
+        "commitlintconfig",
+        "conventional-commits"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/commitlint-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/commitlint-config"
+    },
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./index.d.ts",
+            "default": "./index.js"
+        }
+    },
+    "files": [
+        "index.js",
+        "index.d.ts"
+    ],
+    "engines": {
+        "node": ">=22"
+    },
+    "dependencies": {
+        "@commitlint/config-conventional": "^21.2.2",
+        "@commitlint/types": "^21.2.2",
+        "conventional-changelog-conventionalcommits": "^10.4.0"
+    },
+    "peerDependencies": {
+        "@commitlint/cli": "^21.2.2"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

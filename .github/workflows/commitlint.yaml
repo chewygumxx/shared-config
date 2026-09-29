@@ -1,0 +1,30 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.github/workflows/commitlint.yaml
+#
+#
+
+name: Lint Commit Messages
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+    workflow_dispatch: {}
+
+permissions:
+    contents: read
+    pull-requests: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    commitlint:
+        uses: chewygumxx/.github/.github/workflows/commitlint.yaml@v1

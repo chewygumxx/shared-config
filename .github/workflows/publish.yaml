@@ -8,14 +8,16 @@
 #
 #
 
-# Publishes one workspace package per `<package>@<version>` tag, e.g.
-# `biome-config@1.1.0` publishes `packages/biome-config` if its version
-# matches.
+# Stages one workspace package per `<package>@<version>` tag, e.g.
+# `biome-config@1.1.0` stages `packages/biome-config` if its version matches.
+# A staged version is not installable until it is approved on npmjs.com with
+# the maintainer's 2FA, so this workflow alone can never release a package.
 #
 # Authentication is npm trusted publishing: npm exchanges this job's OIDC
-# token for a short-lived publish credential, so no NPM_TOKEN secret exists.
-# Each package must first be published once by hand, then have this
-# repository and workflow added under its npm Settings > Trusted Publisher.
+# token for a short-lived credential, so no NPM_TOKEN secret exists. Each
+# package must first be published once by hand, then have this repository
+# and workflow added under its npm Settings > Trusted Publisher with the
+# stage publish permission.
 
 name: Publish
 

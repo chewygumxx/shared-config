@@ -28,5 +28,10 @@ export default defineConfig({
             fullName: "remark",
             description: "@chewygumxx/remark-preset",
         },
+        {
+            name: "yamllint",
+            fullName: "yamllint",
+            description: "@chewygumxx/yamllint-config",
+        },
     ],
 });

@@ -1,0 +1,30 @@
+{
+    "name": "@chewygumxx/biome-config",
+    "version": "1.0.0",
+    "description": "Shared Biome configuration for chewygumxx repositories",
+    "keywords": [
+        "biome",
+        "biome-config"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/biome-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/biome-config"
+    },
+    "exports": {
+        ".": "./config.json",
+        "./biome": "./config.json"
+    },
+    "files": [
+        "config.json"
+    ],
+    "peerDependencies": {
+        "@biomejs/biome": "^2.5.14"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

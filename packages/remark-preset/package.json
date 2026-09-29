@@ -1,0 +1,40 @@
+{
+    "name": "@chewygumxx/remark-preset",
+    "version": "1.0.0",
+    "description": "Shared remark-lint preset for chewygumxx repositories",
+    "keywords": [
+        "remark",
+        "remark-lint",
+        "remark-preset",
+        "markdown"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/remark-preset#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/remark-preset"
+    },
+    "type": "module",
+    "exports": "./index.js",
+    "files": [
+        "index.js"
+    ],
+    "engines": {
+        "node": ">=22"
+    },
+    "dependencies": {
+        "remark-frontmatter": "^5.0.0",
+        "remark-gfm": "^4.0.1",
+        "remark-lint-maximum-line-length": "^4.1.1",
+        "remark-preset-lint-consistent": "^6.0.1",
+        "remark-preset-lint-recommended": "^7.0.1"
+    },
+    "peerDependencies": {
+        "remark-cli": "^12.0.1"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

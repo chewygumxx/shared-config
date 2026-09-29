@@ -1,0 +1,28 @@
+{
+    "name": "@chewygumxx/yamllint-config",
+    "version": "1.0.0",
+    "description": "Shared yamllint configuration for chewygumxx repositories",
+    "keywords": [
+        "yamllint",
+        "yamllint-config",
+        "yaml"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/yamllint-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/yamllint-config"
+    },
+    "exports": {
+        ".": "./config.yaml",
+        "./config.yaml": "./config.yaml"
+    },
+    "files": [
+        "config.yaml"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

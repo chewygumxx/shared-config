@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/remark-preset",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Shared remark-lint preset for chewygumxx repositories",
     "keywords": [
         "remark",

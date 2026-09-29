@@ -1,0 +1,48 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.github/workflows/ci.yaml
+#
+#
+
+# The shared standard checks (commitlint, header sync, generic lint and
+# format), then this repository's own `npm run check` against the commit the
+# header sync pushed. See chewygumxx/.github for each part. There is no
+# .repo-metadata.jsonc here, so the metadata sync is off.
+
+name: CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+    workflow_dispatch: {}
+
+permissions:
+    contents: write
+    pull-requests: read
+
+# Not cancelled in progress: a newer run must not interrupt the header sync
+# part-way through its commit.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    standard:
+        uses: chewygumxx/.github/.github/workflows/standard.yaml@v1
+        with:
+            metadata-sync: false
+
+    check:
+        needs: standard
+        if: ${{ !cancelled() }}
+        permissions:
+            contents: read
+        uses: chewygumxx/.github/.github/workflows/lint.yaml@v1
+        with:
+            ref: ${{ needs.standard.outputs.sha }}

@@ -35,7 +35,6 @@ min_version = "2026.9.0"
 [tools]
 node = "24"
 
-# ** YAML **
 # yamllint is a Python tool, installed with the uv pinned beside it.
 # Configuration is imported from `@chewygumxx/yamllint-config` in `package.json`
 # prettier, which formats YAML, is pinned within `package.json`.

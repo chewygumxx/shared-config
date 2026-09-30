@@ -19,5 +19,8 @@ npm install --save-dev commitizen @chewygumxx/cz-commitlint
 ```
 
 The adapter wraps upstream's public `prompter` and relabels its choices before
-inquirer shows them, so no patch to `node_modules` is needed. Emoji prefixes
-and the value committed are unchanged.
+inquirer shows them, so no patch to `node_modules` is needed. Emoji prefixes,
+descriptions and the value committed are unchanged, and an entry without a
+`title` keeps upstream's `<key>:` label. Should upstream change how it labels
+choices, the adapter falls back to upstream's labels and emits a
+`CzCommitlintWarning`.

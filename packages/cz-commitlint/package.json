@@ -16,6 +16,7 @@
         "directory": "packages/cz-commitlint"
     },
     "type": "module",
+    "main": "./index.js",
     "exports": {
         ".": {
             "types": "./index.d.ts",

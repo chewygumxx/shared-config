@@ -8,10 +8,19 @@
 #
 #
 
+# General
 .env*
 *.local.*
 
+# Node
 node_modules/
-/.herdr/
-/.claude/worktrees/
+
+# Herdr
+.herdr/
+
+# Claude
+.mcp.json
+.remember/
+.claude.json
+.claude/worktrees/
 

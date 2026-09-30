@@ -19,8 +19,8 @@ node_modules/
 .herdr/
 
 # Claude
-.mcp.json
-.remember/
 .claude.json
-.claude/worktrees/
+/.remember/
+/.superpowers/
+/.claude/worktrees/
 

@@ -38,5 +38,10 @@ export default defineConfig({
             fullName: "create-repo",
             description: "@chewygumxx/create-repo",
         },
+        {
+            name: "claude",
+            fullName: "Claude",
+            description: "Claude Assets ie. CLAUDE.md and .claude/*",
+        },
     ],
 });

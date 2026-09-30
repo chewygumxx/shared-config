@@ -34,11 +34,6 @@ export default defineConfig({
             description: "@chewygumxx/yamllint-config",
         },
         {
-            name: "create-repo",
-            fullName: "create-repo",
-            description: "@chewygumxx/create-repo",
-        },
-        {
             name: "claude",
             fullName: "Claude",
             description: "Claude Assets ie. CLAUDE.md and .claude/*",

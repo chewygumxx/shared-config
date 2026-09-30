@@ -23,7 +23,7 @@
         "unified": "^11.0.5"
     },
     "scripts": {
-        "check": "npm run typecheck && npm run format:check && npm run lint && npm run lint:md && npm run lint:yaml && npm run test",
+        "check": "npm run typecheck && npm run format:check && npm run lint && npm run lint:md && npm run lint:yaml",
         "commit": "cz",
         "format": "biome format --write . && npm run format:yaml",
         "format:check": "biome format .",
@@ -33,8 +33,7 @@
         "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | YAMLLINT_CONFIG_FILE=node_modules/@chewygumxx/yamllint-config/config.yaml xargs -0 -r yamllint --strict",
         "postinstall": "patch-package >/dev/null",
         "prepare": "test -d node_modules/husky && husky || true",
-        "typecheck": "tsc",
-        "test": "node --test 'packages/*/test/*.test.js'"
+        "typecheck": "tsc"
     },
     "config": {
         "commitizen": {

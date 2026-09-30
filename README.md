@@ -3,13 +3,15 @@
 Shared tooling configuration for `chewygumxx` repositories, published to npm so
 that each repository's local hooks and its CI apply the same rules.
 
-| Package                                                       | Configures                                                     |
-| ------------------------------------------------------------- | -------------------------------------------------------------- |
-| [`@chewygumxx/commitlint-config`](packages/commitlint-config) | commitlint rules and the commitizen prompt                     |
-| [`@chewygumxx/biome-config`](packages/biome-config)           | Biome formatting, linting and import sorting                   |
-| [`@chewygumxx/remark-preset`](packages/remark-preset)         | remark-lint rules for Markdown                                 |
-| [`@chewygumxx/yamllint-config`](packages/yamllint-config)     | yamllint rules that agree with prettier                        |
-| [`@chewygumxx/create-repo`](packages/create-repo)             | `npm create @chewygumxx/repo`: new repositories from repo-tmpl |
+| Package                                                       | Configures                                   |
+| ------------------------------------------------------------- | -------------------------------------------- |
+| [`@chewygumxx/commitlint-config`](packages/commitlint-config) | commitlint rules and the commitizen prompt   |
+| [`@chewygumxx/biome-config`](packages/biome-config)           | Biome formatting, linting and import sorting |
+| [`@chewygumxx/remark-preset`](packages/remark-preset)         | remark-lint rules for Markdown               |
+| [`@chewygumxx/yamllint-config`](packages/yamllint-config)     | yamllint rules that agree with prettier      |
+
+`npm create @chewygumxx/repo` lives in its own repository,
+[`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
 
 Shared CI lives in
 [`chewygumxx/.github`](https://github.com/chewygumxx/.github); new repositories

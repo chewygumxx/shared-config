@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/cz-commitlint",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "commitizen adapter for commitlint that lists types and scopes by title",
     "keywords": [
         "commitizen",

@@ -19,6 +19,11 @@ export default defineConfig({
             description: "@chewygumxx/commitlint-config",
         },
         {
+            name: "cz",
+            fullName: "commitizen",
+            description: "@chewygumxx/cz-commitlint",
+        },
+        {
             name: "biome",
             fullName: "Biome",
             description: "@chewygumxx/biome-config",

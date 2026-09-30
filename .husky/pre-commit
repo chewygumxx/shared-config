@@ -26,6 +26,11 @@ if [ -n "$yaml" ]; then
             xargs -0 yamllint --strict
 fi
 
+git diff -z --cached --name-only --diff-filter=ACMR -- '*.toml' |
+    xargs -0 -r tombi format --check --offline --
+git diff -z --cached --name-only --diff-filter=ACMR -- '*.toml' |
+    xargs -0 -r tombi lint --error-on-warnings --offline --
+
 # U+2014 as UTF-8 bytes, so this file does not trip its own check.
 emdash=$(printf '\342\200\224')
 if git diff --cached -U0 | grep '^+' | grep -q "$emdash"; then

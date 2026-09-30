@@ -23,13 +23,15 @@
         "unified": "^11.0.5"
     },
     "scripts": {
-        "check": "npm run typecheck && npm run format:check && npm run lint && npm run lint:md && npm run lint:yaml",
+        "check": "npm run typecheck && npm run format:check && npm run lint && npm run lint:md && npm run lint:yaml && npm run lint:toml",
         "commit": "cz",
-        "format": "biome format --write . && npm run format:yaml",
+        "format": "biome format --write . && npm run format:yaml && npm run format:toml",
         "format:check": "biome format .",
+        "format:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --offline --",
         "format:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --write --log-level warn",
         "lint": "biome lint .",
         "lint:md": "git ls-files -z '*.md' | xargs -0 -r remark --frail --quiet --no-stdout",
+        "lint:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --check --offline -- && git ls-files -z '*.toml' | xargs -0 -r tombi lint --error-on-warnings --offline --",
         "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | YAMLLINT_CONFIG_FILE=node_modules/@chewygumxx/yamllint-config/config.yaml xargs -0 -r yamllint --strict",
         "postinstall": "patch-package >/dev/null",
         "prepare": "test -d node_modules/husky && husky || true",

@@ -1,5 +1,6 @@
 # vim:set expandtab shiftwidth=4 filetype=toml:
 # SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
 
 #
 #
@@ -13,31 +14,30 @@
 #
 # The development toolchain for this repository, in one place.
 #
-# Everything the repository runs that is not an npm package lives here, so
-# a checkout never depends on whatever the contributor happens to have on
-# `PATH`. npm packages (commitlint, Biome, remark, husky, TypeScript) are
-# pinned in `package.json` instead; together the two files are the whole
-# dependency surface. CI installs from this file via `jdx/mise-action`, so
-# the versions below are the ones CI runs.
+
+# -------------
+# File Purpose
+# -------------
+# Development tools this repository utilises, that is not an NPM package, is
+# specified here such that a checkout is never dependant upon unspecified
+# tooling. NPM package specification is instead pinned within `package.json`.
+# Together, this file and packages.json define the entire dependency surface.
+# CI refers to this file via `jdx/mise-action`, to ensure consistency.
 #
 # Backends are named explicitly rather than relying on the registry alias,
-# so the resolution is visible here and cannot change underneath the pin.
-#
+# such that resolution is detailed here and immutable.
 
 min_version = "2026.9.0"
 
+# ------
+# Tools
+# ------
 [tools]
-#
-# Runtimes
-#
 node = "24"
 
-#
-# YAML
-#
-# yamllint is a Python tool, installed with the uv pinned beside it. Its
-# rules come from `@chewygumxx/yamllint-config` in `package.json`; prettier,
-# which formats YAML, is an npm package pinned there too.
-#
+# ** YAML **
+# yamllint is a Python tool, installed with the uv pinned beside it.
+# Configuration is imported from `@chewygumxx/yamllint-config` in `package.json`
+# prettier, which formats YAML, is pinned within `package.json`.
 "aqua:astral-sh/uv" = "0.12.19"
-"pypi:yamllint"     = "1.38.0"
+"pypi:yamllint" = "1.38.0"

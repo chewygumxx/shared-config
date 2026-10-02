@@ -5,13 +5,16 @@
     "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config",
     "repository": "github:chewygumxx/shared-config",
+    "engines": {
+        "bun": ">=1.4"
+    },
     "workspaces": [
         "packages/*"
     ],
     "devDependencies": {
         "@biomejs/biome": "2.5.14",
         "@commitlint/cli": "^21.2.2",
-        "@types/node": "^24.19.0",
+        "@types/bun": "^1.4.2",
         "commitizen": "^4.3.2",
         "husky": "^9.1.7",
         "prettier": "^3.9.9",
@@ -21,9 +24,9 @@
         "unified": "^11.0.5"
     },
     "scripts": {
-        "check": "npm run typecheck && npm test && npm run format:check && npm run lint && npm run lint:md && npm run lint:yaml && npm run lint:toml",
+        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml",
         "commit": "cz",
-        "format": "biome format --write . && npm run format:yaml && npm run format:toml",
+        "format": "biome format --write . && bun run format:yaml && bun run format:toml",
         "format:check": "biome format .",
         "format:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --offline --",
         "format:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --write --log-level warn",
@@ -32,7 +35,7 @@
         "lint:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --check --offline -- && git ls-files -z '*.toml' | xargs -0 -r tombi lint --error-on-warnings --offline --",
         "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | YAMLLINT_CONFIG_FILE=node_modules/@chewygumxx/yamllint-config/config.yaml xargs -0 -r yamllint --strict",
         "prepare": "test -d node_modules/husky && husky || true",
-        "test": "node --test 'packages/*/test.js'",
+        "test": "bun test ./packages/*/test.js",
         "typecheck": "tsc"
     },
     "config": {

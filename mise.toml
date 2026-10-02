@@ -33,6 +33,10 @@ min_version = "2026.9.0"
 # Tools
 # ------
 [tools]
+# Bun installs the packages and runs the scripts and tests. Node is here only
+# for npm, which publishes the packages (`npm stage publish`, which Bun
+# cannot do).
+bun  = "1.4"
 node = "24"
 
 # yamllint is a Python tool, installed with the uv pinned beside it.

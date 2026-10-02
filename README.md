@@ -11,7 +11,7 @@ that each repository's local hooks and its CI apply the same rules.
 | [`@chewygumxx/remark-preset`](packages/remark-preset)         | remark-lint rules for Markdown                |
 | [`@chewygumxx/yamllint-config`](packages/yamllint-config)     | yamllint rules that agree with prettier       |
 
-`npm create @chewygumxx/repo` lives in its own repository,
+`bun create @chewygumxx/repo` lives in its own repository,
 [`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
 
 Shared CI lives in
@@ -21,13 +21,13 @@ which consumes these packages.
 
 ## Development
 
-This repository consumes its own packages through npm workspaces, so every
+This repository consumes its own packages through Bun workspaces, so every
 change is exercised here before it is published.
 
 ```sh
 mise install
-npm ci
-npm run check
+bun install
+bun run check
 ```
 
 ## Publishing

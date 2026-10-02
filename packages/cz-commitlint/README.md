@@ -5,7 +5,7 @@ listing each type and scope by the `title` its prompt configuration gives it,
 padded to the longest title, rather than by its value.
 
 ```sh
-npm install --save-dev commitizen @chewygumxx/cz-commitlint
+bun add --dev commitizen @chewygumxx/cz-commitlint
 ```
 
 ```json

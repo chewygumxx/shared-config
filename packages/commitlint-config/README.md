@@ -5,7 +5,7 @@ list of types and an optional list of scopes. Dependabot's signed-off version
 bumps are exempt.
 
 ```sh
-npm install --save-dev @commitlint/cli @chewygumxx/commitlint-config
+bun add --dev @commitlint/cli @chewygumxx/commitlint-config
 ```
 
 ```ts

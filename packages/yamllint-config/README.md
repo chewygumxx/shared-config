@@ -30,7 +30,7 @@ Personal configuration of yamllint that conforms to prettier's YAML output:
 ## Usage
 
 ```sh
-npm install --save-dev @chewygumxx/yamllint-config
+bun add --dev @chewygumxx/yamllint-config
 ```
 
 Name the file in `YAMLLINT_CONFIG_FILE` rather than extending it from a

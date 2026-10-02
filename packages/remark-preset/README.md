@@ -6,7 +6,7 @@ tables and unbreakable links may exceed it. GitHub alerts such as
 `> [!NOTE]` are not mistaken for undefined references.
 
 ```sh
-npm install --save-dev remark-cli @chewygumxx/remark-preset
+bun add --dev remark-cli @chewygumxx/remark-preset
 ```
 
 ```json

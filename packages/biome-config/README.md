@@ -4,8 +4,8 @@ Biome settings that take indentation and line endings from `.editorconfig`,
 respect `.gitignore`, and enable the recommended lint rules and import sorting.
 
 ```sh
-npm install --save-dev --save-exact @biomejs/biome
-npm install --save-dev @chewygumxx/biome-config
+bun add --dev --exact @biomejs/biome
+bun add --dev @chewygumxx/biome-config
 ```
 
 ```json

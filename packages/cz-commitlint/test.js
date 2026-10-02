@@ -10,11 +10,11 @@
 
 // @ts-check
 
+import { spyOn, test } from "bun:test";
 import assert from "node:assert/strict";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { prompter as upstream } from "@commitlint/cz-commitlint";
 import { prompter, relabel } from "./index.js";
@@ -171,14 +171,22 @@ test("this repository's own config lists types by title", async () => {
     assert.ok(!choices.some((name) => /\bfeat:/.test(String(name))));
 });
 
-test("an unrecognised label is kept, with a warning", (t) => {
-    const warn = t.mock.method(process, "emitWarning", () => {});
-    const choice = { name: "feat - A feature", value: "feat", short: "feat" };
-    const [question] = relabel([{ name: "type", choices: [choice] }], {
-        type: {
-            enum: { feat: { title: "Features", description: "A feature" } },
-        },
-    });
-    assert.deepEqual(question?.choices, [choice]);
-    assert.equal(warn.mock.callCount(), 1);
+test("an unrecognised label is kept, with a warning", () => {
+    const warn = spyOn(process, "emitWarning").mockImplementation(() => {});
+    try {
+        const choice = {
+            name: "feat - A feature",
+            value: "feat",
+            short: "feat",
+        };
+        const [question] = relabel([{ name: "type", choices: [choice] }], {
+            type: {
+                enum: { feat: { title: "Features", description: "A feature" } },
+            },
+        });
+        assert.deepEqual(question?.choices, [choice]);
+        assert.equal(warn.mock.calls.length, 1);
+    } finally {
+        warn.mockRestore();
+    }
 });

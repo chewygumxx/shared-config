@@ -51,11 +51,11 @@ jobs:
               with:
                   persist-credentials: false
 
-            - name: Setup Node and NPM
+            - name: Setup Bun and Node
               uses: jdx/mise-action@v4
 
-            - name: NPM Clean Install
-              run: npm ci
+            - name: Bun Install
+              run: bun install --frozen-lockfile
 
             - name: Resolve Package
               id: package
@@ -66,10 +66,12 @@ jobs:
                   version="${TAG##*@}"
                   dir="packages/$name"
                   test -f "$dir/package.json" || { echo "::error::No package at $dir"; exit 1; }
-                  actual=$(node -p "require('./$dir/package.json').version")
+                  actual=$(bun -p "require('./$dir/package.json').version")
                   test "$actual" = "$version" || { echo "::error::$dir is $actual, tag says $version"; exit 1; }
                   echo "dir=$dir" >> "$GITHUB_OUTPUT"
 
+            # npm, from mise's Node: Bun cannot stage a publish or publish by
+            # trusted publishing.
             - name: Publish
               env:
                   DIR: ${{ steps.package.outputs.dir }}

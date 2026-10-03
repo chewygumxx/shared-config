@@ -38,10 +38,5 @@ export default defineConfig({
             fullName: "yamllint",
             description: "@chewygumxx/yamllint-config",
         },
-        {
-            name: "claude",
-            fullName: "Claude",
-            description: "Claude Assets ie. CLAUDE.md and .claude/*",
-        },
     ],
 });

@@ -1,3 +1,23 @@
+---
+__cgxx: |
+  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
+  # SPDX-License-Identifier: GPL-3.0-only
+
+  #
+  #
+  # ~chewygumxx/shared-config.git
+  # ::: :/README.md
+  #
+  #
+
+ctime: 2026-10-04
+title: shared-config
+description: Repository README.md
+tags:
+  - npm
+  - config
+---
+
 # shared-config
 
 Shared tooling configuration for `chewygumxx` repositories, published to npm so

@@ -1,3 +1,23 @@
+---
+__cgxx: |
+  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
+  # SPDX-License-Identifier: GPL-3.0-only
+
+  #
+  #
+  # ~chewygumxx/shared-config.git
+  # ::: :/packages/cz-commitlint/README.md
+  #
+  #
+
+ctime: 2026-10-04
+title: "@chewygumxx/cz-commitlint"
+description: Repository README.md
+tags:
+  - npm
+  - config
+---
+
 # @chewygumxx/cz-commitlint
 
 [`@commitlint/cz-commitlint`](https://commitlint.js.org/reference/prompt.html),
@@ -10,11 +30,11 @@ bun add --dev commitizen @chewygumxx/cz-commitlint
 
 ```json
 {
-    "config": {
-        "commitizen": {
-            "path": "@chewygumxx/cz-commitlint"
-        }
+  "config": {
+    "commitizen": {
+      "path": "@chewygumxx/cz-commitlint"
     }
+  }
 }
 ```
 

@@ -14,7 +14,9 @@ ctime: 2026-09-29
 title: "@chewygumxx/yamllint-config"
 description: >-
   My personalised base configuration for yamllint
-tags: []
+tags:
+  - npm
+  - config
 ---
 
 # @chewygumxx/yamllint-config

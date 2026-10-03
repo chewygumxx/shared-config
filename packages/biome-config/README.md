@@ -1,3 +1,23 @@
+---
+__cgxx: |
+  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
+  # SPDX-License-Identifier: GPL-3.0-only
+
+  #
+  #
+  # ~chewygumxx/shared-config.git
+  # ::: :/packages/biome-config/README.md
+  #
+  #
+
+ctime: 2026-10-04
+title: "@chewygumxx/biome-config"
+description: Repository README.md
+tags:
+  - npm
+  - config
+---
+
 # @chewygumxx/biome-config
 
 Biome settings that take indentation and line endings from `.editorconfig`,
@@ -10,8 +30,8 @@ bun add --dev @chewygumxx/biome-config
 
 ```json
 {
-    "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
-    "extends": ["@chewygumxx/biome-config"]
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "extends": ["@chewygumxx/biome-config"]
 }
 ```
 

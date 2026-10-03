@@ -1,3 +1,23 @@
+---
+__cgxx: |
+  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
+  # SPDX-License-Identifier: GPL-3.0-only
+
+  #
+  #
+  # ~chewygumxx/shared-config.git
+  # ::: :/packages/remark-preset/README.md
+  #
+  #
+
+ctime: 2026-10-04
+title: "@chewygumxx/remark-preset"
+description: Repository README.md
+tags:
+  - npm
+  - config
+---
+
 # @chewygumxx/remark-preset
 
 remark-lint's recommended and consistency presets with frontmatter and GFM
@@ -11,9 +31,9 @@ bun add --dev remark-cli @chewygumxx/remark-preset
 
 ```json
 {
-    "remarkConfig": {
-        "plugins": ["@chewygumxx/remark-preset"]
-    }
+  "remarkConfig": {
+    "plugins": ["@chewygumxx/remark-preset"]
+  }
 }
 ```
 

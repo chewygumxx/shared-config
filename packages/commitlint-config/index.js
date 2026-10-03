@@ -51,6 +51,11 @@ export const types = [
         description: "Documentation and comments",
     },
     {
+        name: "ai",
+        fullName: "Agents",
+        description: "Agentic assets",
+    },
+    {
         name: "ci",
         fullName: "CI",
         description: "Continuous integration/deployment",

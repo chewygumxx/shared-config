@@ -21,12 +21,16 @@ tags:
 # @chewygumxx/markdownlint-cli2-config
 
 markdownlint's defaults, adjusted to agree with
-[`@chewygumxx/remark-preset`](../remark-preset):
+[`@chewygumxx/remark-preset`](../remark-preset) and the house style:
 
-- `-` list bullets
+- `#` (ATX) headings and `-` list bullets
 - an 80-column limit on prose; code, headings, tables and unbreakable links may
   exceed it
-- a front matter `title` does not count as the document's heading.
+- hard tabs allowed in code only
+- a front matter `title` does not count as the document's heading, and a blank
+  line separates front matter from the first heading
+- duplicate headings allowed under different parents
+- lists inside blockquotes not checked for the spaces after `>`.
 
 ## Usage
 

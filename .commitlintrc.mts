@@ -43,5 +43,35 @@ export default defineConfig({
             fullName: "yamllint",
             description: "@chewygumxx/yamllint-config",
         },
+        {
+            name: "tsconfig",
+            fullName: "TypeScript",
+            description: "@chewygumxx/tsconfig",
+        },
+        {
+            name: "prettier",
+            fullName: "Prettier",
+            description: "@chewygumxx/prettier-config",
+        },
+        {
+            name: "cspell",
+            fullName: "CSpell",
+            description: "@chewygumxx/cspell-config",
+        },
+        {
+            name: "secretlint",
+            fullName: "secretlint",
+            description: "@chewygumxx/secretlint-rule-preset",
+        },
+        {
+            name: "shellcheck",
+            fullName: "ShellCheck",
+            description: "@chewygumxx/shellcheck-config",
+        },
+        {
+            name: "editorconfig",
+            fullName: "EditorConfig",
+            description: "@chewygumxx/editorconfig-checker-config",
+        },
     ],
 });

@@ -12,5 +12,7 @@
 #
 # The house style from `@chewygumxx/yamllint-config`. yamllint resolves this
 # path against its working directory, so run it from the repository root; an
-# editor's linter can use this file as its root marker.
-extends: node_modules/@chewygumxx/yamllint-config/config.yaml
+# editor's linter can use this file as its root marker. It names the package's
+# source rather than `node_modules`, which the shared CI's YAML job does not
+# install.
+extends: packages/yamllint-config/config.yaml

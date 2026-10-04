@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/markdownlint-cli2-config",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Shared markdownlint-cli2 configuration for chewygumxx repositories",
     "keywords": [
         "markdownlint",

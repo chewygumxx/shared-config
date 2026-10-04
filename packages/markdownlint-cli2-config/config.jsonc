@@ -1,0 +1,47 @@
+// vim:set expandtab shiftwidth=4 filetype=jsonc:
+// SPDX-License-Identifier: GPL-3.0-only
+
+//
+//
+// ~chewygumxx/shared-config.git
+// ::: :/packages/markdownlint-cli2-config/config.jsonc
+//
+//
+
+// https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+//
+// The house style, as a markdownlint `config` object. Extend it from the
+// `config` property of a `.markdownlint-cli2.jsonc`, or from a
+// `.markdownlint.jsonc`. markdownlint merges an extended file shallowly, so a
+// rule overridden locally replaces this file's options for that rule.
+//
+// @chewygumxx/remark-preset lints the same files, so only the rules that
+// disagree with it, or with how these repositories write Markdown, are changed
+// from the defaults.
+
+{
+    "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
+
+    // remark-stringify writes `-` bullets.
+    "MD004": {
+        "style": "dash"
+    },
+
+    // Prose wraps at 80 columns. Code, headings and tables may exceed it, as
+    // may a line whose only overflow is an unbreakable word or link.
+    "MD013": {
+        "line_length": 80,
+        "code_blocks": false,
+        "headings": false,
+        "tables": false
+    },
+
+    // Front matter `title` is metadata; the document still opens with its own
+    // `#` heading after it.
+    "MD025": {
+        "front_matter_title": ""
+    },
+    "MD041": {
+        "front_matter_title": ""
+    }
+}

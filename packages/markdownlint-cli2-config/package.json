@@ -1,0 +1,32 @@
+{
+    "name": "@chewygumxx/markdownlint-cli2-config",
+    "version": "1.0.0",
+    "description": "Shared markdownlint-cli2 configuration for chewygumxx repositories",
+    "keywords": [
+        "markdownlint",
+        "markdownlint-cli2",
+        "markdownlint-config",
+        "markdown"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/markdownlint-cli2-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/markdownlint-cli2-config"
+    },
+    "exports": {
+        ".": "./config.jsonc",
+        "./config.jsonc": "./config.jsonc"
+    },
+    "files": [
+        "config.jsonc"
+    ],
+    "peerDependencies": {
+        "markdownlint-cli2": "^0.23.3"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

@@ -34,6 +34,11 @@ export default defineConfig({
             description: "@chewygumxx/remark-preset",
         },
         {
+            name: "markdownlint",
+            fullName: "markdownlint",
+            description: "@chewygumxx/markdownlint-cli2-config",
+        },
+        {
             name: "yamllint",
             fullName: "yamllint",
             description: "@chewygumxx/yamllint-config",

@@ -15,45 +15,33 @@
 // `.markdownlint.jsonc`. markdownlint merges an extended file shallowly, so a
 // rule overridden locally replaces this file's options for that rule.
 //
-// @chewygumxx/remark-preset lints the same files, so only the rules that
-// disagree with it, or with how these repositories write Markdown, are changed
-// from the defaults.
-
-// front_matter_title:
-// Front matter `title` is metadata; the document still opens with its own
-// `#` heading after it.
+// @chewygumxx/remark-preset lints the same files. Rules are changed from the
+// defaults where they disagree with it, or to pin down how these repositories
+// write Markdown.
 
 {
     "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json",
 
-    // Headings should increment by one level at a time
-    "MD001": {
-        "front_matter_title": ""
-    },
-
-    // Heading Style
+    // Heading style
     "MD003": {
         "style": "atx"
     },
 
-    // Unordered List Style
+    // Unordered list style
     // remark-stringify writes `-` bullets.
     "MD004": {
         "style": "dash"
     },
 
-    // Trailing Spaces
-    "MD009": {
-        "list_item_empty_lines": true
-    },
-
-    // Hard Tabspace
+    // Hard tabs
+    // Code keeps its tabs, as Go and Makefile examples need them. Fixes
+    // replace a tab in prose with four spaces.
     "MD010": {
         "code_blocks": false,
-        "ignore_code_languages": ["sh", "bash", "zsh"],
         "spaces_per_tab": 4
     },
 
+    // Line length
     // Prose wraps at 80 columns. Code, headings and tables may exceed it, as
     // may a line whose only overflow is an unbreakable word or link.
     "MD013": {
@@ -63,29 +51,34 @@
         "tables": false
     },
 
-    // Headings surrounded my blank lines
+    // Headings surrounded by blank lines
+    // A blank line also separates front matter from the first heading.
     "MD022": {
         "include_front_matter": true
     },
 
     // Multiple headings with the same content
-    // Interferes with anchor generation
+    // Only among siblings, so a heading such as `Usage` may repeat under
+    // different parents. GitHub suffixes the repeated anchors `-1`, `-2`.
     "MD024": {
         "siblings_only": true
     },
 
-    // Multiple top-level headings in the same document
+    // Multiple top-level headings in the same document, and first line in a
+    // file should be a top-level heading
+    // Front matter `title` is metadata; the document still opens with its own
+    // `#` heading after it.
     "MD025": {
+        "front_matter_title": ""
+    },
+    "MD041": {
         "front_matter_title": ""
     },
 
     // Multiple spaces after blockquote symbol
+    // Not checked for a list inside a blockquote, whose intended indentation
+    // markdownlint cannot reliably infer.
     "MD027": {
         "list_items": false
-    },
-
-    // First line in a file should be a top-level heading
-    "MD041": {
-        "front_matter_title": ""
     }
 }

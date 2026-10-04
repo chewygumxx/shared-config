@@ -23,13 +23,14 @@ tags:
 Shared tooling configuration for `chewygumxx` repositories, published to npm so
 that each repository's local hooks and its CI apply the same rules.
 
-| Package                                                       | Configures                                    |
-| ------------------------------------------------------------- | --------------------------------------------- |
-| [`@chewygumxx/commitlint-config`](packages/commitlint-config) | commitlint rules and the commitizen prompt    |
-| [`@chewygumxx/cz-commitlint`](packages/cz-commitlint)         | commitizen adapter labelling choices by title |
-| [`@chewygumxx/biome-config`](packages/biome-config)           | Biome formatting, linting and import sorting  |
-| [`@chewygumxx/remark-preset`](packages/remark-preset)         | remark-lint rules for Markdown                |
-| [`@chewygumxx/yamllint-config`](packages/yamllint-config)     | yamllint rules that agree with prettier       |
+| Package                                                                     | Configures                                    |
+| --------------------------------------------------------------------------- | --------------------------------------------- |
+| [`@chewygumxx/commitlint-config`](packages/commitlint-config)               | commitlint rules and the commitizen prompt    |
+| [`@chewygumxx/cz-commitlint`](packages/cz-commitlint)                       | commitizen adapter labelling choices by title |
+| [`@chewygumxx/biome-config`](packages/biome-config)                         | Biome formatting, linting and import sorting  |
+| [`@chewygumxx/remark-preset`](packages/remark-preset)                       | remark-lint rules for Markdown                |
+| [`@chewygumxx/markdownlint-cli2-config`](packages/markdownlint-cli2-config) | markdownlint rules that agree with remark     |
+| [`@chewygumxx/yamllint-config`](packages/yamllint-config)                   | yamllint rules that agree with prettier       |
 
 `bun create @chewygumxx/repo` lives in its own repository,
 [`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).

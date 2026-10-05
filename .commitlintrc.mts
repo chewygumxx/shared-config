@@ -73,5 +73,10 @@ export default defineConfig({
             fullName: "EditorConfig",
             description: "@chewygumxx/editorconfig-checker-config",
         },
+        {
+            name: "actionlint",
+            fullName: "actionlint",
+            description: "@chewygumxx/actionlint-config",
+        },
     ],
 });

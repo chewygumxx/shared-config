@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/biome-config/README.md
-  #
-  #
-
 ctime: 2026-10-04
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/biome-config"
-description: Repository README.md
+description: >-
+  Biome settings taking indentation and line endings from .editorconfig, with
+  the recommended rules and import sorting.
 tags:
   - npm
   - config
+  - biome
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/biome-config/README.md
+   -
+   -->
 
 # @chewygumxx/biome-config
 
@@ -37,3 +38,5 @@ bun add --dev @chewygumxx/biome-config
 
 The shared file is named `config.json` rather than `biome.json` so that Biome
 does not treat it as a nested configuration inside this repository.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

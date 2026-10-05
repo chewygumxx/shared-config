@@ -46,7 +46,7 @@ node = "24"
 "pypi:yamllint"     = "1.38.0"
 
 # tombi formats and lints TOML, matching the version CI installs.
-# Configuration is the house style in `tombi.toml`.
+# Configuration is the house style in `.config/tombi.toml`.
 "aqua:tombi-toml/tombi" = "1.5.5"
 
 # shellcheck lints the shell scripts by `@chewygumxx/shellcheck-config`'s

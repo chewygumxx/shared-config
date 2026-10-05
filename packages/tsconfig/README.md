@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/tsconfig/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/tsconfig"
-description: Repository README.md
+description: >-
+  A strict, type-check-only TypeScript base for repositories run by Bun or Node
+  without a build step.
 tags:
   - npm
   - config
+  - typescript
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/tsconfig/README.md
+   -
+   -->
 
 # @chewygumxx/tsconfig
 
@@ -71,3 +72,5 @@ syntax erasable:
 
 `types` is replaced rather than merged, so a repository that needs more
 global types restates `bun` alongside them.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

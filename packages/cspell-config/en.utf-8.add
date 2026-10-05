@@ -1,0 +1,97 @@
+# vim:set expandtab shiftwidth=4 filetype=conf:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/cspell-config/en.utf-8.add
+#
+#
+
+# The house vocabulary: one word per line, case-insensitive, for words that
+# neither cspell's en-GB and en dictionaries nor its software dictionaries
+# know. Vim reads the same format, and the name, `en.utf-8.add`, is what a
+# Neovim `spellfile` requires, so Neovim can check against it too.
+biomejs
+bufferline
+bunfig
+bunx
+cgxx
+chewygumxx
+chezmoi
+chezmoiignore
+clippy
+cmdline
+commitizen
+commitlint
+commitlintrc
+cyclable
+dotenv
+elif
+emdash
+emmylua
+enoent
+esac
+ewhauser
+expandtab
+extensionless
+foldlevel
+fpath
+frecency
+frontmatter
+Herdr
+jqlang
+keymap
+keymaps
+knip
+koalaman
+lockfiles
+luafmt
+luajit
+luarc
+luarocks
+mktemp
+modeline
+modelines
+moxide
+mvdan
+nocorrect
+npmjs
+nvim
+oneline
+pipefail
+precommand
+publint
+pypi
+relpath
+rhysd
+rumdl
+runtimepath
+rustup
+setext
+shellcheck
+shfmt
+shiftwidth
+spellfile
+spellfiles
+startswith
+statusline
+stefanzweifel
+strikethrough
+stylua
+tabline
+Termux
+textconv
+tmpl
+tombi
+toplevel
+unfunction
+unparseable
+unsets
+vimdoc
+vitest
+winbar
+workerd
+worktreeinclude
+worktrees
+zunit

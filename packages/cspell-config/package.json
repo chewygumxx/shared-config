@@ -1,0 +1,33 @@
+{
+    "name": "@chewygumxx/cspell-config",
+    "version": "1.0.0",
+    "description": "Shared CSpell configuration and word list for chewygumxx repositories",
+    "keywords": [
+        "cspell",
+        "cspell-config",
+        "spelling"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/cspell-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/cspell-config"
+    },
+    "exports": {
+        ".": "./config.yaml",
+        "./config.yaml": "./config.yaml",
+        "./en.utf-8.add": "./en.utf-8.add"
+    },
+    "files": [
+        "config.yaml",
+        "en.utf-8.add"
+    ],
+    "peerDependencies": {
+        "cspell": "^10.3.6"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

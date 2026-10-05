@@ -1,0 +1,50 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/cspell-config/config.yaml
+#
+#
+
+# https://cspell.org/docs/Configuration
+#
+# The house style. Import it from the `cspell` key of `package.json`, or from
+# a `cspell.config.yaml`. Paths here resolve against this file, so the word
+# list is found inside the package wherever it is installed.
+
+version: "0.2"
+
+# Prose is British English; code and its dependencies' names are often
+# American, so both are accepted.
+language: en-GB,en
+
+useGitignore: true
+
+ignorePaths:
+    - "**/LICENSE"
+    - "**/*.lock"
+    - "**/package-lock.json"
+    - "**/lazy-lock.json"
+    - "**/*.spl"
+
+dictionaryDefinitions:
+    - name: chewygumxx
+      path: ./en.utf-8.add
+      addWords: false
+
+dictionaries:
+    - chewygumxx
+
+patterns:
+    # `vim:set expandtab shiftwidth=4 filetype=yaml:` opens every file.
+    - name: vim-modeline
+      pattern: /\bvim?:\s*(?:set?\s)?[^\n]*/g
+    # `--diff-filter=ACMR` and the like are flags, not words.
+    - name: git-diff-filter
+      pattern: /--diff-filter=\w+/g
+
+ignoreRegExpList:
+    - vim-modeline
+    - git-diff-filter

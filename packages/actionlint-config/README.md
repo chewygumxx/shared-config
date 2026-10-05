@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/actionlint-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/actionlint-config"
-description: Repository README.md
+description: >-
+  actionlint's defaults, without two false reports for
+  actions/create-github-app-token@v3.
 tags:
   - npm
   - config
+  - actionlint
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/actionlint-config/README.md
+   -
+   -->
 
 # @chewygumxx/actionlint-config
 
@@ -55,3 +56,5 @@ actionlint reads only `.github/actionlint.yaml` by itself, so name this file:
 actionlint reads one file. A repository that needs more, such as its
 self-hosted runner labels, keeps its own `.github/actionlint.yaml` and
 restates these `ignore` patterns in it.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

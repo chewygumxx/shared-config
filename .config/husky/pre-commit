@@ -49,8 +49,10 @@ git diff -z --cached --name-only --diff-filter=ACMR |
 git diff -z --cached --name-only --diff-filter=ACMR |
     xargs -0 -r bunx --bun --no-install cspell \
         --no-progress --no-summary --no-must-find-files
+# Staged files are named already; `--no-gitignore` keeps secretlint from
+# skipping a force-added one that `.gitignore` matches, such as a `.env`.
 git diff -z --cached --name-only --diff-filter=ACMR |
-    xargs -0 -r bunx --bun --no-install secretlint
+    xargs -0 -r bunx --bun --no-install secretlint --no-gitignore
 
 # U+2014 as UTF-8 bytes, so this file does not trip its own check.
 emdash=$(printf '\342\200\224')

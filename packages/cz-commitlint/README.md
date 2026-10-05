@@ -1,22 +1,24 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/cz-commitlint/README.md
-  #
-  #
-
 ctime: 2026-10-04
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/cz-commitlint"
-description: Repository README.md
+description: >-
+  @commitlint/cz-commitlint, listing each type and scope by the title its prompt
+  configuration gives it.
 tags:
   - npm
   - config
+  - commitlint
+  - commitizen
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/cz-commitlint/README.md
+   -
+   -->
 
 # @chewygumxx/cz-commitlint
 
@@ -44,3 +46,5 @@ descriptions and the value committed are unchanged, and an entry without a
 `title` keeps upstream's `<key>:` label. Should upstream change how it labels
 choices, the adapter falls back to upstream's labels and emits a
 `CzCommitlintWarning`.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

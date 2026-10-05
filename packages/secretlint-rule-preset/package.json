@@ -1,0 +1,42 @@
+{
+    "name": "@chewygumxx/secretlint-rule-preset",
+    "version": "1.0.0",
+    "description": "Shared secretlint rule preset for chewygumxx repositories",
+    "keywords": [
+        "secretlint",
+        "secretlint-rule",
+        "secretlint-rule-preset",
+        "security"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/secretlint-rule-preset#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/secretlint-rule-preset"
+    },
+    "type": "module",
+    "exports": "./index.js",
+    "files": [
+        "index.js"
+    ],
+    "engines": {
+        "node": ">=24"
+    },
+    "dependencies": {
+        "@secretlint/secretlint-rule-no-dotenv": "^13.0.7",
+        "@secretlint/secretlint-rule-no-homedir": "^13.0.7",
+        "@secretlint/secretlint-rule-preset-recommend": "^13.0.7"
+    },
+    "devDependencies": {
+        "@secretlint/core": "^13.0.7",
+        "@secretlint/types": "^13.0.7"
+    },
+    "peerDependencies": {
+        "secretlint": "^13.0.7"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

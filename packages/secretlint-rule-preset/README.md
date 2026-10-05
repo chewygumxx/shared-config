@@ -34,21 +34,25 @@ with two rules for what a repository should never track:
 bun add --dev secretlint @chewygumxx/secretlint-rule-preset
 ```
 
-secretlint reads no key of `package.json`, so it needs a `.secretlintrc.json`:
+secretlint reads the `secretlint` key of `package.json`, so no
+`.secretlintrc.json` is needed:
 
 ```json
 {
-  "rules": [{ "id": "@chewygumxx/secretlint-rule-preset" }]
+  "secretlint": {
+    "rules": [{ "id": "@chewygumxx/secretlint-rule-preset" }]
+  }
 }
 ```
 
-Pass tracked files only, so that an untracked `.env` is not reported.
+Pass tracked files only, so that an untracked `.env` is not reported, with
+`--no-gitignore`, so that a force-added one that `.gitignore` matches is.
 secretlint masks the secrets it reports by default:
 
 ```json
 {
   "scripts": {
-    "lint:secrets": "git ls-files -z | xargs -0 -r secretlint"
+    "lint:secrets": "git ls-files -z | xargs -0 -r secretlint --no-gitignore"
   }
 }
 ```

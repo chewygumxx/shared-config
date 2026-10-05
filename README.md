@@ -23,14 +23,20 @@ tags:
 Shared tooling configuration for `chewygumxx` repositories, published to npm so
 that each repository's local hooks and its CI apply the same rules.
 
-| Package                                                                     | Configures                                    |
-| --------------------------------------------------------------------------- | --------------------------------------------- |
-| [`@chewygumxx/commitlint-config`](packages/commitlint-config)               | commitlint rules and the commitizen prompt    |
-| [`@chewygumxx/cz-commitlint`](packages/cz-commitlint)                       | commitizen adapter labelling choices by title |
-| [`@chewygumxx/biome-config`](packages/biome-config)                         | Biome formatting, linting and import sorting  |
-| [`@chewygumxx/remark-preset`](packages/remark-preset)                       | remark-lint rules for Markdown                |
-| [`@chewygumxx/markdownlint-cli2-config`](packages/markdownlint-cli2-config) | markdownlint rules that agree with remark     |
-| [`@chewygumxx/yamllint-config`](packages/yamllint-config)                   | yamllint rules that agree with prettier       |
+| Package                                                                           | Configures                                           |
+| --------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| [`@chewygumxx/commitlint-config`](packages/commitlint-config)                     | commitlint rules and the commitizen prompt           |
+| [`@chewygumxx/cz-commitlint`](packages/cz-commitlint)                             | commitizen adapter labelling choices by title        |
+| [`@chewygumxx/biome-config`](packages/biome-config)                               | Biome formatting, linting and import sorting         |
+| [`@chewygumxx/tsconfig`](packages/tsconfig)                                       | strict, type-check-only TypeScript base              |
+| [`@chewygumxx/prettier-config`](packages/prettier-config)                         | prettier options that agree with Biome               |
+| [`@chewygumxx/remark-preset`](packages/remark-preset)                             | remark-lint rules for Markdown, no em dashes         |
+| [`@chewygumxx/markdownlint-cli2-config`](packages/markdownlint-cli2-config)       | markdownlint rules that agree with remark            |
+| [`@chewygumxx/yamllint-config`](packages/yamllint-config)                         | yamllint rules that agree with prettier              |
+| [`@chewygumxx/cspell-config`](packages/cspell-config)                             | CSpell settings and the house word list              |
+| [`@chewygumxx/secretlint-rule-preset`](packages/secretlint-rule-preset)           | secretlint rules for credentials, `.env`, home paths |
+| [`@chewygumxx/shellcheck-config`](packages/shellcheck-config)                     | ShellCheck's optional checks that catch mistakes     |
+| [`@chewygumxx/editorconfig-checker-config`](packages/editorconfig-checker-config) | editorconfig-checker without the indent size check   |
 
 `bun create @chewygumxx/repo` lives in its own repository,
 [`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
@@ -50,6 +56,11 @@ mise install
 bun install
 bun run check
 ```
+
+mise pins the tools that are not npm packages, at the versions the shared CI
+runs: yamllint, tombi, ShellCheck, shfmt, editorconfig-checker and
+actionlint. `bun run check` also lints each package's manifest with publint
+and, for those with types, attw, and finds unused dependencies with knip.
 
 ## Publishing
 

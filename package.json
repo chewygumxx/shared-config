@@ -9,7 +9,7 @@
         "packages/*"
     ],
     "scripts": {
-        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:sh && bun run lint:editorconfig && bun run lint:actions && bun run lint:spell && bun run lint:secrets",
+        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:sh && bun run lint:editorconfig && bun run lint:actions && bun run lint:package && bun run lint:spell && bun run lint:secrets",
         "commit": "cz",
         "format": "biome format --write . && bun run format:yaml && bun run format:toml && bun run format:sh",
         "format:check": "biome format .",
@@ -20,6 +20,7 @@
         "lint:actions": "actionlint",
         "lint:editorconfig": "editorconfig-checker",
         "lint:md": "git ls-files -z '*.md' | xargs -0 -r remark --frail --quiet --no-stdout && git ls-files -z '*.md' | xargs -0 -r markdownlint-cli2",
+        "lint:package": "sort-package-json --check package.json packages/*/package.json && for dir in packages/*/; do publint --level warning \"$dir\" || exit 1; done && for dir in packages/*/; do test ! -f \"$dir/index.d.ts\" || attw --pack \"$dir\" --profile esm-only || exit 1; done",
         "lint:secrets": "git ls-files -z | xargs -0 -r secretlint",
         "lint:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -d && git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shellcheck",
         "lint:spell": "git ls-files -z | xargs -0 -r cspell --no-progress --no-summary --no-must-find-files",

@@ -31,7 +31,7 @@
         "unified": "^11.0.5"
     },
     "scripts": {
-        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:sh && bun run lint:editorconfig && bun run lint:spell && bun run lint:secrets",
+        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:sh && bun run lint:editorconfig && bun run lint:actions && bun run lint:spell && bun run lint:secrets",
         "commit": "cz",
         "format": "biome format --write . && bun run format:yaml && bun run format:toml && bun run format:sh",
         "format:check": "biome format .",
@@ -48,7 +48,8 @@
         "lint:secrets": "git ls-files -z | xargs -0 -r secretlint",
         "lint:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -d && git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shellcheck",
         "format:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -w",
-        "lint:editorconfig": "editorconfig-checker"
+        "lint:editorconfig": "editorconfig-checker",
+        "lint:actions": "actionlint"
     },
     "config": {
         "commitizen": {

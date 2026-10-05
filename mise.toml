@@ -60,3 +60,7 @@ node = "24"
 # `@chewygumxx/editorconfig-checker-config`'s source. It matches the version
 # CI installs.
 "aqua:editorconfig-checker/editorconfig-checker" = "4.0.2"
+
+# actionlint checks the workflows, and their `run:` scripts with the
+# shellcheck above. It matches the version CI installs.
+"aqua:rhysd/actionlint" = "1.7.12"

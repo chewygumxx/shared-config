@@ -37,6 +37,10 @@ if [ -n "$sh" ]; then
     printf '%s\n' "$sh" | tr '\n' '\0' | xargs -0 shellcheck
 fi
 
+git diff -z --cached --name-only --diff-filter=ACMR -- \
+    '.github/workflows/*.yaml' '.github/workflows/*.yml' |
+    xargs -0 -r actionlint
+
 git diff -z --cached --name-only --diff-filter=ACMR |
     xargs -0 -r editorconfig-checker
 

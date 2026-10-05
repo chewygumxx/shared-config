@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/secretlint-rule-preset/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/secretlint-rule-preset"
-description: Repository README.md
+description: >-
+  secretlint's recommended preset, plus two rules for what a repository should
+  never track.
 tags:
   - npm
   - config
+  - secretlint
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/secretlint-rule-preset/README.md
+   -
+   -->
 
 # @chewygumxx/secretlint-rule-preset
 
@@ -81,3 +82,5 @@ whose files name paths in the home directory on purpose, allows `HOMEDIR`:
 secretlint 13 ignores `"disabled": true` on a rule inside any preset, its own
 included, so `allowMessageIds` is the way to turn one off. A
 `.secretlintignore` exempts whole files.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

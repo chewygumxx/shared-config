@@ -43,7 +43,8 @@ git diff -z --cached --name-only --diff-filter=ACMR -- \
     xargs -0 -r actionlint -config-file packages/actionlint-config/config.yaml
 
 git diff -z --cached --name-only --diff-filter=ACMR |
-    xargs -0 -r editorconfig-checker
+    xargs -0 -r editorconfig-checker \
+        -config packages/editorconfig-checker-config/config.json
 
 git diff -z --cached --name-only --diff-filter=ACMR |
     xargs -0 -r bunx --bun --no-install cspell \

@@ -56,9 +56,8 @@ node = "24"
 "aqua:mvdan/sh"            = "3.14.1"
 
 # editorconfig-checker holds every tracked file to `.editorconfig`, by
-# `.editorconfig-checker.json`, a link to
-# `@chewygumxx/editorconfig-checker-config`'s source. It matches the version
-# CI installs.
+# `@chewygumxx/editorconfig-checker-config`'s source, named with `-config`.
+# It matches the version CI installs.
 "aqua:editorconfig-checker/editorconfig-checker" = "4.0.2"
 
 # actionlint checks the workflows, and their `run:` scripts with the

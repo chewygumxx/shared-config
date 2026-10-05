@@ -1,22 +1,24 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/shellcheck-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/shellcheck-config"
-description: Repository README.md
+description: >-
+  ShellCheck's default checks plus the optional ones that catch mistakes rather
+  than enforce a style.
 tags:
   - npm
   - config
+  - shellcheck
+  - shell
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/shellcheck-config/README.md
+   -
+   -->
 
 # @chewygumxx/shellcheck-config
 
@@ -64,3 +66,5 @@ shell scripts only; `shfmt -f` finds them by extension or shebang:
 ShellCheck reads one file, so a repository that wants the house style with
 changes copies this one to its own `.shellcheckrc` and edits it, or adds
 `# shellcheck disable=SC2034` directives in the scripts concerned.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

@@ -107,7 +107,7 @@
     },
     "packages/secretlint-rule-preset": {
       "name": "@chewygumxx/secretlint-rule-preset",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "dependencies": {
         "@secretlint/secretlint-rule-no-dotenv": "^13.0.7",
         "@secretlint/secretlint-rule-no-homedir": "^13.0.7",

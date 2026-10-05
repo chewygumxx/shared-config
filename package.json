@@ -23,7 +23,7 @@
         "lint:md": "git ls-files -z '*.md' | xargs -0 -r remark --frail --quiet --no-stdout && git ls-files -z '*.md' | xargs -0 -r markdownlint-cli2",
         "lint:package": "sort-package-json --check package.json packages/*/package.json && for dir in packages/*/; do publint --level warning \"$dir\" || exit 1; done && for dir in packages/*/; do test ! -f \"$dir/index.d.ts\" || attw --pack \"$dir\" --profile esm-only || exit 1; done",
         "lint:secrets": "git ls-files -z | xargs -0 -r secretlint",
-        "lint:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -d && git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shellcheck",
+        "lint:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -d && git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
         "lint:spell": "git ls-files -z | xargs -0 -r cspell --no-progress --no-summary --no-must-find-files",
         "lint:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --check --offline -- && git ls-files -z '*.toml' | xargs -0 -r tombi lint --error-on-warnings --offline --",
         "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | YAMLLINT_CONFIG_FILE=packages/yamllint-config/config.yaml xargs -0 -r yamllint --strict",

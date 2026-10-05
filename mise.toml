@@ -49,9 +49,9 @@ node = "24"
 # Configuration is the house style in `tombi.toml`.
 "aqua:tombi-toml/tombi" = "1.5.5"
 
-# shellcheck lints the shell scripts by `.shellcheckrc`, a link to
-# `@chewygumxx/shellcheck-config`'s source; shfmt formats them by
-# `.editorconfig`. Both match the versions CI installs.
+# shellcheck lints the shell scripts by `@chewygumxx/shellcheck-config`'s
+# source, named with `--rcfile`; shfmt formats them by `.editorconfig`. Both
+# match the versions CI installs.
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mvdan/sh"            = "3.14.1"
 

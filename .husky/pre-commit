@@ -34,7 +34,8 @@ git diff -z --cached --name-only --diff-filter=ACMR -- '*.toml' |
 sh=$(git diff -z --cached --name-only --diff-filter=ACMR | xargs -0 -r shfmt -f)
 if [ -n "$sh" ]; then
     printf '%s\n' "$sh" | tr '\n' '\0' | xargs -0 shfmt -d
-    printf '%s\n' "$sh" | tr '\n' '\0' | xargs -0 shellcheck
+    printf '%s\n' "$sh" | tr '\n' '\0' |
+        xargs -0 shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc
 fi
 
 git diff -z --cached --name-only --diff-filter=ACMR -- \

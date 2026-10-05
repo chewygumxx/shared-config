@@ -69,7 +69,7 @@
     },
     "packages/editorconfig-checker-config": {
       "name": "@chewygumxx/editorconfig-checker-config",
-      "version": "1.0.0",
+      "version": "1.0.1",
     },
     "packages/markdownlint-cli2-config": {
       "name": "@chewygumxx/markdownlint-cli2-config",

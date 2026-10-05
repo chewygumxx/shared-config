@@ -17,6 +17,7 @@ import remarkLintMaximumLineLength from "remark-lint-maximum-line-length";
 import remarkLintNoUndefinedReferences from "remark-lint-no-undefined-references";
 import remarkPresetLintConsistent from "remark-preset-lint-consistent";
 import remarkPresetLintRecommended from "remark-preset-lint-recommended";
+import remarkLintNoEmDash from "./no-em-dash.js";
 
 /** @type {import("unified").Preset} */
 const preset = {
@@ -38,6 +39,7 @@ const preset = {
             remarkLintNoUndefinedReferences,
             { allow: [/^!(?:note|tip|important|warning|caution)$/i] },
         ],
+        remarkLintNoEmDash,
     ],
 };
 

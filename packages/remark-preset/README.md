@@ -25,6 +25,9 @@ support, `-` list bullets, and an 80-column limit on prose. Code, headings,
 tables and unbreakable links may exceed it. GitHub alerts such as
 `> [!NOTE]` are not mistaken for undefined references.
 
+Em dashes (U+2014) are reported wherever they are, front matter and code
+included, as `no-em-dash`.
+
 ```sh
 bun add --dev remark-cli @chewygumxx/remark-preset
 ```

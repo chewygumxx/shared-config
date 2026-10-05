@@ -1,22 +1,22 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/cspell-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/cspell-config"
-description: Repository README.md
+description: >-
+  CSpell's defaults with the house vocabulary, in British and American English
 tags:
   - npm
   - config
+  - cspell
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/cspell-config/README.md
+   -
+   -->
 
 # @chewygumxx/cspell-config
 
@@ -64,3 +64,5 @@ shared list:
 `en.utf-8.add` is one word per line with `#` comments: a Vim word list, named
 as Neovim's `spellfile` requires, so Neovim can list it after its own word list
 and check against the same vocabulary.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

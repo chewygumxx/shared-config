@@ -1,0 +1,28 @@
+{
+    "name": "@chewygumxx/prettier-config",
+    "version": "1.0.0",
+    "description": "Shared Prettier configuration for chewygumxx repositories",
+    "keywords": [
+        "prettier",
+        "prettier-config"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/prettier-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/prettier-config"
+    },
+    "type": "module",
+    "exports": "./index.js",
+    "files": [
+        "index.js"
+    ],
+    "peerDependencies": {
+        "prettier": "^3.9.9"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

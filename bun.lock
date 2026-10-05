@@ -63,6 +63,13 @@
         "markdownlint-cli2": "^0.23.3",
       },
     },
+    "packages/prettier-config": {
+      "name": "@chewygumxx/prettier-config",
+      "version": "1.0.0",
+      "peerDependencies": {
+        "prettier": "^3.9.9",
+      },
+    },
     "packages/remark-preset": {
       "name": "@chewygumxx/remark-preset",
       "version": "1.0.3",
@@ -132,6 +139,8 @@
     "@chewygumxx/cz-commitlint": ["@chewygumxx/cz-commitlint@workspace:packages/cz-commitlint"],
 
     "@chewygumxx/markdownlint-cli2-config": ["@chewygumxx/markdownlint-cli2-config@workspace:packages/markdownlint-cli2-config"],
+
+    "@chewygumxx/prettier-config": ["@chewygumxx/prettier-config@workspace:packages/prettier-config"],
 
     "@chewygumxx/remark-preset": ["@chewygumxx/remark-preset@workspace:packages/remark-preset"],
 

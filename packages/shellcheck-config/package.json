@@ -1,0 +1,28 @@
+{
+    "name": "@chewygumxx/shellcheck-config",
+    "version": "1.0.0",
+    "description": "Shared ShellCheck configuration for chewygumxx repositories",
+    "keywords": [
+        "shellcheck",
+        "shellcheckrc",
+        "shell"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/shellcheck-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/shellcheck-config"
+    },
+    "exports": {
+        ".": "./config.shellcheckrc",
+        "./config.shellcheckrc": "./config.shellcheckrc"
+    },
+    "files": [
+        "config.shellcheckrc"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

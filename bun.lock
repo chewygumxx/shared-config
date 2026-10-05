@@ -108,6 +108,10 @@
         "secretlint": "^13.0.7",
       },
     },
+    "packages/shellcheck-config": {
+      "name": "@chewygumxx/shellcheck-config",
+      "version": "1.0.0",
+    },
     "packages/tsconfig": {
       "name": "@chewygumxx/tsconfig",
       "version": "1.0.0",
@@ -170,6 +174,8 @@
     "@chewygumxx/remark-preset": ["@chewygumxx/remark-preset@workspace:packages/remark-preset"],
 
     "@chewygumxx/secretlint-rule-preset": ["@chewygumxx/secretlint-rule-preset@workspace:packages/secretlint-rule-preset"],
+
+    "@chewygumxx/shellcheck-config": ["@chewygumxx/shellcheck-config@workspace:packages/shellcheck-config"],
 
     "@chewygumxx/tsconfig": ["@chewygumxx/tsconfig@workspace:packages/tsconfig"],
 

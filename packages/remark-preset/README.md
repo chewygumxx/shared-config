@@ -1,22 +1,24 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/remark-preset/README.md
-  #
-  #
-
 ctime: 2026-10-04
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/remark-preset"
-description: Repository README.md
+description: >-
+  remark-lint's recommended and consistency presets, with frontmatter, GFM, -
+  bullets and an 80-column prose limit.
 tags:
   - npm
   - config
+  - remark
+  - markdown
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/remark-preset/README.md
+   -
+   -->
 
 # @chewygumxx/remark-preset
 
@@ -42,3 +44,5 @@ bun add --dev remark-cli @chewygumxx/remark-preset
 
 remark-lint drops a warning positioned after a file's last node, so an over-long
 final line of a file is not reported.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

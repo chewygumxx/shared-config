@@ -86,5 +86,12 @@
             "actionlint",
             "editorconfig-checker"
         ]
+    },
+    "secretlint": {
+        "rules": [
+            {
+                "id": "@chewygumxx/secretlint-rule-preset"
+            }
+        ]
     }
 }

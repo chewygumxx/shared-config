@@ -26,7 +26,7 @@
     },
     "packages/actionlint-config": {
       "name": "@chewygumxx/actionlint-config",
-      "version": "1.0.0",
+      "version": "1.0.1",
     },
     "packages/biome-config": {
       "name": "@chewygumxx/biome-config",

@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/actionlint-config",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Shared actionlint configuration for chewygumxx repositories",
     "keywords": [
         "actionlint",

@@ -1,22 +1,24 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/markdownlint-cli2-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/markdownlint-cli2-config"
-description: Repository README.md
+description: >-
+  markdownlint's defaults, adjusted to agree with @chewygumxx/remark-preset and
+  the house style.
 tags:
   - npm
   - config
+  - markdownlint
+  - markdown
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/markdownlint-cli2-config/README.md
+   -
+   -->
 
 # @chewygumxx/markdownlint-cli2-config
 
@@ -81,3 +83,5 @@ rule; restate any you want to keep:
 The shared file is named `config.jsonc` rather than `.markdownlint.jsonc` so
 that markdownlint-cli2 does not treat it as a nested configuration inside this
 repository.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

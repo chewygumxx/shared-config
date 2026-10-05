@@ -6,13 +6,13 @@
         "prettier",
         "prettier-config"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/prettier-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/prettier-config"
     },
+    "license": "GPL-3.0-only",
     "type": "module",
     "exports": "./index.js",
     "files": [

@@ -8,28 +8,25 @@
         "cz",
         "cz-commitlint"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/cz-commitlint#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/cz-commitlint"
     },
+    "license": "GPL-3.0-only",
     "type": "module",
-    "main": "./index.js",
     "exports": {
         ".": {
             "types": "./index.d.ts",
             "default": "./index.js"
         }
     },
+    "main": "./index.js",
     "files": [
         "index.js",
         "index.d.ts"
     ],
-    "engines": {
-        "node": ">=24"
-    },
     "dependencies": {
         "@commitlint/cz-commitlint": "^21.2.3",
         "@commitlint/load": "^21.2.3",
@@ -38,6 +35,9 @@
     "peerDependencies": {
         "commitizen": "^4.3.2",
         "inquirer": "^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0"
+    },
+    "engines": {
+        "node": ">=24"
     },
     "publishConfig": {
         "access": "public",

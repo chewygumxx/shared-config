@@ -7,13 +7,13 @@
         "cspell-config",
         "spelling"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/cspell-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/cspell-config"
     },
+    "license": "GPL-3.0-only",
     "exports": {
         ".": "./config.yaml",
         "./config.yaml": "./config.yaml",

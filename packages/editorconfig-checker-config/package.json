@@ -6,13 +6,13 @@
         "editorconfig",
         "editorconfig-checker"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/editorconfig-checker-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/editorconfig-checker-config"
     },
+    "license": "GPL-3.0-only",
     "exports": {
         ".": "./config.json",
         "./config.json": "./config.json"

@@ -8,22 +8,19 @@
         "remark-preset",
         "markdown"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/remark-preset#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/remark-preset"
     },
+    "license": "GPL-3.0-only",
     "type": "module",
     "exports": "./index.js",
     "files": [
         "index.js",
         "no-em-dash.js"
     ],
-    "engines": {
-        "node": ">=24"
-    },
     "dependencies": {
         "remark-frontmatter": "^5.0.0",
         "remark-gfm": "^4.0.1",
@@ -34,14 +31,17 @@
         "unified-lint-rule": "^3.0.1",
         "vfile-location": "^5.0.3"
     },
+    "devDependencies": {
+        "remark": "^15.0.1"
+    },
     "peerDependencies": {
         "remark-cli": "^12.0.1"
+    },
+    "engines": {
+        "node": ">=24"
     },
     "publishConfig": {
         "access": "public",
         "provenance": true
-    },
-    "devDependencies": {
-        "remark": "^15.0.1"
     }
 }

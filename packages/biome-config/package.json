@@ -6,13 +6,13 @@
         "biome",
         "biome-config"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/biome-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/biome-config"
     },
+    "license": "GPL-3.0-only",
     "exports": {
         ".": "./config.json",
         "./biome": "./config.json"

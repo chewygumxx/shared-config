@@ -7,13 +7,13 @@
         "yamllint-config",
         "yaml"
     ],
-    "license": "GPL-3.0-only",
     "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/yamllint-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",
         "directory": "packages/yamllint-config"
     },
+    "license": "GPL-3.0-only",
     "exports": {
         ".": "./config.yaml",
         "./config.yaml": "./config.yaml"

@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/prettier-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/prettier-config"
-description: Repository README.md
+description: >-
+  prettier's defaults, taking indentation, line endings and line length from
+  .editorconfig, agreeing with Biome.
 tags:
   - npm
   - config
+  - prettier
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/prettier-config/README.md
+   -
+   -->
 
 # @chewygumxx/prettier-config
 
@@ -57,3 +58,5 @@ export default {
   ],
 };
 ```
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

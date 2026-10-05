@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/shellcheck-config",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Shared ShellCheck configuration for chewygumxx repositories",
     "keywords": [
         "shellcheck",

@@ -1,0 +1,34 @@
+{
+    "name": "@chewygumxx/tsconfig",
+    "version": "1.0.0",
+    "description": "Shared TypeScript configuration for chewygumxx repositories",
+    "keywords": [
+        "tsconfig",
+        "typescript",
+        "bun"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/tsconfig#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/tsconfig"
+    },
+    "exports": {
+        ".": "./tsconfig.json",
+        "./tsconfig.json": "./tsconfig.json",
+        "./bun": "./bun.json",
+        "./bun.json": "./bun.json"
+    },
+    "files": [
+        "tsconfig.json",
+        "bun.json"
+    ],
+    "peerDependencies": {
+        "typescript": "^7.0.2"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

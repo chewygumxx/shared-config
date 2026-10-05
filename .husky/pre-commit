@@ -39,7 +39,7 @@ fi
 
 git diff -z --cached --name-only --diff-filter=ACMR -- \
     '.github/workflows/*.yaml' '.github/workflows/*.yml' |
-    xargs -0 -r actionlint
+    xargs -0 -r actionlint -config-file packages/actionlint-config/config.yaml
 
 git diff -z --cached --name-only --diff-filter=ACMR |
     xargs -0 -r editorconfig-checker

@@ -17,7 +17,7 @@
         "format:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --offline --",
         "format:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --write --log-level warn",
         "lint": "biome lint .",
-        "lint:actions": "actionlint",
+        "lint:actions": "actionlint -config-file packages/actionlint-config/config.yaml",
         "lint:deps": "knip",
         "lint:editorconfig": "editorconfig-checker",
         "lint:md": "git ls-files -z '*.md' | xargs -0 -r remark --frail --quiet --no-stdout && git ls-files -z '*.md' | xargs -0 -r markdownlint-cli2",

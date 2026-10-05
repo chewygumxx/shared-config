@@ -49,7 +49,7 @@
     },
     "packages/cspell-config": {
       "name": "@chewygumxx/cspell-config",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "peerDependencies": {
         "cspell": "^10.3.6",
       },

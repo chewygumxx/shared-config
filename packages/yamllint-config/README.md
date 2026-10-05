@@ -1,23 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/yamllint-config/README.md
-  #
-  #
-
 ctime: 2026-09-29
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/yamllint-config"
 description: >-
-  My personalised base configuration for yamllint
+  yamllint configuration that conforms to prettier's YAML output
 tags:
   - npm
   - config
+  - yamllint
+  - yaml
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/yamllint-config/README.md
+   -
+   -->
 
 # @chewygumxx/yamllint-config
 
@@ -56,3 +56,5 @@ repository that wants the house style with a few changes can extend it:
 ```yaml
 extends: node_modules/@chewygumxx/yamllint-config/config.yaml
 ```
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

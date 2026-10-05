@@ -54,3 +54,9 @@ node = "24"
 # `.editorconfig`. Both match the versions CI installs.
 "aqua:koalaman/shellcheck" = "0.11.0"
 "aqua:mvdan/sh"            = "3.14.1"
+
+# editorconfig-checker holds every tracked file to `.editorconfig`, by
+# `.editorconfig-checker.json`, a link to
+# `@chewygumxx/editorconfig-checker-config`'s source. It matches the version
+# CI installs.
+"aqua:editorconfig-checker/editorconfig-checker" = "4.0.2"

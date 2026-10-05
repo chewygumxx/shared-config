@@ -38,6 +38,9 @@ if [ -n "$sh" ]; then
 fi
 
 git diff -z --cached --name-only --diff-filter=ACMR |
+    xargs -0 -r editorconfig-checker
+
+git diff -z --cached --name-only --diff-filter=ACMR |
     xargs -0 -r bunx --bun --no-install cspell \
         --no-progress --no-summary --no-must-find-files
 git diff -z --cached --name-only --diff-filter=ACMR |

@@ -31,6 +31,10 @@ git diff -z --cached --name-only --diff-filter=ACMR -- '*.toml' |
 git diff -z --cached --name-only --diff-filter=ACMR -- '*.toml' |
     xargs -0 -r tombi lint --error-on-warnings --offline --
 
+git diff -z --cached --name-only --diff-filter=ACMR |
+    xargs -0 -r bunx --bun --no-install cspell \
+        --no-progress --no-summary --no-must-find-files
+
 # U+2014 as UTF-8 bytes, so this file does not trip its own check.
 emdash=$(printf '\342\200\224')
 if git diff --cached -U0 | grep '^+' | grep -q "$emdash"; then

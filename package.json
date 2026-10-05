@@ -31,7 +31,7 @@
         "unified": "^11.0.5"
     },
     "scripts": {
-        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml",
+        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:spell",
         "commit": "cz",
         "format": "biome format --write . && bun run format:yaml && bun run format:toml",
         "format:check": "biome format .",
@@ -43,7 +43,8 @@
         "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | xargs -0 -r yamllint --strict",
         "prepare": "test -d node_modules/husky && husky || true",
         "test": "bun test ./packages/*/test.js",
-        "typecheck": "tsc"
+        "typecheck": "tsc",
+        "lint:spell": "git ls-files -z | xargs -0 -r cspell --no-progress --no-summary --no-must-find-files"
     },
     "config": {
         "commitizen": {
@@ -55,5 +56,13 @@
             "@chewygumxx/remark-preset"
         ]
     },
-    "prettier": "./packages/prettier-config/index.js"
+    "prettier": "./packages/prettier-config/index.js",
+    "cspell": {
+        "import": [
+            "@chewygumxx/cspell-config"
+        ],
+        "words": [
+            "commitlintconfig"
+        ]
+    }
 }

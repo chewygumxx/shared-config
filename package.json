@@ -54,5 +54,6 @@
         "plugins": [
             "@chewygumxx/remark-preset"
         ]
-    }
+    },
+    "prettier": "./packages/prettier-config/index.js"
 }

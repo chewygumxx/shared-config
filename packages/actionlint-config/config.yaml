@@ -1,0 +1,24 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/actionlint-config/config.yaml
+#
+#
+
+# https://github.com/rhysd/actionlint/blob/main/docs/config.md
+#
+# The house configuration. Name this file with `-config-file`; actionlint
+# otherwise reads only `.github/actionlint.yaml`. chewygumxx/.github ignores
+# the same messages for its own workflows.
+
+paths:
+    .github/workflows/**/*.{yml,yaml}:
+        ignore:
+            # actionlint's bundled metadata for create-github-app-token
+            # predates v3, which added `client-id` and deprecated `app-id`.
+            # Only that action's messages are ignored.
+            - 'missing input "app-id" which is required by action "actions/create-github-app-token@'
+            - 'input "client-id" is not defined in action "actions/create-github-app-token@'

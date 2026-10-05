@@ -1,0 +1,27 @@
+{
+    "name": "@chewygumxx/actionlint-config",
+    "version": "1.0.0",
+    "description": "Shared actionlint configuration for chewygumxx repositories",
+    "keywords": [
+        "actionlint",
+        "github-actions"
+    ],
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/actionlint-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/actionlint-config"
+    },
+    "license": "GPL-3.0-only",
+    "exports": {
+        ".": "./config.yaml",
+        "./config.yaml": "./config.yaml"
+    },
+    "files": [
+        "config.yaml"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

@@ -24,6 +24,10 @@
         "unified": "^11.0.5",
       },
     },
+    "packages/actionlint-config": {
+      "name": "@chewygumxx/actionlint-config",
+      "version": "1.0.0",
+    },
     "packages/biome-config": {
       "name": "@chewygumxx/biome-config",
       "version": "1.0.1",
@@ -167,6 +171,8 @@
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.14", "", { "os": "win32", "cpu": "x64" }, "sha512-oJWmBhoHsnhUKIke+0gXDX0mltJrWHA1UyHsrTlXwX0TL64ilVZAo+TYZm97baecV0esBdpzy3k96q+09JaZUQ=="],
 
     "@braidai/lang": ["@braidai/lang@1.1.2", "", {}, "sha512-qBcknbBufNHlui137Hft8xauQMTZDKdophmLFv05r2eNmdIv/MlPuP4TdUknHG68UdWLgVZwgxVe735HzJNIwA=="],
+
+    "@chewygumxx/actionlint-config": ["@chewygumxx/actionlint-config@workspace:packages/actionlint-config"],
 
     "@chewygumxx/biome-config": ["@chewygumxx/biome-config@workspace:packages/biome-config"],
 

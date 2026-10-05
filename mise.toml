@@ -64,6 +64,17 @@ node = "24"
 # shellcheck above. It matches the version CI installs.
 "aqua:rhysd/actionlint" = "1.7.12"
 
+# ----
+# Env
+# ----
+# yamllint and shellcheck have no configuration at the root to find, so name
+# the house style for them wherever mise runs them: an activated shell, a
+# shim, or an editor's linter started from either. The package scripts and
+# hooks name the same files themselves, so they do not rely on this.
+[env]
+SHELLCHECK_OPTS      = "--rcfile={{config_root}}/packages/shellcheck-config/config.shellcheckrc"
+YAMLLINT_CONFIG_FILE = "{{config_root}}/packages/yamllint-config/config.yaml"
+
 [settings]
 #
 # Refetch remote tasks each time one runs, so `act` follows `v1` as it

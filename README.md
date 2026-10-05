@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/README.md
-  #
-  #
-
 ctime: 2026-10-04
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: shared-config
-description: Repository README.md
+description: >-
+  Shared tooling configuration for chewygumxx repositories, published to npm so
+  local hooks and CI apply the same rules.
 tags:
   - npm
   - config
+  - monorepo
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/README.md
+   -
+   -->
 
 # shared-config
 
@@ -69,3 +70,5 @@ Each package is versioned independently. Bump its `version`, commit, and push a
 tag named `<package>@<version>`, such as `biome-config@1.1.0`; the publish
 workflow stages that package with provenance. Approve the staged version on
 npmjs.com to release it.
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

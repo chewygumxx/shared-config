@@ -1,22 +1,23 @@
 ---
-__cgxx: |
-  # vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3:
-  # SPDX-License-Identifier: GPL-3.0-only
-
-  #
-  #
-  # ~chewygumxx/shared-config.git
-  # ::: :/packages/editorconfig-checker-config/README.md
-  #
-  #
-
 ctime: 2026-10-05
+mtime: 2026-10-05
+spdx: GPL-3.0-only
 title: "@chewygumxx/editorconfig-checker-config"
-description: Repository README.md
+description: >-
+  editorconfig-checker's defaults with the indent size check off, leaving
+  indentation to the formatters.
 tags:
   - npm
   - config
+  - editorconfig
 ---
+
+<!--
+   -
+   - ~chewygumxx/shared-config.git
+   - ::: :/packages/editorconfig-checker-config/README.md
+   -
+   -->
 
 # @chewygumxx/editorconfig-checker-config
 
@@ -57,3 +58,5 @@ as an `Exclude` pattern, keeps its own `.editorconfig-checker.json` with
 ```sh
 editorconfig-checker -config node_modules/@chewygumxx/editorconfig-checker-config/config.json -exclude '^vendor/'
 ```
+
+<!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

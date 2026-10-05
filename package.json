@@ -71,5 +71,20 @@
         "words": [
             "commitlintconfig"
         ]
+    },
+    "knip": {
+        "ignoreDependencies": [
+            "cspell",
+            "markdownlint-cli2",
+            "prettier",
+            "remark-cli",
+            "secretlint",
+            "@commitlint/config-conventional",
+            "conventional-changelog-conventionalcommits"
+        ],
+        "ignoreBinaries": [
+            "actionlint",
+            "editorconfig-checker"
+        ]
     }
 }

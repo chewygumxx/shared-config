@@ -63,6 +63,10 @@
         "inquirer": "^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0",
       },
     },
+    "packages/editorconfig-checker-config": {
+      "name": "@chewygumxx/editorconfig-checker-config",
+      "version": "1.0.0",
+    },
     "packages/markdownlint-cli2-config": {
       "name": "@chewygumxx/markdownlint-cli2-config",
       "version": "1.1.0",
@@ -166,6 +170,8 @@
     "@chewygumxx/cspell-config": ["@chewygumxx/cspell-config@workspace:packages/cspell-config"],
 
     "@chewygumxx/cz-commitlint": ["@chewygumxx/cz-commitlint@workspace:packages/cz-commitlint"],
+
+    "@chewygumxx/editorconfig-checker-config": ["@chewygumxx/editorconfig-checker-config@workspace:packages/editorconfig-checker-config"],
 
     "@chewygumxx/markdownlint-cli2-config": ["@chewygumxx/markdownlint-cli2-config@workspace:packages/markdownlint-cli2-config"],
 

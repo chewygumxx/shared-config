@@ -1,0 +1,27 @@
+{
+    "name": "@chewygumxx/editorconfig-checker-config",
+    "version": "1.0.0",
+    "description": "Shared editorconfig-checker configuration for chewygumxx repositories",
+    "keywords": [
+        "editorconfig",
+        "editorconfig-checker"
+    ],
+    "license": "GPL-3.0-only",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/editorconfig-checker-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/editorconfig-checker-config"
+    },
+    "exports": {
+        ".": "./config.json",
+        "./config.json": "./config.json"
+    },
+    "files": [
+        "config.json"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

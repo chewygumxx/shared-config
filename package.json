@@ -98,8 +98,5 @@
                 "id": "@chewygumxx/secretlint-rule-preset"
             }
         ]
-    },
-    "dependencies": {
-        "@chewygumxx/biome-config": "workspace:*"
     }
 }

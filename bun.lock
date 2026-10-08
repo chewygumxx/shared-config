@@ -4,9 +4,6 @@
   "workspaces": {
     "": {
       "name": "shared-config",
-      "dependencies": {
-        "@chewygumxx/biome-config": "workspace:*",
-      },
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@biomejs/biome": "2.5.14",

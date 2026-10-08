@@ -39,4 +39,17 @@ bun add --dev @chewygumxx/biome-config
 The shared file is named `config.json` rather than `biome.json` so that Biome
 does not treat it as a nested configuration inside this repository.
 
+Claude Code's `.claude/settings.json` and `.claude/settings.local.json` are
+excluded, as Claude Code rewrites them in its own style. A repository that sets
+`files.includes` replaces the shared list rather than adding to it, so it must
+start with `"**"` and repeat the exclusion:
+
+```json
+{
+  "files": {
+    "includes": ["**", "!**/.claude/settings*.json", "!dist"]
+  }
+}
+```
+
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

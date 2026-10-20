@@ -57,7 +57,7 @@
         "remark-cli": "^12.0.1",
         "remark-stringify": "^11.0.0",
         "secretlint": "^13.0.7",
-        "sort-package-json": "^4.0.0",
+        "sort-package-json": "^4.1.0",
         "typescript": "^7.0.2",
         "unified": "^11.0.5"
     },

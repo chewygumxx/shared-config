@@ -14,8 +14,10 @@
 # otherwise reads only `.github/actionlint.yaml`. chewygumxx/.github ignores
 # the same messages for its own workflows.
 
+# The leading **/ also matches a path given as ./.github/..., as tools
+# that start each path ./ pass them, so no file reads as an option.
 paths:
-    .github/workflows/**/*.{yml,yaml}:
+    "**/.github/workflows/**/*.{yml,yaml}":
         ignore:
             # actionlint's bundled metadata for create-github-app-token
             # predates v3, which added `client-id` and deprecated `app-id`.

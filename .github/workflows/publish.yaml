@@ -15,9 +15,9 @@
 #
 # Authentication is npm trusted publishing: npm exchanges this job's OIDC
 # token for a short-lived credential, so no NPM_TOKEN secret exists. Each
-# package must first be published once by hand, then have this repository
-# and workflow added under its npm Settings > Trusted Publisher with the
-# stage publish permission.
+# package must first be published once by hand with `--provenance=false`,
+# then have this repository and workflow added under its npm Settings >
+# Trusted Publisher with the `npm publish` permission.
 
 name: Publish
 
@@ -75,4 +75,4 @@ jobs:
             - name: Publish
               env:
                   DIR: ${{ steps.package.outputs.dir }}
-              run: npm stage publish --workspace "$DIR"
+              run: npm publish --workspace "$DIR"

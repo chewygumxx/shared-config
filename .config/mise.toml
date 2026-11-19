@@ -47,7 +47,7 @@ node = "24"
 
 # tombi formats and lints TOML, matching the version CI installs.
 # Configuration is the house style in `.config/tombi.toml`.
-"aqua:tombi-toml/tombi" = "1.5.5"
+"aqua:tombi-toml/tombi" = "1.11.3"
 
 # shellcheck lints the shell scripts by `@chewygumxx/shellcheck-config`'s
 # source, named with `--rcfile`; shfmt formats them by `.editorconfig`. Both

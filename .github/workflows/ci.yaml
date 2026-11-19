@@ -37,6 +37,7 @@ jobs:
         uses: chewygumxx/.github/.github/workflows/standard.yaml@v1
         with:
             metadata-sync: false
+            yaml: false
 
     check:
         needs: standard

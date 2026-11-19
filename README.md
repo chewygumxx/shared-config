@@ -55,14 +55,24 @@ change is exercised here before it is published.
 
 ```sh
 mise install
-bun install
-bun run check
+mise run install
+mise run check --all
 ```
 
-mise pins the tools that are not npm packages, at the versions the shared CI
-runs: yamllint, tombi, ShellCheck, shfmt, editorconfig-checker and
-actionlint. `bun run check` also lints each package's manifest with publint
-and, for those with types, attw, and finds unused dependencies with knip.
+`mise install` installs the toolchain and Git hooks. If this clone used Husky,
+clear its old repository-local hook path before running `mise install`:
+
+```sh
+git config --local --unset core.hooksPath '^\.config/husky/_$'
+```
+
+`mise run check` and `mise run lint` select staged paths for file-based checks.
+`mise run format` formats the working-tree copies of staged paths so you can
+review and stage the changes. Pass `--all` to select all tracked paths. The
+checks also run publint for each package, attw for packages with types, and
+Knip for unused dependencies. Use `mise run test` to run the tests and
+`mise run commit` to open the commitizen prompt. CI runs `bun run check`, which
+delegates to `mise run check --all`.
 
 ## Publishing
 

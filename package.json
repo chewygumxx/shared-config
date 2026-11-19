@@ -9,38 +9,12 @@
         "packages/*"
     ],
     "scripts": {
-        "check": "bun run typecheck && bun run test && bun run format:check && bun run lint && bun run lint:md && bun run lint:yaml && bun run lint:toml && bun run lint:sh && bun run lint:editorconfig && bun run lint:actions && bun run lint:package && bun run lint:deps && bun run lint:spell && bun run lint:secrets",
-        "commit": "cz",
-        "format": "biome format --write . && bun run format:yaml && bun run format:toml && bun run format:sh",
-        "format:check": "biome format .",
-        "format:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -w",
-        "format:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --offline --",
-        "format:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --write --log-level warn",
-        "lint": "biome lint .",
-        "lint:actions": "actionlint -config-file packages/actionlint-config/config.yaml",
-        "lint:deps": "knip",
-        "lint:editorconfig": "editorconfig-checker -config packages/editorconfig-checker-config/config.json",
-        "lint:md": "git ls-files -z '*.md' | xargs -0 -r remark --frail --quiet --no-stdout && git ls-files -z '*.md' | xargs -0 -r markdownlint-cli2",
-        "lint:package": "sort-package-json --check package.json packages/*/package.json && for dir in packages/*/; do publint --level warning \"$dir\" || exit 1; done && for dir in packages/*/; do test ! -f \"$dir/index.d.ts\" || attw --pack \"$dir\" --profile esm-only || exit 1; done",
-        "lint:secrets": "git ls-files -z | xargs -0 -r secretlint --no-gitignore",
-        "lint:sh": "git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shfmt -d && git ls-files -z | xargs -0 -r shfmt -f | tr '\\n' '\\0' | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
-        "lint:spell": "git ls-files -z | xargs -0 -r cspell --no-progress --no-summary --no-must-find-files",
-        "lint:toml": "git ls-files -z '*.toml' | xargs -0 -r tombi format --check --offline -- && git ls-files -z '*.toml' | xargs -0 -r tombi lint --error-on-warnings --offline --",
-        "lint:yaml": "git ls-files -z '*.yaml' '*.yml' | xargs -0 -r prettier --check && git ls-files -z '*.yaml' '*.yml' | YAMLLINT_CONFIG_FILE=packages/yamllint-config/config.yaml xargs -0 -r yamllint --strict",
-        "prepare": "test -d node_modules/husky && husky .config/husky || true",
-        "test": "bun test ./packages/*/test.js",
-        "typecheck": "tsc"
+        "check": "mise run check --all"
     },
     "config": {
         "commitizen": {
             "path": "@chewygumxx/cz-commitlint"
         }
-    },
-    "prettier": "./packages/prettier-config/index.js",
-    "remarkConfig": {
-        "plugins": [
-            "@chewygumxx/remark-preset"
-        ]
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
@@ -49,7 +23,6 @@
         "@types/bun": "^1.4.2",
         "commitizen": "^4.3.2",
         "cspell": "^10.3.6",
-        "husky": "^9.1.7",
         "knip": "^6.40.0",
         "markdownlint-cli2": "^0.23.3",
         "prettier": "^3.9.9",
@@ -58,45 +31,11 @@
         "remark-stringify": "^11.0.0",
         "secretlint": "^13.0.7",
         "sort-package-json": "^4.0.0",
+        "sync-header-metadata": "^2.4.3",
         "typescript": "^7.0.2",
         "unified": "^11.0.5"
     },
     "engines": {
         "bun": ">=1.4"
-    },
-    "cspell": {
-        "import": [
-            "@chewygumxx/cspell-config"
-        ],
-        "words": [
-            "commitlintconfig"
-        ]
-    },
-    "knip": {
-        "ignoreDependencies": [
-            "cspell",
-            "markdownlint-cli2",
-            "prettier",
-            "remark-cli",
-            "secretlint",
-            "@commitlint/config-conventional",
-            "conventional-changelog-conventionalcommits"
-        ],
-        "ignoreBinaries": [
-            "actionlint",
-            "editorconfig-checker"
-        ],
-        "husky": {
-            "config": [
-                ".config/husky/*"
-            ]
-        }
-    },
-    "secretlint": {
-        "rules": [
-            {
-                "id": "@chewygumxx/secretlint-rule-preset"
-            }
-        ]
     }
 }

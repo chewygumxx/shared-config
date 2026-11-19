@@ -68,6 +68,7 @@ git config --local --unset core.hooksPath '^\.config/husky/_$'
 ```
 
 `mise run check` and `mise run lint` select staged paths for file-based checks.
+The pre-commit hook checks the staged contents and restores unstaged edits.
 `mise run format` formats the working-tree copies of staged paths so you can
 review and stage the changes. Pass `--all` to select all tracked paths. The
 checks also run publint for each package, attw for packages with types, and
@@ -92,7 +93,8 @@ Merging the release pull request approves publication. Release Please creates
 a GitHub release with notes and a `<package>@<version>` tag for each package.
 The **Publish** workflow checks the tagged commit and publishes that workspace
 to npm with provenance. For the first release, check the GitHub release and
-confirm the version and `dist.attestations` with `npm view <package>@<version>`.
+confirm the version and provenance with
+`npm view <package>@<version> version dist.attestations`.
 
 [npm-trust]: https://docs.npmjs.com/trusted-publishers/
 

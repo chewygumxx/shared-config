@@ -1,0 +1,28 @@
+{
+    "name": "@chewygumxx/tombi-config",
+    "version": "0.0.1",
+    "description": "Shared tombi configuration for chewygumxx repositories",
+    "keywords": [
+        "tombi",
+        "tombi-config",
+        "toml"
+    ],
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/tombi-config",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/tombi-config"
+    },
+    "license": "GPL-3.0-only",
+    "exports": {
+        ".": "./tombi.toml",
+        "./tombi.toml": "./tombi.toml"
+    },
+    "files": [
+        "tombi.toml"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

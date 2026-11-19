@@ -19,6 +19,11 @@ export default defineConfig({
             description: "@chewygumxx/commitlint-config",
         },
         {
+            name: "tombi",
+            fullName: "tombi",
+            description: "@chewygumxx/tombi-config",
+        },
+        {
             name: "cz",
             fullName: "commitizen",
             description: "@chewygumxx/cz-commitlint",

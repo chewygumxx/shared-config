@@ -24,7 +24,6 @@ node                                             = "24"
 "aqua:rhysd/actionlint"                          = "1.7.12"
 
 [env]
-SHELLCHECK_OPTS      = "--rcfile={{config_root}}/packages/shellcheck-config/config.shellcheckrc"
 YAMLLINT_CONFIG_FILE = "{{config_root}}/packages/yamllint-config/config.yaml"
 
 [hooks]

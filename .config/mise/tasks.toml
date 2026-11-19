@@ -76,6 +76,7 @@ depends     = [ "lint {% if not usage.staged %}--all{% endif %}", "test" ]
 ["lint:actions"]
 description = "Lint GitHub workflows with actionlint"
 extends     = "staged"
+env         = { SHELLCHECK_OPTS = "--rcfile=packages/shellcheck-config/config.shellcheckrc" }
 run         = """
 scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint -config-file packages/actionlint-config/config.yaml
 """

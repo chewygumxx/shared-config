@@ -1,0 +1,29 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/tombi-config/tombi.toml
+#
+#
+
+# https://tombi-toml.github.io/tombi/docs/configuration
+#
+# The house style. tombi takes no flag or environment variable naming a
+# configuration file, so place this file where tombi looks for one: a
+# repository's `tombi.toml` or `.config/tombi.toml`, or the user-level
+# `tombi/config.toml`. chewygumxx/.github keeps an identical copy in
+# `actions/config/tombi` for its shared CI.
+
+toml-version = "v1.1.0"
+
+[format]
+[format.rules]
+array-bracket-space-width       = 1
+date-time-delimiter             = "space"
+group-blank-lines-limit         = 2
+indent-width                    = 4
+key-value-equals-sign-alignment = true
+trailing-comment-alignment      = true
+trailing-comment-space-width    = 2

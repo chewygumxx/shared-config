@@ -42,6 +42,7 @@ depends     = [
     "lint:toml         {% if not usage.staged %}--all{% endif %}",
     "lint:yaml         {% if not usage.staged %}--all{% endif %}",
     "lint:deps",
+    "lint:lockfile",
     "lint:package",
     "lint:types",
 ]
@@ -144,6 +145,10 @@ run         = [
 ["lint:deps"]
 description = "Find unused files and dependencies with knip"
 run         = "bunx --bun --no-install knip"
+
+["lint:lockfile"]
+description = "Verify the workspace versions recorded in bun.lock"
+run         = "bun scripts/check-workspace-versions.mjs"
 
 ["lint:package"]
 description = "Check all package manifests, published files and types"

@@ -10,6 +10,9 @@
 {
     "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
     "workspaces": {
+        ".": {
+            "entry": ["scripts/check-workspace-versions.mjs"]
+        },
         "packages/cz-commitlint": {
             "entry": ["test.js"]
         },

@@ -1,0 +1,54 @@
+{
+    "$schema": "https://raw.githubusercontent.com/googleapis/release-please/v17.6.0/schemas/config.json",
+    "release-type": "node",
+    "include-component-in-tag": true,
+    "include-v-in-tag": false,
+    "include-v-in-release-name": false,
+    "tag-separator": "@",
+    "separate-pull-requests": false,
+    "skip-changelog": true,
+    "packages": {
+        "packages/actionlint-config": {
+            "component": "actionlint-config"
+        },
+        "packages/biome-config": {
+            "component": "biome-config"
+        },
+        "packages/commitlint-config": {
+            "component": "commitlint-config"
+        },
+        "packages/cspell-config": {
+            "component": "cspell-config"
+        },
+        "packages/cz-commitlint": {
+            "component": "cz-commitlint"
+        },
+        "packages/editorconfig-checker-config": {
+            "component": "editorconfig-checker-config"
+        },
+        "packages/markdownlint-cli2-config": {
+            "component": "markdownlint-cli2-config"
+        },
+        "packages/prettier-config": {
+            "component": "prettier-config"
+        },
+        "packages/remark-preset": {
+            "component": "remark-preset"
+        },
+        "packages/secretlint-rule-preset": {
+            "component": "secretlint-rule-preset"
+        },
+        "packages/shellcheck-config": {
+            "component": "shellcheck-config"
+        },
+        "packages/tombi-config": {
+            "component": "tombi-config"
+        },
+        "packages/tsconfig": {
+            "component": "tsconfig"
+        },
+        "packages/yamllint-config": {
+            "component": "yamllint-config"
+        }
+    }
+}

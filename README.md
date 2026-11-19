@@ -39,6 +39,7 @@ that each repository's local hooks and its CI apply the same rules.
 | [`@chewygumxx/shellcheck-config`](packages/shellcheck-config)                     | ShellCheck's optional checks that catch mistakes           |
 | [`@chewygumxx/editorconfig-checker-config`](packages/editorconfig-checker-config) | editorconfig-checker without the indent size check         |
 | [`@chewygumxx/actionlint-config`](packages/actionlint-config)                     | actionlint without create-github-app-token's false reports |
+| [`@chewygumxx/tombi-config`](packages/tombi-config)                               | Tombi formatting and linting for TOML                      |
 
 `bun create @chewygumxx/repo` lives in its own repository,
 [`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
@@ -76,9 +77,23 @@ delegates to `mise run check --all`.
 
 ## Publishing
 
-Each package is versioned independently. Bump its `version`, commit, and push a
-tag named `<package>@<version>`, such as `biome-config@1.1.0`; the publish
-workflow stages that package with provenance. Approve the staged version on
-npmjs.com to release it.
+Release Please reads conventional commits on `main` and opens a single
+release pull request with independent versions for the affected packages. The
+workflow refreshes `bun.lock`. If the refresh fails, run the **Release Please**
+workflow manually on `main` to retry it.
+
+Before merging the first release pull request, enable **Allow npm publish**
+on the existing trusted publisher for each of the 14 packages listed above.
+In the package's npm settings, select the publisher for
+`chewygumxx/shared-config` and `publish.yaml`. This change requires a
+maintainer to authenticate with 2FA. [npm trusted publishing][npm-trust]
+
+Merging the release pull request approves publication. Release Please creates
+a GitHub release with notes and a `<package>@<version>` tag for each package.
+The **Publish** workflow checks the tagged commit and publishes that workspace
+to npm with provenance. For the first release, check the GitHub release and
+confirm the version and `dist.attestations` with `npm view <package>@<version>`.
+
+[npm-trust]: https://docs.npmjs.com/trusted-publishers/
 
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

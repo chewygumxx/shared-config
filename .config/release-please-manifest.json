@@ -1,0 +1,16 @@
+{
+    "packages/actionlint-config": "1.0.2",
+    "packages/biome-config": "1.1.0",
+    "packages/commitlint-config": "1.1.0",
+    "packages/cspell-config": "1.0.2",
+    "packages/cz-commitlint": "1.0.2",
+    "packages/editorconfig-checker-config": "1.0.1",
+    "packages/markdownlint-cli2-config": "1.1.0",
+    "packages/prettier-config": "1.0.1",
+    "packages/remark-preset": "1.1.0",
+    "packages/secretlint-rule-preset": "1.0.1",
+    "packages/shellcheck-config": "1.0.1",
+    "packages/tombi-config": "0.0.2",
+    "packages/tsconfig": "1.0.1",
+    "packages/yamllint-config": "1.0.1"
+}

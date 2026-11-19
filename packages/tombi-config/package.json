@@ -7,7 +7,7 @@
         "tombi-config",
         "toml"
     ],
-    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/tombi-config",
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/tombi-config#readme",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/chewygumxx/shared-config.git",

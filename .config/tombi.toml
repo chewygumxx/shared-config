@@ -10,18 +10,9 @@
 
 # https://tombi-toml.github.io/tombi/docs/configuration
 #
-# The house style, copied from chewygumxx/.github `actions/config/tombi`.
-# CI points tombi at that copy as a user-level configuration, which this
-# repository-level file overrides, so the pre-commit hook and CI agree.
+# The house style, extended from the `@chewygumxx/tombi-config` package's
+# source rather than copied. CI points tombi at the chewygumxx/.github copy as
+# a user-level configuration, which this repository-level file overrides, so
+# the pre-commit hook and CI agree.
 
-toml-version = "v1.1.0"
-
-[format]
-[format.rules]
-array-bracket-space-width       = 1
-date-time-delimiter             = "space"
-group-blank-lines-limit         = 2
-indent-width                    = 4
-key-value-equals-sign-alignment = true
-trailing-comment-alignment      = true
-trailing-comment-space-width    = 2
+extends = [ "packages/tombi-config/tombi.toml" ]

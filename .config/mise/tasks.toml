@@ -78,7 +78,7 @@ description = "Lint GitHub workflows with actionlint"
 extends     = "staged"
 env         = { SHELLCHECK_OPTS = "--rcfile=packages/shellcheck-config/config.shellcheckrc" }
 run         = """
-scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint -config-file packages/actionlint-config/config.yaml
+scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint
 """
 
 ["lint:biome"]
@@ -131,12 +131,13 @@ run         = [
     "scripts/with-files.sh '*.toml' -- tombi lint --error-on-warnings --offline --",
 ]
 
+# The actionlint symlink points to the package config, which is checked directly.
 ["lint:yaml"]
 description = "Lint and check formatting of YAML with Prettier and yamllint"
 extends     = "staged"
 run         = [
-    "scripts/with-files.sh '*.yaml' '*.yml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
-    "scripts/with-files.sh '*.yaml' '*.yml' -- yamllint --strict",
+    "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
+    "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- yamllint --strict",
 ]
 
 # ---------------------
@@ -195,7 +196,7 @@ run         = "scripts/with-files.sh '*.toml' -- tombi format --offline --"
 ["format:yaml"]
 description = "Format YAML with Prettier"
 extends     = "staged"
-run         = "scripts/with-files.sh '*.yaml' '*.yml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --write --log-level warn"
+run         = "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --write --log-level warn"
 
 # ------
 # Other

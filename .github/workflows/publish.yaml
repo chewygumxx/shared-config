@@ -8,23 +8,12 @@
 #
 #
 
-# Stages one workspace package per `<package>@<version>` tag, e.g.
-# `biome-config@1.1.0` stages `packages/biome-config` if its version matches.
-# A staged version is not installable until it is approved on npmjs.com with
-# the maintainer's 2FA, so this workflow alone can never release a package.
-#
-# Authentication is npm trusted publishing: npm exchanges this job's OIDC
-# token for a short-lived credential, so no NPM_TOKEN secret exists. Each
-# package must first be published once by hand with `--provenance=false`,
-# then have this repository and workflow added under its npm Settings >
-# Trusted Publisher with the `npm publish` permission.
-
 name: Publish
 
 on:
-    push:
-        tags:
-            - "*@*"
+    release:
+        types:
+            - published
 
 permissions:
     contents: read
@@ -36,6 +25,8 @@ concurrency:
 jobs:
     check:
         uses: chewygumxx/.github/.github/workflows/lint.yaml@v1
+        with:
+            ref: ${{ github.sha }}
 
     publish:
         needs: check
@@ -46,33 +37,54 @@ jobs:
             id-token: write
 
         steps:
-            - name: Checkout
+            - name: Checkout Release Commit
               uses: actions/checkout@v7
               with:
+                  ref: ${{ github.sha }}
                   persist-credentials: false
 
-            - name: Setup Bun and Node
-              uses: jdx/mise-action@v4
+            - name: Set Up Node
+              uses: actions/setup-node@v6
+              with:
+                  node-version: "24"
+                  registry-url: https://registry.npmjs.org
+                  package-manager-cache: false
 
-            - name: Bun Install
-              run: bun install --frozen-lockfile
-
-            - name: Resolve Package
+            - name: Resolve Public Workspace
               id: package
+              shell: bash
               env:
-                  TAG: ${{ github.ref_name }}
+                  TAG: ${{ github.event.release.tag_name }}
               run: |
+                  number='(0|[1-9][0-9]*)'
+                  identifier="(${number}|[0-9]*[a-zA-Z-][a-zA-Z0-9-]*)"
+                  semver="${number}\.${number}\.${number}(-${identifier}(\.${identifier})*)?(\+[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?"
+                  if [[ ! $TAG =~ ^[a-z0-9]+(-[a-z0-9]+)*@${semver}$ ]]; then
+                      echo "::error::Expected a <package>@<version> release tag"
+                      exit 1
+                  fi
+
                   name="${TAG%@*}"
                   version="${TAG##*@}"
-                  dir="packages/$name"
-                  test -f "$dir/package.json" || { echo "::error::No package at $dir"; exit 1; }
-                  actual=$(bun -p "require('./$dir/package.json').version")
-                  test "$actual" = "$version" || { echo "::error::$dir is $actual, tag says $version"; exit 1; }
+                  dir="packages/${name}"
+                  manifest="${dir}/package.json"
+                  if [[ ! -f $manifest ]]; then
+                      echo "::error::No workspace package at $dir"
+                      exit 1
+                  fi
+                  if ! jq -e --arg name "@chewygumxx/$name" --arg version "$version" \
+                      '.name == $name and .version == $version' "$manifest" >/dev/null; then
+                      echo "::error::Workspace name or version does not match $TAG"
+                      exit 1
+                  fi
+                  if ! jq -e '(.private == null or .private == false) and .publishConfig.access == "public"' \
+                      "$manifest" >/dev/null; then
+                      echo "::error::Workspace $dir must be public"
+                      exit 1
+                  fi
                   echo "dir=$dir" >> "$GITHUB_OUTPUT"
 
-            # npm, from mise's Node: Bun cannot stage a publish or publish by
-            # trusted publishing.
-            - name: Publish
+            - name: Publish with npm Trusted Publishing
               env:
                   DIR: ${{ steps.package.outputs.dir }}
-              run: npm publish --workspace "$DIR"
+              run: npm publish --workspace "$DIR" --ignore-scripts --provenance

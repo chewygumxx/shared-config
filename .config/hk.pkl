@@ -1,0 +1,46 @@
+// vim:set expandtab shiftwidth=4 filetype=pkl:
+// SPDX-License-Identifier: GPL-3.0-only
+
+//
+//
+// ~chewygumxx/shared-config.git
+// ::: :/.config/hk.pkl
+//
+//
+
+//
+// https://hk.jdx.dev/configuration
+//
+// The git hooks. Each step hands off to a mise task, which owns the file
+// selection and the tools, so a hook runs exactly what `mise run` does.
+// `mise install` installs the hooks; see [hooks] in .config/mise/config.toml.
+//
+
+amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+
+hooks {
+    ["pre-commit"] {
+        stash = "git"
+        fix = false
+        stage = false
+        steps {
+            ["check"] {
+                check = "mise run check --staged"
+            }
+        }
+    }
+    ["commit-msg"] {
+        steps {
+            ["commitlint"] {
+                check = "mise run lint:commit \"{{ commit_msg_file }}\""
+            }
+        }
+    }
+    ["pre-push"] {
+        steps {
+            ["headers"] {
+                check = "mise run lint:headers"
+            }
+        }
+    }
+}

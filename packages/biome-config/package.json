@@ -18,6 +18,7 @@
         "./biome": "./config.json"
     },
     "files": [
+        "biome-manifest.json",
         "config.json"
     ],
     "peerDependencies": {

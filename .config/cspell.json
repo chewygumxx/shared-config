@@ -1,0 +1,11 @@
+{
+    "import": ["@chewygumxx/cspell-config"],
+    "words": [
+        "attw",
+        "commitlintconfig",
+        "commitizen",
+        "pathspec",
+        "pathspecs",
+        "remarkrc"
+    ]
+}

@@ -1,0 +1,43 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.config/mise/config.toml
+#
+#
+
+min_version = "2026.9.0"
+
+[tools]
+bun                                              = "1.4"
+node                                             = "24"
+"aqua:jdx/hk"                                    = "2.13.0"
+"aqua:astral-sh/uv"                              = "0.12.19"
+"pypi:yamllint"                                  = { version = "1.38.0", depends = [ "aqua:astral-sh/uv" ] }
+"aqua:tombi-toml/tombi"                          = "1.11.3"
+"aqua:koalaman/shellcheck"                       = "0.11.0"
+"aqua:mvdan/sh"                                  = "3.14.1"
+"aqua:editorconfig-checker/editorconfig-checker" = "4.0.2"
+"aqua:rhysd/actionlint"                          = "1.7.12"
+
+[env]
+YAMLLINT_CONFIG_FILE = "{{config_root}}/packages/yamllint-config/config.yaml"
+
+[hooks]
+postinstall = "hk install --mise"
+
+[task_config]
+includes = [ ".config/mise/tasks.toml" ]
+
+[task_templates.staged]
+usage = '''
+flag "--staged" negate="--all" default=#true {
+    help "Select staged paths, or all tracked paths with --all"
+}
+'''
+
+[settings]
+task.remote_no_cache = true

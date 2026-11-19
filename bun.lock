@@ -26,7 +26,7 @@
     },
     "packages/actionlint-config": {
       "name": "@chewygumxx/actionlint-config",
-      "version": "1.0.1",
+      "version": "1.0.2",
     },
     "packages/biome-config": {
       "name": "@chewygumxx/biome-config",
@@ -49,7 +49,7 @@
     },
     "packages/cspell-config": {
       "name": "@chewygumxx/cspell-config",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "peerDependencies": {
         "cspell": "^10.3.6",
       },
@@ -125,6 +125,10 @@
       "name": "@chewygumxx/shellcheck-config",
       "version": "1.0.1",
     },
+    "packages/tombi-config": {
+      "name": "@chewygumxx/tombi-config",
+      "version": "0.0.2",
+    },
     "packages/tsconfig": {
       "name": "@chewygumxx/tsconfig",
       "version": "1.0.1",
@@ -193,6 +197,8 @@
     "@chewygumxx/secretlint-rule-preset": ["@chewygumxx/secretlint-rule-preset@workspace:packages/secretlint-rule-preset"],
 
     "@chewygumxx/shellcheck-config": ["@chewygumxx/shellcheck-config@workspace:packages/shellcheck-config"],
+
+    "@chewygumxx/tombi-config": ["@chewygumxx/tombi-config@workspace:packages/tombi-config"],
 
     "@chewygumxx/tsconfig": ["@chewygumxx/tsconfig@workspace:packages/tsconfig"],
 

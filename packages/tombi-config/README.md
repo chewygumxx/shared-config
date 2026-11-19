@@ -35,12 +35,24 @@ Personal configuration of tombi, the TOML formatter and linter:
 bun add --dev @chewygumxx/tombi-config
 ```
 
-tombi takes no flag or environment variable naming a configuration file. Copy
-the file to where tombi looks for one: the repository's `tombi.toml` or
-`.config/tombi.toml`, or the user-level `tombi/config.toml`.
+Extend it from the repository's `tombi.toml` or `.config/tombi.toml`. This
+needs tombi 1.11.0 or later. Paths in `.config/tombi.toml` resolve from the
+repository root; in `tombi.toml`, from the file's own directory.
 
-```sh
-cp node_modules/@chewygumxx/tombi-config/tombi.toml .config/tombi.toml
+```toml
+extends = [ "node_modules/@chewygumxx/tombi-config/tombi.toml" ]
+```
+
+## Extending
+
+The local configuration is applied after the house style: tables merge, and
+local values win.
+
+```toml
+extends = [ "node_modules/@chewygumxx/tombi-config/tombi.toml" ]
+
+[format.rules]
+line-width = 100
 ```
 
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

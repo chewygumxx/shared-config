@@ -33,6 +33,7 @@ depends     = [
     "lint:toml         {% if not usage.staged %}--all{% endif %}",
     "lint:yaml         {% if not usage.staged %}--all{% endif %}",
     "lint:deps",
+    "lint:headers",
     "lint:lockfile",
     "lint:package",
     "lint:types",

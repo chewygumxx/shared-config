@@ -23,6 +23,7 @@ alias       = "f"
 extends     = "staged"
 depends     = [
     "format:biome {% if not usage.staged %}--all{% endif %}",
+    "format:headers",
     "format:sh    {% if not usage.staged %}--all{% endif %}",
     "format:toml  {% if not usage.staged %}--all{% endif %}",
     "format:yaml  {% if not usage.staged %}--all{% endif %}",
@@ -32,6 +33,10 @@ depends     = [
 description = "Format with Biome"
 extends     = "staged"
 run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bun run biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
+
+["format:headers"]
+description = "Sync files' repository and path header lines"
+run         = "bun run sync-header-metadata --update"
 
 ["format:sh"]
 description = "Format shell scripts with shfmt"

@@ -36,11 +36,4 @@ hooks {
             }
         }
     }
-    ["pre-push"] {
-        steps {
-            ["headers"] {
-                check = "mise run lint:headers"
-            }
-        }
-    }
 }

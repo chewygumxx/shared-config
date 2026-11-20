@@ -1,6 +1,6 @@
 {
     "packages/actionlint-config": "1.0.2",
-    "packages/biome-config": "1.1.0",
+    "packages/biome-config": "1.2.0",
     "packages/commitlint-config": "1.1.0",
     "packages/cspell-config": "1.0.2",
     "packages/cz-commitlint": "1.0.2",

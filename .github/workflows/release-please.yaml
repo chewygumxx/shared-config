@@ -80,6 +80,9 @@ jobs:
             - name: Set Up mise
               if: steps.pr.outputs.sha != ''
               uses: jdx/mise-action@v4
+              env:
+                  # This job updates only bun.lock, with no dependencies installed.
+                  MISE_NO_HOOKS: "1"
 
             - name: Refresh and Verify Bun Lockfile
               if: steps.pr.outputs.sha != ''

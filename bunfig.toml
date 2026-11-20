@@ -14,7 +14,7 @@
 # Runs every package script on Bun, the CLIs whose shebang names node
 # included: `bun run` puts a `node` that is Bun first on `PATH`, nested
 # scripts too, so a Node installed elsewhere, such as a CI runner's, never
-# runs them.
+# runs them. The mise tasks rely on it, running each CLI as `bun run <cli>`.
 #
 
 [run]

@@ -40,6 +40,8 @@ that each repository's local hooks and its CI apply the same rules.
 | [`@chewygumxx/editorconfig-checker-config`](packages/editorconfig-checker-config) | editorconfig-checker without the indent size check         |
 | [`@chewygumxx/actionlint-config`](packages/actionlint-config)                     | actionlint without create-github-app-token's false reports |
 | [`@chewygumxx/tombi-config`](packages/tombi-config)                               | Tombi formatting and linting for TOML                      |
+| [`@chewygumxx/hk-config`](packages/hk-config)                                     | hk steps that lint and format, imported by `hk.pkl`        |
+| [`@chewygumxx/mise-tasks-config`](packages/mise-tasks-config)                     | `cgxx:` mise task templates that hand work to hk           |
 
 `bun create @chewygumxx/repo` lives in its own repository,
 [`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
@@ -52,29 +54,36 @@ which consumes these packages.
 ## Development
 
 This repository consumes its own packages through Bun workspaces, so every
-change is exercised here before it is published.
+change is exercised here before it is published. mise is the switchboard: it
+pins the tools and names the tasks, and hands each task to the tool for it.
 
 ```sh
 mise install
-mise run install
 mise run check --all
 ```
 
-`mise install` installs the toolchain and Git hooks. If this clone used Husky,
-clear its old repository-local hook path before running `mise install`:
+`mise install` installs the toolchain, then the packages, then the Git hooks,
+which read the packages. If this clone used Husky, clear its old
+repository-local hook path before running `mise install`:
 
 ```sh
 git config --local --unset core.hooksPath '^\.config/husky/_$'
 ```
 
-`mise run check` and `mise run lint` select staged paths for file-based checks.
-The pre-commit hook checks the staged contents and restores unstaged edits.
-`mise run format` formats the working-tree copies of staged paths so you can
-review and stage the changes. Pass `--all` to select all tracked paths. The
-checks also run publint for each package, attw for packages with types, and
-Knip for unused dependencies. Use `mise run test` to run the tests and
-`mise run commit` to open the commitizen prompt. CI runs `bun run check`, which
-delegates to `mise run check --all`.
+The tasks extend the `cgxx:` templates of
+[`@chewygumxx/mise-tasks-config`](packages/mise-tasks-config). `mise run lint`
+and `mise run format` run hk's check and fix hooks, whose steps come from
+[`@chewygumxx/hk-config`](packages/hk-config) in `.config/hk.pkl`. Both act on
+the changed files, staged, unstaged and untracked; pass `--staged` for the
+staged files alone, `--all` for every file git does not ignore, and `-S <step>`
+for one hk step. A change to `bun.lock`, `.config` or `packages` selects every
+file, and hk skips a step whose inputs have not changed since it last passed.
+`mise run format` leaves its fixes unstaged for you to review.
+
+The pre-commit hook runs `mise run check --staged` on the staged contents and
+restores unstaged edits. Use `mise run test` to run the tests,
+`mise run commit` to open the commitizen prompt and `mise run act` to run CI
+locally. CI runs `bun run check`, which delegates to `mise run check --all`.
 
 ## Publishing
 
@@ -84,10 +93,14 @@ workflow refreshes `bun.lock`. If the refresh fails, run the **Release Please**
 workflow manually on `main` to retry it.
 
 Before merging the first release pull request, enable **Allow npm publish**
-on the existing trusted publisher for each of the 14 packages listed above.
-In the package's npm settings, select the publisher for
+on the existing trusted publisher for each of the first 14 packages listed
+above. In the package's npm settings, select the publisher for
 `chewygumxx/shared-config` and `publish.yaml`. This change requires a
 maintainer to authenticate with 2FA. [npm trusted publishing][npm-trust]
+
+A trusted publisher can be added only to a package that exists, so
+`@chewygumxx/hk-config` and `@chewygumxx/mise-tasks-config` are first
+published by hand, then given their trusted publisher like the rest.
 
 Merging the release pull request approves publication. Release Please creates
 a GitHub release with notes and a `<package>@<version>` tag for each package.

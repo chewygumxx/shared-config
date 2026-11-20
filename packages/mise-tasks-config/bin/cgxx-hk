@@ -1,0 +1,75 @@
+#!/usr/bin/env sh
+# vim:set expandtab shiftwidth=4 filetype=sh:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/mise-tasks-config/bin/cgxx-hk
+#
+#
+
+# Usage: cgxx-hk check|fix
+#
+# Runs hk's check or fix hook on the files a cgxx: mise task's flags select,
+# which mise exports: none for the changed files, $usage_staged for the
+# staged files, $usage_all for every file git does not ignore, and
+# $usage_step for the steps to run. A change to a path in $CGXX_WIDEN_ON,
+# by default the lockfile and the hk and mise configuration, selects every
+# file. Every step runs, however many fail.
+
+set -euf
+
+usage() {
+    echo 'usage: cgxx-hk check|fix' >&2
+    exit 2
+}
+
+[ $# -eq 1 ] || usage
+case $1 in
+check | fix) hook=$1 ;;
+*) usage ;;
+esac
+
+staged=${usage_staged:-false}
+all=${usage_all:-false}
+widen=${CGXX_WIDEN_ON-bun.lock .config/hk.pkl .config/mise}
+steps=${usage_step-}
+
+if [ "$staged" = true ] && [ "$all" = true ]; then
+    echo 'cgxx-hk: --staged and --all exclude each other' >&2
+    exit 2
+fi
+
+# Whether a path in $widen changed among the files the flags select.
+# Globbing is off, so the pathspecs reach git unexpanded.
+widened() {
+    [ -n "$widen" ] || return 1
+    if [ "$staged" = true ]; then
+        # shellcheck disable=SC2086
+        if git diff --cached --quiet -- $widen; then
+            return 1
+        fi
+    else
+        # shellcheck disable=SC2086
+        changes=$(git status --porcelain -- $widen)
+        [ -n "$changes" ]
+    fi
+}
+
+if [ "$all" = true ] || widened; then
+    set -- --all
+elif [ "$staged" = true ]; then
+    set -- --staged
+else
+    set --
+fi
+
+for step in $steps; do
+    set -- "$@" --step "$step"
+done
+
+set -- "$@" --no-fail-fast
+[ "$hook" = check ] || set -- "$@" --no-stage
+
+exec hk "$hook" "$@"

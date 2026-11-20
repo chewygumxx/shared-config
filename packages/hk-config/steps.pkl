@@ -1,0 +1,225 @@
+// vim:set expandtab shiftwidth=4 filetype=pkl:
+// SPDX-License-Identifier: GPL-3.0-only
+
+//
+//
+// ~chewygumxx/shared-config.git
+// ::: :/packages/hk-config/steps.pkl
+//
+//
+
+//
+// https://hk.jdx.dev/configuration
+//
+// The shared hk steps. A repository's hk.pkl imports this file from
+// node_modules and maps the steps it wants into its hooks; `lint` and
+// `format` collect them all. hk selects the files: changed, staged, or all.
+// CLIs installed with Bun run through `bun run`; the rest are mise tools.
+//
+
+import "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+
+/// The published configuration packages, as Bun installs them.
+hidden configs: String = "node_modules/@chewygumxx"
+
+/// Files every step's result also depends on: the locked dependencies,
+/// configuration packages included, and the pinned tools.
+hidden commonInputs: List<String> = List("bun.lock", ".config/mise/config.toml")
+
+/// Further cache inputs for every step, such as a repository's own copies
+/// of the configuration packages.
+hidden extraInputs: List<String> = List()
+
+local function inputs(own: List<String>): List<String> = own + commonInputs + extraInputs
+
+local shellFiles = List(
+    new Config.FileSelector { glob = List("**/*.sh", "**/*.bash") },
+    new Config.FileSelector { types = List("sh", "bash") },
+)
+
+local shellcheckOpts = "--rcfile=\(configs)/shellcheck-config/config.shellcheckrc"
+
+// -------------------
+// Lint: file by file
+// -------------------
+
+actionlint: Config.Step = new {
+    glob = List(".github/workflows/*.yaml", ".github/workflows/*.yml")
+    check = "actionlint {{files}}"
+    env { ["SHELLCHECK_OPTS"] = shellcheckOpts }
+    cache = true
+    cache_inputs = inputs(List(".github/workflows/**", ".github/actionlint.yaml"))
+}
+
+editorconfig: Config.Step = new {
+    glob = "**/*"
+    check = "editorconfig-checker -config \(configs)/editorconfig-checker-config/config.json {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*", ".editorconfig"))
+}
+
+emdash: Config.Step = new {
+    glob = "**/*"
+    check = "bun run cgxx-lint-emdash {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*"))
+}
+
+remark: Config.Step = new {
+    glob = "**/*.md"
+    check = "bun run remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*.md", ".config/remarkrc.json"))
+}
+
+secretlint: Config.Step = new {
+    glob = "**/*"
+    check = "bun run secretlint --no-gitignore {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*", ".secretlintrc.json"))
+}
+
+shellcheck: Config.Step = new {
+    match_any = shellFiles
+    check = "shellcheck {{files}}"
+    env { ["SHELLCHECK_OPTS"] = shellcheckOpts }
+    cache = true
+    cache_inputs = inputs(List("**/*"))
+}
+
+cspell: Config.Step = new {
+    glob = "**/*"
+    check = "bun run cspell --no-progress --no-summary --no-must-find-files {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*", ".config/cspell.json"))
+}
+
+yamllint: Config.Step = new {
+    glob = List("**/*.yaml", "**/*.yml")
+    check = "yamllint --strict {{files}}"
+    env { ["YAMLLINT_CONFIG_FILE"] = "\(configs)/yamllint-config/config.yaml" }
+    cache = true
+    cache_inputs = inputs(List("**/*.yaml", "**/*.yml"))
+}
+
+// ---------------------------------
+// Lint and format: file by file
+// ---------------------------------
+
+biome: Config.Step = new {
+    glob = "**/*"
+    check = "bun run biome ci --no-errors-on-unmatched --files-ignore-unknown=true {{files}}"
+    fix = "bun run biome format --write --no-errors-on-unmatched --files-ignore-unknown=true {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*", ".biome.json", ".biome.jsonc", "biome.json", "biome.jsonc"))
+}
+
+markdownlint: Config.Step = new {
+    glob = "**/*.md"
+    check = "bun run markdownlint-cli2 {{files}}"
+    fix = "bun run markdownlint-cli2 --fix {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*.md", ".markdownlint-cli2.jsonc"))
+}
+
+shfmt: Config.Step = new {
+    match_any = shellFiles
+    check = "shfmt -d {{files}}"
+    fix = "shfmt -w {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*", ".editorconfig"))
+}
+
+tombi: Config.Step = new {
+    glob = "**/*.toml"
+    check = "tombi format --check --offline -- {{files}} && tombi lint --error-on-warnings --offline -- {{files}}"
+    fix = "tombi format --offline -- {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*.toml", ".config/tombi.toml"))
+}
+
+prettier: Config.Step = new {
+    glob = List("**/*.yaml", "**/*.yml")
+    check = "bun run prettier --config .config/prettierrc.json --check {{files}}"
+    fix = "bun run prettier --config .config/prettierrc.json --write --log-level warn {{files}}"
+    cache = true
+    cache_inputs = inputs(List("**/*.yaml", "**/*.yml", ".editorconfig", ".config/prettierrc.json"))
+}
+
+// ----------------------
+// Whole project
+// ----------------------
+
+tsc: Config.Step = new {
+    check = "bun run tsc"
+    cache = true
+    cache_inputs = inputs(List("**/*.js", "**/*.mjs", "**/*.ts", "**/*.mts", "**/*.d.ts", "**/tsconfig*.json", "**/package.json"))
+}
+
+knip: Config.Step = new {
+    check = "bun run knip"
+    cache = true
+    cache_inputs = inputs(List("**/*"))
+}
+
+/// publint, and attw for packages with types. A workspace names its
+/// package directories in `check`.
+packages: Config.Step = new {
+    check = "bun run cgxx-lint-packages ."
+    cache = true
+    cache_inputs = inputs(List("**/*"))
+}
+
+sort_package_json: Config.Step = new {
+    check = "bun run sort-package-json --check package.json"
+    fix = "bun run sort-package-json package.json"
+    exclusive = true
+    cache = true
+    cache_inputs = inputs(List("**/package.json"))
+}
+
+headers: Config.Step = new {
+    check = "bun run sync-header-metadata"
+    fix = "bun run sync-header-metadata --update"
+    exclusive = true
+    cache = true
+    cache_inputs = inputs(List("**/*"))
+}
+
+// ------------
+// Collections
+// ------------
+
+/// Every step, for the check hook.
+lint: Mapping<String, Config.Step> = new {
+    ["actionlint"] = actionlint
+    ["biome"] = biome
+    ["cspell"] = cspell
+    ["editorconfig"] = editorconfig
+    ["emdash"] = emdash
+    ["headers"] = headers
+    ["knip"] = knip
+    ["markdownlint"] = markdownlint
+    ["packages"] = packages
+    ["prettier"] = prettier
+    ["remark"] = remark
+    ["secretlint"] = secretlint
+    ["shellcheck"] = shellcheck
+    ["shfmt"] = shfmt
+    ["sort_package_json"] = sort_package_json
+    ["tombi"] = tombi
+    ["tsc"] = tsc
+    ["yamllint"] = yamllint
+}
+
+/// The steps that fix, for the fix hook, which would otherwise run the
+/// checks of the steps that cannot.
+format: Mapping<String, Config.Step> = new {
+    ["biome"] = biome
+    ["headers"] = headers
+    ["markdownlint"] = markdownlint
+    ["prettier"] = prettier
+    ["shfmt"] = shfmt
+    ["sort_package_json"] = sort_package_json
+    ["tombi"] = tombi
+}

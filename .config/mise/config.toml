@@ -9,7 +9,7 @@
 #
 #
 
-min_version = "2026.9.0"
+min_version = "2026.11.6"
 
 [tools]
 bun                                              = "1.4"
@@ -24,20 +24,18 @@ node                                             = "24"
 "aqua:rhysd/actionlint"                          = "1.7.12"
 
 [env]
-YAMLLINT_CONFIG_FILE = "{{config_root}}/packages/yamllint-config/config.yaml"
+# A change to these, the configuration packages among them, makes lint and
+# format select every file.
+CGXX_WIDEN_ON = "bun.lock .config packages .biome.json .editorconfig .markdownlint-cli2.jsonc .secretlintrc.json"
 
 [hooks]
-postinstall = "hk install --mise"
+# The hooks import the shared hk steps, which bun ci installs first. CI
+# installs the packages itself, from a lockfile a release may yet refresh.
+postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
 
 [task_config]
-includes = [ ".config/mise/tasks.toml" ]
-
-[task_templates.staged]
-usage = '''
-flag "--staged" negate="--all" default=#true {
-    help "Select staged paths, or all tracked paths with --all"
-}
-'''
+includes = [ ".config/mise/tasks/*.task.toml" ]
 
 [settings]
-task.remote_no_cache = true
+# Remote file tasks, such as act-cached, are experimental.
+experimental = true

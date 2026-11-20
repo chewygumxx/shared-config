@@ -1,0 +1,72 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/mise-tasks-config/tasks.toml
+#
+#
+
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+#
+# The cgxx: task templates. A repository links this file into
+# .config/mise/conf.d/, as an included task file cannot hold templates, and
+# each of its tasks extends one, overriding what differs. lint and format
+# hand the work to hk: with no flag, the changed files; --staged, the staged
+# files; --all, every file git does not ignore.
+#
+
+[task_templates."cgxx:install"]
+description = "Install the locked dependency tree"
+alias       = "i"
+run         = "bun ci"
+
+[task_templates."cgxx:test"]
+description = "Run the tests"
+alias       = "t"
+
+[task_templates."cgxx:lint"]
+description = "Run every linter and format check through hk"
+alias       = "l"
+usage       = '''
+flag "--staged" help="Select the staged files alone"
+flag "-a --all" help="Select every file git does not ignore"
+flag "-S --step <step>" var=#true help="Run only the named hk step"
+'''
+run         = "bun run cgxx-hk check"
+
+[task_templates."cgxx:format"]
+description = "Apply every formatter through hk"
+alias       = "f"
+usage       = '''
+flag "--staged" help="Select the staged files alone"
+flag "-a --all" help="Select every file git does not ignore"
+flag "-S --step <step>" var=#true help="Run only the named hk step"
+'''
+run         = "bun run cgxx-hk fix"
+
+[task_templates."cgxx:check"]
+description = "Run everything CI runs: lint and test"
+alias       = "c"
+usage       = '''
+flag "--staged" help="Lint the staged files alone"
+flag "-a --all" help="Lint every file git does not ignore"
+'''
+depends     = [ "lint {% if usage.staged %}--staged{% elif usage.all %}--all{% endif %}", "test" ]
+
+[task_templates."cgxx:lint:commit"]
+description = "Lint a commit message file with commitlint"
+usage       = 'arg "<file>" help="The commit message file"'
+run         = 'bun run commitlint --edit "$usage_file"'
+
+[task_templates."cgxx:commit"]
+description = "Compose a commit with commitizen"
+run         = "bun run cz"
+
+# Wraps a remote act-cached file task, which the repository declares.
+[task_templates."cgxx:act"]
+description = "Run CI locally with act"
+run         = "mise run --no-cache act-cached"

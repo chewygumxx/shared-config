@@ -1,0 +1,86 @@
+{
+    "name": "@chewygumxx/hk-config",
+    "version": "0.0.0",
+    "description": "Shared hk steps that lint and format chewygumxx repositories",
+    "keywords": [
+        "hk",
+        "git-hooks",
+        "lint",
+        "format"
+    ],
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/hk-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/hk-config"
+    },
+    "license": "GPL-3.0-only",
+    "exports": {
+        ".": "./steps.pkl",
+        "./steps.pkl": "./steps.pkl"
+    },
+    "bin": {
+        "cgxx-lint-emdash": "bin/cgxx-lint-emdash",
+        "cgxx-lint-packages": "bin/cgxx-lint-packages"
+    },
+    "files": [
+        "bin",
+        "steps.pkl"
+    ],
+    "peerDependencies": {
+        "@arethetypeswrong/cli": "^0.18.5",
+        "@biomejs/biome": "2.6.8",
+        "cspell": "^10.3.6",
+        "knip": "^6.40.0",
+        "markdownlint-cli2": "^0.23.3",
+        "prettier": "^3.9.9",
+        "publint": "^0.3.25",
+        "remark-cli": "^12.0.1",
+        "secretlint": "^13.0.7",
+        "sort-package-json": "^4.0.0",
+        "sync-header-metadata": "^2.4.3",
+        "typescript": "^7.0.2"
+    },
+    "peerDependenciesMeta": {
+        "@arethetypeswrong/cli": {
+            "optional": true
+        },
+        "@biomejs/biome": {
+            "optional": true
+        },
+        "cspell": {
+            "optional": true
+        },
+        "knip": {
+            "optional": true
+        },
+        "markdownlint-cli2": {
+            "optional": true
+        },
+        "prettier": {
+            "optional": true
+        },
+        "publint": {
+            "optional": true
+        },
+        "remark-cli": {
+            "optional": true
+        },
+        "secretlint": {
+            "optional": true
+        },
+        "sort-package-json": {
+            "optional": true
+        },
+        "sync-header-metadata": {
+            "optional": true
+        },
+        "typescript": {
+            "optional": true
+        }
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

@@ -29,8 +29,9 @@ node                                             = "24"
 CGXX_WIDEN_ON = "bun.lock .config packages .biome.json .editorconfig .markdownlint-cli2.jsonc .secretlintrc.json"
 
 [hooks]
-# The hooks import the shared hk steps, which bun ci installs first.
-postinstall = [ "bun ci", "hk install --mise" ]
+# The hooks import the shared hk steps, which bun ci installs first. CI
+# installs the packages itself, from a lockfile a release may yet refresh.
+postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
 
 [task_config]
 includes = [ ".config/mise/tasks/*.task.toml" ]

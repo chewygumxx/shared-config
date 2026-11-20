@@ -1,0 +1,32 @@
+{
+    "name": "@chewygumxx/mise-tasks-config",
+    "version": "0.0.0",
+    "description": "Shared mise task templates that run hk for chewygumxx repositories",
+    "keywords": [
+        "mise",
+        "mise-tasks",
+        "hk"
+    ],
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/mise-tasks-config#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/mise-tasks-config"
+    },
+    "license": "GPL-3.0-only",
+    "exports": {
+        ".": "./tasks.toml",
+        "./tasks.toml": "./tasks.toml"
+    },
+    "bin": {
+        "cgxx-hk": "bin/cgxx-hk"
+    },
+    "files": [
+        "bin",
+        "tasks.toml"
+    ],
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

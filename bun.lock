@@ -114,6 +114,13 @@
         "markdownlint-cli2": "^0.23.3",
       },
     },
+    "packages/mise-tasks-config": {
+      "name": "@chewygumxx/mise-tasks-config",
+      "version": "0.0.0",
+      "bin": {
+        "cgxx-hk": "bin/cgxx-hk",
+      },
+    },
     "packages/prettier-config": {
       "name": "@chewygumxx/prettier-config",
       "version": "1.0.1",
@@ -231,6 +238,8 @@
     "@chewygumxx/hk-config": ["@chewygumxx/hk-config@workspace:packages/hk-config"],
 
     "@chewygumxx/markdownlint-cli2-config": ["@chewygumxx/markdownlint-cli2-config@workspace:packages/markdownlint-cli2-config"],
+
+    "@chewygumxx/mise-tasks-config": ["@chewygumxx/mise-tasks-config@workspace:packages/mise-tasks-config"],
 
     "@chewygumxx/prettier-config": ["@chewygumxx/prettier-config@workspace:packages/prettier-config"],
 

@@ -31,7 +31,7 @@ depends     = [
 ["format:biome"]
 description = "Format with Biome"
 extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bunx --bun --no-install biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
+run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bun run biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
 
 ["format:sh"]
 description = "Format shell scripts with shfmt"
@@ -47,4 +47,4 @@ run         = "scripts/with-files.sh --widen-on .config/tombi.toml --widen-on pa
 ["format:yaml"]
 description = "Format YAML with Prettier"
 extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --write --log-level warn"
+run         = "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bun run prettier --config .config/prettierrc.json --write --log-level warn"

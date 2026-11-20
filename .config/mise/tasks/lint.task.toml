@@ -63,7 +63,7 @@ scripts/with-files.sh --widen-on .github/actionlint.yaml --widen-on packages/act
 ["lint:biome"]
 description = "Lint and check formatting with Biome"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bunx --bun --no-install biome ci --no-errors-on-unmatched --files-ignore-unknown=true"
+run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bun run biome ci --no-errors-on-unmatched --files-ignore-unknown=true"
 
 ["lint:editorconfig"]
 description = "Check files against .editorconfig"
@@ -90,14 +90,14 @@ sources     = [
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
 run         = [
-    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bunx --bun --no-install remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout",
-    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bunx --bun --no-install markdownlint-cli2",
+    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bun run remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout",
+    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bun run markdownlint-cli2",
 ]
 
 ["lint:secrets"]
 description = "Scan for secrets with secretlint --no-gitignore"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh --widen-on .secretlintrc.json --widen-on packages/secretlint-rule-preset -- bunx --bun --no-install secretlint --no-gitignore"
+run         = "scripts/with-files.sh --widen-on .secretlintrc.json --widen-on packages/secretlint-rule-preset -- bun run secretlint --no-gitignore"
 
 ["lint:sh"]
 description = "Lint shell scripts with shfmt and ShellCheck"
@@ -111,7 +111,7 @@ run         = [
 ["lint:spell"]
 description = "Check spelling with cspell"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh --widen-on .config/cspell.json --widen-on packages/cspell-config -- bunx --bun --no-install cspell --no-progress --no-summary --no-must-find-files"
+run         = "scripts/with-files.sh --widen-on .config/cspell.json --widen-on packages/cspell-config -- bun run cspell --no-progress --no-summary --no-must-find-files"
 
 ["lint:toml"]
 description = "Lint and check formatting of TOML with Tombi"
@@ -146,7 +146,7 @@ sources     = [
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
 run         = [
-    "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bun run prettier --config .config/prettierrc.json --check",
     "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- yamllint --strict",
 ]
 
@@ -156,7 +156,7 @@ run         = [
 
 ["lint:deps"]
 description = "Find unused files and dependencies with knip"
-run         = "bunx --bun --no-install knip"
+run         = "bun run knip"
 
 ["lint:lockfile"]
 description = "Verify the workspace versions recorded in bun.lock"
@@ -165,20 +165,20 @@ run         = "bun scripts/check-workspace-versions.mjs"
 ["lint:package"]
 description = "Check all package manifests, published files and types"
 run         = [
-    "bunx --bun --no-install sort-package-json --check package.json packages/*/package.json",
-    'for dir in packages/*/; do bunx --bun --no-install publint --level warning "$dir" || exit 1; done',
-    'for dir in packages/*/; do test ! -f "$dir/index.d.ts" || bunx --bun --no-install attw --pack "$dir" --profile esm-only || exit 1; done',
+    "bun run sort-package-json --check package.json packages/*/package.json",
+    'for dir in packages/*/; do bun run publint --level warning "$dir" || exit 1; done',
+    'for dir in packages/*/; do test ! -f "$dir/index.d.ts" || bun run attw --pack "$dir" --profile esm-only || exit 1; done',
 ]
 
 ["lint:types"]
 description = "Type-check with tsc"
-run         = "bunx --bun --no-install tsc"
+run         = "bun run tsc"
 
 ["lint:commit"]
 description = "Lint a commit message file with commitlint"
 usage       = 'arg "<file>" help="The commit message file"'
-run         = 'bunx --bun --no-install commitlint --edit "$usage_file"'
+run         = 'bun run commitlint --edit "$usage_file"'
 
 ["lint:headers"]
 description = "Verify files' repository and path header lines"
-run         = "bunx --bun --no-install sync-header-metadata"
+run         = "bun run sync-header-metadata"

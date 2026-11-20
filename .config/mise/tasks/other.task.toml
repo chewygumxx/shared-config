@@ -15,7 +15,7 @@
 
 [commit]
 description = "Compose a commit with commitizen"
-run         = "bunx --bun --no-install cz"
+run         = "bun run cz"
 
 [act]
 description = "Run CI locally with act"

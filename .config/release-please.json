@@ -27,15 +27,17 @@
             "component": "editorconfig-checker-config"
         },
         "packages/hk-config": {
+            "bump-minor-pre-major": true,
             "component": "hk-config",
-            "bump-minor-pre-major": true
+            "initial-version": "0.1.0"
         },
         "packages/markdownlint-cli2-config": {
             "component": "markdownlint-cli2-config"
         },
         "packages/mise-tasks-config": {
+            "bump-minor-pre-major": true,
             "component": "mise-tasks-config",
-            "bump-minor-pre-major": true
+            "initial-version": "0.1.0"
         },
         "packages/prettier-config": {
             "component": "prettier-config"

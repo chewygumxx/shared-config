@@ -5,26 +5,17 @@
 #
 #
 # ~chewygumxx/shared-config.git
-# ::: :/.config/mise/tasks.toml
+# ::: :/.config/mise/tasks/lint.task.toml
 #
 #
 
 #
 # https://mise.jdx.dev/tasks/task-configuration.html
 #
-# File-based tasks, and lint, format and check, act on staged files alone
-# unless given --all, which parents pass on. Each extends a template in
-# .config/mise/config.toml, which declares the flag.
+# Each file-based linter acts on staged files alone unless given --all,
+# which lint passes on. The templates in .config/mise/config.toml declare
+# the flag.
 #
-
-# ---------
-# Standard
-# ---------
-
-[install]
-description = "Install the locked dependency tree"
-alias       = "i"
-run         = "bun ci"
 
 [lint]
 description = "Run every linter and format check"
@@ -47,27 +38,6 @@ depends     = [
     "lint:types",
 ]
 
-[format]
-description = "Apply every formatter"
-alias       = "f"
-extends     = "staged"
-depends     = [
-    "format:biome {% if not usage.staged %}--all{% endif %}",
-    "format:sh    {% if not usage.staged %}--all{% endif %}",
-    "format:toml  {% if not usage.staged %}--all{% endif %}",
-    "format:yaml  {% if not usage.staged %}--all{% endif %}",
-]
-
-[test]
-description = "Run the tests"
-alias       = "t"
-run         = "bun test ./packages/*/test.js"
-
-[check]
-description = "Run everything CI runs: lint and test"
-alias       = "c"
-extends     = "staged"
-depends     = [ "lint {% if not usage.staged %}--all{% endif %}", "test" ]
 
 # --------------------
 # Lint: file by file
@@ -172,40 +142,3 @@ run         = 'bunx --bun --no-install commitlint --edit "$usage_file"'
 ["lint:headers"]
 description = "Verify files' repository and path header lines"
 run         = "bunx --bun --no-install sync-header-metadata"
-
-# -------
-# Format
-# -------
-
-["format:biome"]
-description = "Format with Biome"
-extends     = "staged"
-run         = "scripts/with-files.sh -- bunx --bun --no-install biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
-
-["format:sh"]
-description = "Format shell scripts with shfmt"
-shell       = "bash -o pipefail -c"
-extends     = "staged"
-run         = "scripts/with-files.sh -- shfmt --find=0 | xargs -0 -r shfmt -w"
-
-["format:toml"]
-description = "Format TOML with Tombi"
-extends     = "staged"
-run         = "scripts/with-files.sh '*.toml' -- tombi format --offline --"
-
-["format:yaml"]
-description = "Format YAML with Prettier"
-extends     = "staged"
-run         = "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --write --log-level warn"
-
-# ------
-# Other
-# ------
-
-[commit]
-description = "Compose a commit with commitizen"
-run         = "bunx --bun --no-install cz"
-
-[act]
-description = "Run CI locally with act"
-file        = "git::https://github.com/chewygumxx/.github.git//tasks/act?ref=v1"

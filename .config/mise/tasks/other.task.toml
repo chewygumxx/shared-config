@@ -1,0 +1,22 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise-task.json
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.config/mise/tasks/other.task.toml
+#
+#
+
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+#
+
+[commit]
+description = "Compose a commit with commitizen"
+run         = "bunx --bun --no-install cz"
+
+[act]
+description = "Run CI locally with act"
+file        = "git::https://github.com/chewygumxx/.github.git//tasks/act?ref=v1"

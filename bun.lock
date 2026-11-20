@@ -75,7 +75,7 @@
     },
     "packages/hk-config": {
       "name": "@chewygumxx/hk-config",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "bin": {
         "cgxx-lint-emdash": "bin/cgxx-lint-emdash",
         "cgxx-lint-packages": "bin/cgxx-lint-packages",
@@ -118,7 +118,7 @@
     },
     "packages/mise-tasks-config": {
       "name": "@chewygumxx/mise-tasks-config",
-      "version": "0.0.0",
+      "version": "0.1.0",
       "bin": {
         "cgxx-hk": "bin/cgxx-hk",
       },

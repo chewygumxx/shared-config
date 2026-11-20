@@ -78,11 +78,14 @@ run     = "bun test"
 extends = "cgxx:check"
 ```
 
-Install the packages before hk's hooks, which read them:
+Until the package is installed no task loads, as each extends a template
+that does not yet exist, so `mise install` installs the packages, then hk's
+hooks, which read them. CI installs the packages itself, from a lockfile a
+release may yet refresh:
 
 ```toml
 [hooks]
-postinstall = [ "bun ci", "hk install --mise" ]
+postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
 ```
 
 ## Extending

@@ -84,7 +84,8 @@ Steps read their configuration from the other `@chewygumxx` packages in
 `.config/remarkrc.json`.
 
 `hk.pkl` cannot be read until the package is installed, so install it before
-the hooks, as with mise's `postinstall = [ "bun ci", "hk install --mise" ]`.
+the hooks, as with mise's
+`postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'`.
 
 ## Extending
 

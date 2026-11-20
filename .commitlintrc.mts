@@ -83,5 +83,15 @@ export default defineConfig({
             fullName: "actionlint",
             description: "@chewygumxx/actionlint-config",
         },
+        {
+            name: "hk",
+            fullName: "hk",
+            description: "@chewygumxx/hk-config",
+        },
+        {
+            name: "mise",
+            fullName: "mise",
+            description: "@chewygumxx/mise-tasks-config",
+        },
     ],
 });

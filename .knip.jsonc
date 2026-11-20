@@ -27,7 +27,10 @@
         // Extended by the shared commitlint configuration.
         "@commitlint/config-conventional",
         "conventional-changelog-conventionalcommits",
-        // Run from mise tasks, which Knip does not read.
+        // Read by .config/hk.pkl and .config/mise/conf.d, which Knip does not.
+        "@chewygumxx/hk-config",
+        "@chewygumxx/mise-tasks-config",
+        // Run from hk steps, which Knip does not read.
         "@arethetypeswrong/cli",
         "@biomejs/biome",
         "@commitlint/cli",

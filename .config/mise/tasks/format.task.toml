@@ -12,50 +12,8 @@
 #
 # https://mise.jdx.dev/tasks/task-configuration.html
 #
-# Each formatter acts on staged files alone unless given --all, which
-# format passes on. The templates in .config/mise/config.toml declare the
-# flag.
+# format runs hk's fix hook; the steps are in .config/hk.pkl.
 #
 
 [format]
-description = "Apply every formatter"
-alias       = "f"
-extends     = "staged"
-depends     = [
-    "format:biome {% if not usage.staged %}--all{% endif %}",
-    "format:headers",
-    "format:md    {% if not usage.staged %}--all{% endif %}",
-    "format:sh    {% if not usage.staged %}--all{% endif %}",
-    "format:toml  {% if not usage.staged %}--all{% endif %}",
-    "format:yaml  {% if not usage.staged %}--all{% endif %}",
-]
-
-["format:biome"]
-description = "Format with Biome"
-extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bun run biome format --write --no-errors-on-unmatched --files-ignore-unknown=true"
-
-["format:headers"]
-description = "Sync files' repository and path header lines"
-run         = "bun run sync-header-metadata --update"
-
-["format:md"]
-description = "Fix Markdown with markdownlint-cli2"
-extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .markdownlint-cli2.jsonc --widen-on packages/markdownlint-cli2-config '*.md' -- bun run markdownlint-cli2 --fix"
-
-["format:sh"]
-description = "Format shell scripts with shfmt"
-shell       = "bash -o pipefail -c"
-extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shfmt -w"
-
-["format:toml"]
-description = "Format TOML with Tombi"
-extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .config/tombi.toml --widen-on packages/tombi-config '*.toml' -- tombi format --offline --"
-
-["format:yaml"]
-description = "Format YAML with Prettier"
-extends     = "staged"
-run         = "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bun run prettier --config .config/prettierrc.json --write --log-level warn"
+extends = "cgxx:format"

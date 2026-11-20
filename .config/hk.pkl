@@ -11,14 +11,45 @@
 //
 // https://hk.jdx.dev/configuration
 //
-// The git hooks. Each step hands off to a mise task, which owns the file
-// selection and the tools, so a hook runs exactly what `mise run` does.
-// `mise install` installs the hooks; see [hooks] in .config/mise/config.toml.
+// The git hooks, and the check and fix hooks that `mise run lint` and
+// `mise run format` run. The steps come from @chewygumxx/hk-config, this
+// repository's own copies of the configuration packages among their cache
+// inputs. `mise install` installs the hooks; see [hooks] in
+// .config/mise/config.toml.
 //
 
 amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
 
+import "../node_modules/@chewygumxx/hk-config/steps.pkl" as shared
+
+local cgxx = (shared) {
+    extraInputs = List("packages/**")
+}
+
+local lockfile = new Step {
+    check = "bun scripts/check-workspace-versions.mjs"
+}
+
 hooks {
+    ["check"] {
+        steps = (cgxx.lint) {
+            ["packages"] {
+                check = "bun run cgxx-lint-packages packages/*/"
+            }
+            ["sort_package_json"] {
+                check = "bun run sort-package-json --check package.json packages/*/package.json"
+            }
+            ["lockfile"] = lockfile
+        }
+    }
+    ["fix"] {
+        stage = false
+        steps = (cgxx.format) {
+            ["sort_package_json"] {
+                fix = "bun run sort-package-json package.json packages/*/package.json"
+            }
+        }
+    }
     ["pre-commit"] {
         stash = "git"
         fix = false

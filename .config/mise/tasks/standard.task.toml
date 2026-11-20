@@ -12,19 +12,16 @@
 #
 # https://mise.jdx.dev/tasks/task-configuration.html
 #
+# Each task extends a cgxx: template from @chewygumxx/mise-tasks-config,
+# linked into .config/mise/conf.d/.
+#
 
 [install]
-description = "Install the locked dependency tree"
-alias       = "i"
-run         = "bun ci"
+extends = "cgxx:install"
 
 [test]
-description = "Run the tests"
-alias       = "t"
-run         = "bun test ./packages/*/test.js"
+extends = "cgxx:test"
+run     = "bun test ./packages/*/test.js"
 
 [check]
-description = "Run everything CI runs: lint and test"
-alias       = "c"
-extends     = "staged"
-depends     = [ "lint {% if not usage.staged %}--all{% endif %}", "test" ]
+extends = "cgxx:check"

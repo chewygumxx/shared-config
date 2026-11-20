@@ -14,12 +14,10 @@
 #
 
 [commit]
-description = "Compose a commit with commitizen"
-run         = "bun run cz"
+extends = "cgxx:commit"
 
 [act]
-description = "Run CI locally with act"
-run         = "mise run --no-cache act-cached"
+extends = "cgxx:act"
 
 [act-cached]
 description = "[Internal] Run CI locally with act"

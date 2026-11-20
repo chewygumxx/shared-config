@@ -55,4 +55,5 @@ sources = [
 outputs = { auto = true }
 
 [settings]
-task.remote_no_cache = true
+# Remote file tasks, such as act-cached, are experimental.
+experimental = true

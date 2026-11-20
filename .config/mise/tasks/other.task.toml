@@ -19,4 +19,9 @@ run         = "bun run cz"
 
 [act]
 description = "Run CI locally with act"
+run         = "mise run --no-cache act-cached"
+
+[act-cached]
+description = "[Internal] Run CI locally with act"
 file        = "git::https://github.com/chewygumxx/.github.git//tasks/act?ref=v1"
+hide        = true

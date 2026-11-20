@@ -45,7 +45,16 @@ depends     = [
 
 ["lint:actions"]
 description = "Lint GitHub workflows with actionlint"
-extends     = "staged"
+extends     = "staged:cached"
+sources     = [
+    ".github/workflows/*.yaml",
+    ".github/workflows/*.yml",
+    ".github/actionlint.yaml",
+    "packages/actionlint-config/**",
+    "packages/shellcheck-config/**",
+    ".config/mise/config.toml",
+    "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
+]
 env         = { SHELLCHECK_OPTS = "--rcfile=packages/shellcheck-config/config.shellcheckrc" }
 run         = """
 scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint
@@ -53,22 +62,33 @@ scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- ac
 
 ["lint:biome"]
 description = "Lint and check formatting with Biome"
-extends     = "staged"
+extends     = "staged:cached"
 run         = "scripts/with-files.sh -- bunx --bun --no-install biome ci --no-errors-on-unmatched --files-ignore-unknown=true"
 
 ["lint:editorconfig"]
 description = "Check files against .editorconfig"
-extends     = "staged"
+extends     = "staged:cached"
 run         = "scripts/with-files.sh -- editorconfig-checker -config packages/editorconfig-checker-config/config.json"
 
 ["lint:emdash"]
 description = "Refuse em dashes"
-extends     = "staged"
+extends     = "staged:cached"
 run         = "scripts/lint-emdash.sh"
 
 ["lint:md"]
 description = "Lint Markdown with remark and markdownlint"
-extends     = "staged"
+extends     = "staged:cached"
+sources     = [
+    "**/*.md",
+    "!node_modules/**",
+    ".config/remarkrc.json",
+    ".markdownlint-cli2.jsonc",
+    "packages/remark-preset/**",
+    "packages/markdownlint-cli2-config/**",
+    "bun.lock",
+    ".config/mise/config.toml",
+    "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
+]
 run         = [
     "scripts/with-files.sh '*.md' -- bunx --bun --no-install remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout",
     "scripts/with-files.sh '*.md' -- bunx --bun --no-install markdownlint-cli2",
@@ -76,13 +96,13 @@ run         = [
 
 ["lint:secrets"]
 description = "Scan for secrets with secretlint --no-gitignore"
-extends     = "staged"
+extends     = "staged:cached"
 run         = "scripts/with-files.sh -- bunx --bun --no-install secretlint --no-gitignore"
 
 ["lint:sh"]
 description = "Lint shell scripts with shfmt and ShellCheck"
 shell       = "bash -o pipefail -c"
-extends     = "staged"
+extends     = "staged:cached"
 run         = [
     "scripts/with-files.sh -- shfmt --find=0 | xargs -0 -r shfmt -d",
     "scripts/with-files.sh -- shfmt --find=0 | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
@@ -90,12 +110,20 @@ run         = [
 
 ["lint:spell"]
 description = "Check spelling with cspell"
-extends     = "staged"
+extends     = "staged:cached"
 run         = "scripts/with-files.sh -- bunx --bun --no-install cspell --no-progress --no-summary --no-must-find-files"
 
 ["lint:toml"]
 description = "Lint and check formatting of TOML with Tombi"
-extends     = "staged"
+extends     = "staged:cached"
+sources     = [
+    "**/*.toml",
+    "!node_modules/**",
+    ".config/tombi.toml",
+    "packages/tombi-config/**",
+    ".config/mise/config.toml",
+    "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
+]
 run         = [
     "scripts/with-files.sh '*.toml' -- tombi format --check --offline --",
     "scripts/with-files.sh '*.toml' -- tombi lint --error-on-warnings --offline --",
@@ -104,7 +132,18 @@ run         = [
 # The actionlint symlink points to the package config, which is checked directly.
 ["lint:yaml"]
 description = "Lint and check formatting of YAML with Prettier and yamllint"
-extends     = "staged"
+extends     = "staged:cached"
+sources     = [
+    "**/*.yaml",
+    "**/*.yml",
+    "!node_modules/**",
+    ".config/prettierrc.json",
+    "packages/prettier-config/**",
+    "packages/yamllint-config/**",
+    "bun.lock",
+    ".config/mise/config.toml",
+    "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
+]
 run         = [
     "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
     "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- yamllint --strict",

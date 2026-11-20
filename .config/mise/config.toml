@@ -39,5 +39,19 @@ flag "--staged" negate="--all" default=#true {
 }
 '''
 
+[task_templates."staged:cached"]
+usage   = '''
+flag "--staged" negate="--all" default=#true {
+    help "Select staged paths, or all tracked paths with --all"
+}
+'''
+sources = [
+    "**/*",
+    "!.git/**",
+    "!node_modules/**",
+    "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
+]
+outputs = { auto = true }
+
 [settings]
 task.remote_no_cache = true

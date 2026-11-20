@@ -24,6 +24,7 @@ extends     = "staged"
 depends     = [
     "format:biome {% if not usage.staged %}--all{% endif %}",
     "format:headers",
+    "format:md    {% if not usage.staged %}--all{% endif %}",
     "format:sh    {% if not usage.staged %}--all{% endif %}",
     "format:toml  {% if not usage.staged %}--all{% endif %}",
     "format:yaml  {% if not usage.staged %}--all{% endif %}",
@@ -37,6 +38,11 @@ run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/
 ["format:headers"]
 description = "Sync files' repository and path header lines"
 run         = "bun run sync-header-metadata --update"
+
+["format:md"]
+description = "Fix Markdown with markdownlint-cli2"
+extends     = "staged"
+run         = "scripts/with-files.sh --widen-on .markdownlint-cli2.jsonc --widen-on packages/markdownlint-cli2-config '*.md' -- bun run markdownlint-cli2 --fix"
 
 ["format:sh"]
 description = "Format shell scripts with shfmt"

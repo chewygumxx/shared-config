@@ -70,11 +70,17 @@ git config --local --unset core.hooksPath '^\.config/husky/_$'
 `mise run check` and `mise run lint` select staged paths for file-based checks.
 The pre-commit hook checks the staged contents and restores unstaged edits.
 `mise run format` formats the working-tree copies of staged paths so you can
-review and stage the changes. Pass `--all` to select all tracked paths. The
-checks also run publint for each package, attw for packages with types, and
-Knip for unused dependencies. Use `mise run test` to run the tests and
-`mise run commit` to open the commitizen prompt. CI runs `bun run check`, which
-delegates to `mise run check --all`.
+review and stage the changes. Pass `--all` to select all tracked paths. A
+staged change to a package's configuration, or to the root file that uses it,
+selects every file it governs. mise skips a file-based check when nothing it
+reads has changed since it last passed; `mise run --force check` runs it anyway.
+
+The checks also verify each file's repository and path header lines, run
+publint for each package, attw for packages with types, and Knip for unused
+dependencies. `mise run format` rewrites stale header lines and fixes Markdown
+with markdownlint-cli2. Use `mise run test` to run the tests,
+`mise run commit` to open the commitizen prompt and `mise run act` to run CI
+locally. CI runs `bun run check`, which delegates to `mise run check --all`.
 
 ## Publishing
 

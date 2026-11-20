@@ -57,18 +57,18 @@ sources     = [
 ]
 env         = { SHELLCHECK_OPTS = "--rcfile=packages/shellcheck-config/config.shellcheckrc" }
 run         = """
-scripts/with-files.sh '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint
+scripts/with-files.sh --widen-on .github/actionlint.yaml --widen-on packages/actionlint-config --widen-on packages/shellcheck-config '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint
 """
 
 ["lint:biome"]
 description = "Lint and check formatting with Biome"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh -- bunx --bun --no-install biome ci --no-errors-on-unmatched --files-ignore-unknown=true"
+run         = "scripts/with-files.sh --widen-on .biome.json --widen-on packages/biome-config -- bunx --bun --no-install biome ci --no-errors-on-unmatched --files-ignore-unknown=true"
 
 ["lint:editorconfig"]
 description = "Check files against .editorconfig"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh -- editorconfig-checker -config packages/editorconfig-checker-config/config.json"
+run         = "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/editorconfig-checker-config -- editorconfig-checker -config packages/editorconfig-checker-config/config.json"
 
 ["lint:emdash"]
 description = "Refuse em dashes"
@@ -90,28 +90,28 @@ sources     = [
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
 run         = [
-    "scripts/with-files.sh '*.md' -- bunx --bun --no-install remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout",
-    "scripts/with-files.sh '*.md' -- bunx --bun --no-install markdownlint-cli2",
+    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bunx --bun --no-install remark --rc-path .config/remarkrc.json --frail --quiet --no-stdout",
+    "scripts/with-files.sh --widen-on .config/remarkrc.json --widen-on .markdownlint-cli2.jsonc --widen-on packages/remark-preset --widen-on packages/markdownlint-cli2-config '*.md' -- bunx --bun --no-install markdownlint-cli2",
 ]
 
 ["lint:secrets"]
 description = "Scan for secrets with secretlint --no-gitignore"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh -- bunx --bun --no-install secretlint --no-gitignore"
+run         = "scripts/with-files.sh --widen-on .secretlintrc.json --widen-on packages/secretlint-rule-preset -- bunx --bun --no-install secretlint --no-gitignore"
 
 ["lint:sh"]
 description = "Lint shell scripts with shfmt and ShellCheck"
 shell       = "bash -o pipefail -c"
 extends     = "staged:cached"
 run         = [
-    "scripts/with-files.sh -- shfmt --find=0 | xargs -0 -r shfmt -d",
-    "scripts/with-files.sh -- shfmt --find=0 | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shfmt -d",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
 ]
 
 ["lint:spell"]
 description = "Check spelling with cspell"
 extends     = "staged:cached"
-run         = "scripts/with-files.sh -- bunx --bun --no-install cspell --no-progress --no-summary --no-must-find-files"
+run         = "scripts/with-files.sh --widen-on .config/cspell.json --widen-on packages/cspell-config -- bunx --bun --no-install cspell --no-progress --no-summary --no-must-find-files"
 
 ["lint:toml"]
 description = "Lint and check formatting of TOML with Tombi"
@@ -125,8 +125,8 @@ sources     = [
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
 run         = [
-    "scripts/with-files.sh '*.toml' -- tombi format --check --offline --",
-    "scripts/with-files.sh '*.toml' -- tombi lint --error-on-warnings --offline --",
+    "scripts/with-files.sh --widen-on .config/tombi.toml --widen-on packages/tombi-config '*.toml' -- tombi format --check --offline --",
+    "scripts/with-files.sh --widen-on .config/tombi.toml --widen-on packages/tombi-config '*.toml' -- tombi lint --error-on-warnings --offline --",
 ]
 
 # The actionlint symlink points to the package config, which is checked directly.
@@ -137,6 +137,7 @@ sources     = [
     "**/*.yaml",
     "**/*.yml",
     "!node_modules/**",
+    ".editorconfig",
     ".config/prettierrc.json",
     "packages/prettier-config/**",
     "packages/yamllint-config/**",
@@ -145,8 +146,8 @@ sources     = [
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
 run         = [
-    "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
-    "scripts/with-files.sh '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- yamllint --strict",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- bunx --bun --no-install prettier --config .config/prettierrc.json --check",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on .config/prettierrc.json --widen-on packages/prettier-config --widen-on packages/yamllint-config '*.yaml' '*.yml' ':!.github/actionlint.yaml' -- yamllint --strict",
 ]
 
 # ---------------------

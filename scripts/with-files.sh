@@ -9,18 +9,20 @@
 #
 #
 
-# Usage: with-files.sh [--all] [<pathspec>...] -- <command> [<arg>...]
+# Usage: with-files.sh [--all] [--widen-on <pathspec>]... [<pathspec>...]
+#            -- <command> [<arg>...]
 #
 # Runs the command with the staged files added, copied, modified or renamed,
 # or with --all, all tracked files matching the pathspecs. Mise exports the
-# same choice through $usage_staged.
+# same choice through $usage_staged. A staged change to a --widen-on path,
+# such as the configuration governing the files, selects all of them too.
 # No pathspec means every file. Runs nothing when no file matches. Each
 # path starts ./, so no tool reads a file named -x as an option.
 
 set -eu
 
 usage() {
-    echo 'usage: with-files.sh [--all] [<pathspec>...] -- <command> [<arg>...]' >&2
+    echo 'usage: with-files.sh [--all] [--widen-on <pathspec>]... [<pathspec>...] -- <command> [<arg>...]' >&2
     exit 2
 }
 
@@ -29,6 +31,13 @@ if [ "${1-}" = --all ]; then
     staged=false
     shift
 fi
+while [ "${1-}" = --widen-on ]; do
+    [ $# -ge 2 ] || usage
+    if [ "$staged" = true ] && ! git diff --cached --quiet -- "$2"; then
+        staged=false
+    fi
+    shift 2
+done
 
 # Lists the files matching the arguments before --, NUL-separated.
 list() {

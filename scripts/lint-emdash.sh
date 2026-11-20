@@ -20,7 +20,8 @@ set -eu
 emdash=$(printf '\342\200\224')
 
 if [ "${1-}" != --all ] && [ "${usage_staged-true}" = true ]; then
-    if git diff --cached -U0 | grep '^+' | grep -q "$emdash"; then
+    if git diff --cached -U0 --no-color --no-ext-diff |
+        grep -v '^+++ ' | grep '^+' | grep -q "$emdash"; then
         echo "Em dash (U+2014) in staged changes; em dashes are prohibited." >&2
         exit 1
     fi

@@ -55,7 +55,6 @@ sources     = [
     ".config/mise/config.toml",
     "{% if usage.staged %}{{ exec(command=\"git rev-parse --path-format=absolute --git-path index\") }}{% endif %}",
 ]
-env         = { SHELLCHECK_OPTS = "--rcfile=packages/shellcheck-config/config.shellcheckrc" }
 run         = """
 scripts/with-files.sh --widen-on .github/actionlint.yaml --widen-on packages/actionlint-config --widen-on packages/shellcheck-config '.github/workflows/*.yaml' '.github/workflows/*.yml' -- actionlint
 """
@@ -105,7 +104,7 @@ shell       = "bash -o pipefail -c"
 extends     = "staged:cached"
 run         = [
     "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shfmt -d",
-    "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shellcheck --rcfile packages/shellcheck-config/config.shellcheckrc",
+    "scripts/with-files.sh --widen-on .editorconfig --widen-on packages/shellcheck-config -- shfmt --find=0 | xargs -0 -r shellcheck",
 ]
 
 ["lint:spell"]

@@ -13,6 +13,9 @@
         ".": {
             "entry": ["scripts/check-workspace-versions.mjs"]
         },
+        "packages/commitlint-config": {
+            "entry": ["test.js"]
+        },
         "packages/cz-commitlint": {
             "entry": ["test.js"]
         },
@@ -26,7 +29,6 @@
     "ignoreDependencies": [
         // Extended by the shared commitlint configuration.
         "@commitlint/config-conventional",
-        "conventional-changelog-conventionalcommits",
         // Read by .config/hk.pkl and .config/mise/conf.d, which Knip does not.
         "@chewygumxx/hk-config",
         "@chewygumxx/mise-tasks-config",

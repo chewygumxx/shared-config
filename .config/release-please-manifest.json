@@ -5,7 +5,7 @@
     "packages/cspell-config": "1.0.2",
     "packages/cz-commitlint": "1.0.2",
     "packages/editorconfig-checker-config": "1.0.1",
-    "packages/hk-config": "0.2.0",
+    "packages/hk-config": "0.2.1",
     "packages/markdownlint-cli2-config": "1.1.0",
     "packages/mise-tasks-config": "0.2.0",
     "packages/prettier-config": "1.0.1",

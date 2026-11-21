@@ -79,7 +79,7 @@
     },
     "packages/hk-config": {
       "name": "@chewygumxx/hk-config",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "bin": {
         "cgxx-lint-emdash": "bin/cgxx-lint-emdash",
         "cgxx-lint-packages": "bin/cgxx-lint-packages",
@@ -89,7 +89,7 @@
         "@biomejs/biome": "2.6.8",
         "cspell": "^10.3.6",
         "knip": "^6.40.0",
-        "markdownlint-cli2": "^0.23.3",
+        "markdownlint-cli2": ">=0.23.3 <0.25.0",
         "prettier": "^3.9.9",
         "publint": "^0.3.25",
         "remark-cli": "^12.0.1",

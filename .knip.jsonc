@@ -19,6 +19,9 @@
         "packages/cz-commitlint": {
             "entry": ["test.js"]
         },
+        "packages/mise-tasks-config": {
+            "entry": ["test.js"]
+        },
         "packages/remark-preset": {
             "entry": ["test.js"]
         },

@@ -12,6 +12,7 @@
 
 import { fileURLToPath } from "node:url";
 import { RuleConfigSeverity } from "@commitlint/types";
+import createPreset from "conventional-changelog-conventionalcommits";
 
 /** @typedef {import("./index.d.ts").Enumerable} Enumerable */
 /** @typedef {import("./index.d.ts").Options} Options */
@@ -125,9 +126,14 @@ export function defineConfig({ scopes = [] } = {}) {
                 import.meta.resolve("@commitlint/config-conventional"),
             ),
         ],
-        parserPreset: fileURLToPath(
-            import.meta.resolve("conventional-changelog-conventionalcommits"),
-        ),
+        // Given as parser options, not as a path: commitlint only calls a
+        // preset's factory when the preset is named
+        // conventional-changelog-*, which an absolute path is not. Without
+        // the factory's breakingHeaderPattern, `type!:` headers fail to parse.
+        parserPreset: {
+            name: "conventional-changelog-conventionalcommits",
+            parserOpts: createPreset().parser,
+        },
 
         // Dependabot headers name the package and both versions, and its
         // bodies carry release-note URLs; neither fits the limits below. An

@@ -45,10 +45,10 @@ local shellcheckOpts = "--rcfile=\(configs)/shellcheck-config/config.shellcheckr
 
 actionlint: Config.Step = new {
     glob = List(".github/workflows/*.yaml", ".github/workflows/*.yml")
-    check = "actionlint {{files}}"
+    check = "actionlint -config-file \(configs)/actionlint-config/config.yaml {{files}}"
     env { ["SHELLCHECK_OPTS"] = shellcheckOpts }
     cache = true
-    cache_inputs = inputs(List(".github/workflows/**", ".github/actionlint.yaml"))
+    cache_inputs = inputs(List(".github/workflows/**"))
 }
 
 editorconfig: Config.Step = new {

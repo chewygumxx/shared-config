@@ -45,6 +45,10 @@
         "@commitlint/types": "^21.2.2",
         "conventional-changelog-conventionalcommits": "^10.4.0",
       },
+      "devDependencies": {
+        "@commitlint/lint": "^21.2.3",
+        "@commitlint/load": "^21.2.3",
+      },
       "peerDependencies": {
         "@commitlint/cli": "^21.2.2",
       },

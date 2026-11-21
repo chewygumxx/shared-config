@@ -7,7 +7,6 @@
     "tag-separator": "@",
     "separate-pull-requests": false,
     "skip-changelog": true,
-    "last-release-sha": "56bb0ed77066f3b03569b234ffdf7779339050ed",
     "packages": {
         "packages/actionlint-config": {
             "component": "actionlint-config"

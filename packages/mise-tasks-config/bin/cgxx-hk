@@ -16,7 +16,8 @@
 # staged files, $usage_all for every file git does not ignore, and
 # $usage_step for the steps to run. A change to a path in $CGXX_WIDEN_ON,
 # by default the lockfile and the hk and mise configuration, selects every
-# file. Every step runs, however many fail.
+# file; with --staged, every file in the index, so untracked files stay
+# out. Every step runs, however many fail.
 
 set -euf
 
@@ -57,8 +58,17 @@ widened() {
     fi
 }
 
-if [ "$all" = true ] || widened; then
+# hk's --all takes in untracked files too, which --staged must not.
+from_index=false
+if [ "$all" = true ]; then
     set -- --all
+elif widened; then
+    if [ "$staged" = true ]; then
+        from_index=true
+        set -- --files0-from -
+    else
+        set -- --all
+    fi
 elif [ "$staged" = true ]; then
     set -- --staged
 else
@@ -72,4 +82,8 @@ done
 set -- "$@" --no-fail-fast
 [ "$hook" = check ] || set -- "$@" --no-stage
 
-exec hk "$hook" "$@"
+if [ "$from_index" = true ]; then
+    git ls-files -z --cached | hk "$hook" "$@"
+else
+    exec hk "$hook" "$@"
+fi

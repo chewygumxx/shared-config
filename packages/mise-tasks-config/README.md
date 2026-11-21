@@ -46,7 +46,8 @@ Every step runs, however many fail.
 
 A change to a path in `$CGXX_WIDEN_ON`, by default `bun.lock`,
 `.config/hk.pkl` and `.config/mise`, selects every file, as it can change the
-result for any of them.
+result for any of them. Under `--staged`, only a staged change widens, and
+to every file in the index, so untracked files stay out.
 
 ## Usage
 

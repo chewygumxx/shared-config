@@ -14,6 +14,7 @@
         "directory": "packages/mise-tasks-config"
     },
     "license": "GPL-3.0-only",
+    "type": "module",
     "exports": {
         ".": "./tasks.toml",
         "./tasks.toml": "./tasks.toml"

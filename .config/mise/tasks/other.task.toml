@@ -13,9 +13,6 @@
 # https://mise.jdx.dev/tasks/task-configuration.html
 #
 
-[commit]
-extends = "cgxx:commit"
-
 [act]
 extends = "cgxx:act"
 

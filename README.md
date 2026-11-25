@@ -81,9 +81,11 @@ file, and hk skips a step whose inputs have not changed since it last passed.
 `mise run format` leaves its fixes unstaged for you to review.
 
 The pre-commit hook runs `mise run check --staged` on the staged contents and
-restores unstaged edits. Use `mise run test` to run the tests,
-`mise run commit` to open the commitizen prompt and `mise run act` to run CI
-locally. CI runs `bun run check`, which delegates to `mise run check --all`.
+restores unstaged edits. Stage your changes and run `mise run commit` or
+`bun run commit` to open the cz-git prompt. The prompt reads the repository's
+commitlint configuration, including its types, scopes and message length limits.
+Use `mise run test` to run the tests and `mise run act` to run CI locally.
+CI runs `bun run check`, which delegates to `mise run check --all`.
 
 ## Publishing
 

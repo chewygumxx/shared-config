@@ -35,7 +35,6 @@
         // Run from hk steps, which Knip does not read.
         "@arethetypeswrong/cli",
         "@biomejs/biome",
-        "@commitlint/cli",
         "commitizen",
         "cspell",
         "markdownlint-cli2",

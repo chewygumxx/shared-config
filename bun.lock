@@ -7,12 +7,14 @@
       "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@biomejs/biome": "2.6.8",
+        "@chewygumxx/commitlint-config": "workspace:*",
         "@chewygumxx/hk-config": "workspace:*",
         "@chewygumxx/mise-tasks-config": "workspace:*",
         "@commitlint/cli": "^21.2.3",
         "@types/bun": "^1.4.2",
         "commitizen": "^4.3.2",
         "cspell": "^10.5.1",
+        "cz-git": "^1.14.0",
         "knip": "^6.45.1",
         "markdownlint-cli2": "^0.24.2",
         "prettier": "^3.10.1",
@@ -852,6 +854,8 @@
     "cspell-trie-lib": ["cspell-trie-lib@10.5.1", "", { "peerDependencies": { "@cspell/cspell-types": "10.5.1" } }, "sha512-nB6MLCzJfStH88MjvzpMfXvg7sdp1fvAPFv+f174UobwCPUheA9BmCxPlxXphhxU+zQ4n082rn+OLq6aUifXVA=="],
 
     "cz-conventional-changelog": ["cz-conventional-changelog@3.3.0", "", { "dependencies": { "chalk": "^2.4.1", "commitizen": "^4.0.3", "conventional-commit-types": "^3.0.0", "lodash.map": "^4.5.1", "longest": "^2.0.1", "word-wrap": "^1.0.3" }, "optionalDependencies": { "@commitlint/load": ">6.1.1" } }, "sha512-U466fIzU5U22eES5lTNiNbZ+d8dfcHcssH4o7QsdWaCcRs/feIPCxKYSWkYBNs5mny7MvEfwpTLWjvbm94hecw=="],
+
+    "cz-git": ["cz-git@1.14.0", "", {}, "sha512-QjwlXZrGWsXQkyregBHhA2qNNGB2TCuf0ovkW1Q5OLgdJDs9Tq1yahfKpSMLyqOBjVRuv1iHBTDP83zJDBlJdg=="],
 
     "debug": ["debug@4.4.3", "", { "dependencies": { "ms": "^2.1.3" } }, "sha512-RGwwWnwQvkVfavKVt22FGLw+xYSdzARwm0ru6DhTVA3umU5hZc28V3kO4stgYryrTlLpuvgI9GiijltAjNbcqA=="],
 

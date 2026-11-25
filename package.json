@@ -9,22 +9,26 @@
         "packages/*"
     ],
     "scripts": {
-        "check": "mise run check --all"
+        "check": "mise run check --all",
+        "commit": "mise run commit",
+        "cz": "mise run cz"
     },
     "config": {
         "commitizen": {
-            "path": "@chewygumxx/cz-commitlint"
+            "path": "./node_modules/cz-git"
         }
     },
     "devDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
         "@biomejs/biome": "2.6.8",
+        "@chewygumxx/commitlint-config": "workspace:*",
         "@chewygumxx/hk-config": "workspace:*",
         "@chewygumxx/mise-tasks-config": "workspace:*",
         "@commitlint/cli": "^21.2.3",
         "@types/bun": "^1.4.2",
         "commitizen": "^4.3.2",
         "cspell": "^10.5.1",
+        "cz-git": "^1.14.0",
         "knip": "^6.45.1",
         "markdownlint-cli2": "^0.24.2",
         "prettier": "^3.10.1",

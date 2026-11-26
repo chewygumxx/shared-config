@@ -1,0 +1,36 @@
+{
+    "name": "@chewygumxx/create-repo",
+    "version": "4.1.0",
+    "description": "Creates a GitHub repository from a bundled template: bun create @chewygumxx/repo",
+    "keywords": [
+        "create",
+        "template",
+        "repository"
+    ],
+    "homepage": "https://github.com/chewygumxx/shared-config/tree/main/packages/create-repo#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/shared-config.git",
+        "directory": "packages/create-repo"
+    },
+    "license": "GPL-3.0-only",
+    "type": "module",
+    "bin": {
+        "create-repo": "bin/create-repo.js"
+    },
+    "files": [
+        "bin",
+        "lib",
+        "templates"
+    ],
+    "dependencies": {
+        "jsonc-parser": "^3.3.1"
+    },
+    "engines": {
+        "bun": ">=1.4"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
+    }
+}

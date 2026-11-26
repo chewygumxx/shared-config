@@ -9,3 +9,6 @@
 #
 
 * text=auto eol=lf
+
+# These headers are rewritten when a template becomes a repository.
+/packages/create-repo/templates/** -sync-header-metadata

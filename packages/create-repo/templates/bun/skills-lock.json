@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "skills": {
+    "creating-bun-repositories": {
+      "source": "@chewygumxx/skill-creating-bun-repositories",
+      "sourceType": "node_modules",
+      "skillPath": "SKILL.md",
+      "version": "0.0.2",
+      "computedHash": "710aec3de1b188abec5aa8168d18dfc9279f8029052fa5e02f151d9691d82e13"
+    }
+  }
+}

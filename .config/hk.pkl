@@ -30,6 +30,32 @@ local lockfile = new Step {
     check = "bun run scripts/check-workspace-versions.mjs"
 }
 
+// Template layers are composed and checked as independent repositories.
+local templates = "packages/create-repo/templates"
+local templateFiles = List("\(templates)/**")
+local templateTombi = List("\(templates)/common/.config/tombi.toml")
+
+local materialized = new Step {
+    check = """
+        root=$PWD
+        scratch=$(mktemp -d)
+        trap 'rm -r -- "$scratch"' EXIT
+        bun packages/create-repo/scripts/materialize.js --all "$scratch" || exit 1
+        for dir in "$scratch"/*/; do
+            (
+                cd "$dir" &&
+                    ln -s "$root/node_modules" node_modules &&
+                    "$root/node_modules/.bin/biome" ci --vcs-use-ignore-file=false . &&
+                    editorconfig-checker -config "$root/node_modules/@chewygumxx/editorconfig-checker-config/config.json" . &&
+                    tombi format --check --offline &&
+                    tombi lint --error-on-warnings --offline
+            ) || exit 1
+        done
+        """
+    cache = true
+    cache_inputs = List("bun.lock", ".config/mise/config.toml", ".config/mise/tasks.toml", "packages/**")
+}
+
 local sortPackageJson = (cgxx.sort_package_json) {
     prefix = "bun run"
     check = "sort-package-json --check package.json packages/*/package.json"
@@ -39,16 +65,21 @@ local sortPackageJson = (cgxx.sort_package_json) {
 hooks {
     ["check"] {
         steps = (cgxx.lint) {
+            ["biome"] { exclude = templateFiles }
+            ["tombi"] { exclude = templateTombi }
             ["packages"] {
                 check = "bun run cgxx-lint-packages packages/*/"
             }
             ["sort_package_json"] = sortPackageJson
+            ["templates"] = materialized
             ["lockfile"] = lockfile
         }
     }
     ["fix"] {
         stage = false
         steps = (cgxx.format) {
+            ["biome"] { exclude = templateFiles }
+            ["tombi"] { exclude = templateTombi }
             ["sort_package_json"] = sortPackageJson
         }
     }

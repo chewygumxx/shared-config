@@ -13,6 +13,10 @@
         "packages/commitlint-config": {
             "entry": ["test.js"]
         },
+        "packages/create-repo": {
+            "entry": ["test/*.test.js", "scripts/*.js"],
+            "ignore": ["templates/**"]
+        },
         "packages/cz-commitlint": {
             "entry": ["test.js"]
         },

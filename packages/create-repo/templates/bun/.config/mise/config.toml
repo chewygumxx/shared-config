@@ -1,0 +1,46 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
+
+#
+#
+# ~chewygumxx/repo-tmpl.git
+# ::: :/.config/mise/config.toml
+#
+#
+
+min_version = "2026.11.6"
+
+[settings]
+experimental = true  # Remote tasks eg. act
+
+[tools]
+# Runtimes
+bun  = "1.4.5"
+node = "24"
+npm  = "latest"
+sh   = "3.14.1"
+uv   = "0.12.19"
+
+# Lint and Format
+actionlint           = "1.7.12"
+editorconfig-checker = "4.0.2"
+shellcheck           = "0.11.0"
+tombi                = "1.11.3"
+yamllint             = { version = "1.38.0", depends = [ "uv" ] }
+
+# Utility
+hk = "2.14.0"
+
+[env]
+# Changes to shared configuration can affect checks on every file.
+CGXX_WIDEN_ON = "bun.lock .config packages .biome.json .editorconfig .markdownlint-cli2.jsonc .secretlintrc.json"
+
+[[hooks.postinstall]]
+run = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
+
+[task_config]
+includes = [
+    ".config/mise/tasks.toml",
+    ".config/mise/tasks/*.task.toml",
+]

@@ -32,10 +32,19 @@ extends = "cgxx:lint"
 
 [test]
 extends = "cgxx:test"
-run     = "bun test ./packages/*/test.js"
+run     = "bun test ./packages/*/test.js ./packages/create-repo/test/"
 
 [check]
 extends = "cgxx:check"
 
 [act]
 extends = "cgxx:act"
+
+["templates:materialize"]
+description = "Write every repository template under .templates"
+run         = "bun packages/create-repo/scripts/materialize.js --all .templates"
+
+["templates:verify"]
+description = "Dry-run every template from the packed scaffolder"
+usage       = 'flag "--registry" help="Use the registry pins and lockfiles as bundled"'
+run         = "bun packages/create-repo/scripts/verify-templates.js {% if usage.registry %}--registry{% endif %}"

@@ -1,0 +1,191 @@
+// vim:set expandtab shiftwidth=4 filetype=javascript:
+// SPDX-License-Identifier: GPL-3.0-only
+
+//
+//
+// ~chewygumxx/shared-config.git
+// ::: :/packages/create-repo/test/dependabot.test.js
+//
+//
+
+// @ts-check
+
+// Dependabot reads what its config names: a directory that holds no workflow
+// is read without error and watches nothing, and a commit title its prefix
+// makes must pass commitlint, which only ignores an unscoped bump.
+
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+
+const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
+const TEMPLATES = "packages/create-repo/templates";
+
+/**
+ * The entries of `updates`, read by line: the file is small and flat, and
+ * this repository has no YAML parser to read it with.
+ * @returns {{ ecosystem: string, directory: string, prefix: string }[]}
+ */
+function entries() {
+    const text = readFileSync(join(ROOT, ".github/dependabot.yml"), "utf8");
+    return text
+        .split(/^ {4}- package-ecosystem: /m)
+        .slice(1)
+        .map((block) => ({
+            ecosystem: block.split("\n")[0].trim(),
+            directory: /^ {6}directory: (\S+)$/m.exec(block)?.[1] ?? "",
+            prefix: /^ {10}prefix: (\S+)$/m.exec(block)?.[1] ?? "",
+        }));
+}
+
+/** @param {string} ecosystem */
+const directories = (ecosystem) =>
+    entries()
+        .filter((entry) => entry.ecosystem === ecosystem)
+        .map((entry) => entry.directory);
+
+const LAYERS = readdirSync(join(ROOT, TEMPLATES), { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map((entry) => entry.name);
+
+test("every layer with a bun.lock has a bun entry", () => {
+    for (const layer of LAYERS) {
+        if (!existsSync(join(ROOT, TEMPLATES, layer, "bun.lock"))) continue;
+        assert.ok(directories("bun").includes(`/${TEMPLATES}/${layer}`), layer);
+    }
+    assert.ok(directories("bun").includes("/"));
+    assert.deepEqual(directories("npm"), []);
+});
+
+test("every template's own Dependabot watches Bun, not npm", () => {
+    for (const layer of LAYERS) {
+        const file = join(ROOT, TEMPLATES, layer, ".github/dependabot.yml");
+        if (!existsSync(file)) continue;
+        assert.doesNotMatch(
+            readFileSync(file, "utf8"),
+            /package-ecosystem: npm$/m,
+            layer,
+        );
+    }
+});
+
+/**
+ * The bun entries of a Dependabot config, one block of text each.
+ * @param {string} file
+ */
+const bunEntries = (file) =>
+    readFileSync(file, "utf8")
+        .split(/^ {4}- package-ecosystem: /m)
+        .filter((block) => block.startsWith("bun\n"));
+
+/**
+ * The groups of a bun entry, in the order Dependabot tries them.
+ * @param {string} block
+ */
+const groupsOf = (block) =>
+    [
+        ...block.matchAll(
+            /^ {10}(\S+):\n {14}patterns: \[(.+)\]\n {14}update-types: \[(.+)\]$/gm,
+        ),
+    ].map(([, name, patterns, types]) => ({ name, patterns, types }));
+
+// A shared-config release bumps several @chewygumxx packages at once, which
+// would each open their own pull request in every bun directory. A pattern
+// is tried in order, so the @chewygumxx group comes before the catch-all.
+const GROUPS = [
+    {
+        name: "shared-config",
+        patterns: '"@chewygumxx/*"',
+        types: '"minor", "patch"',
+    },
+    { name: "dependencies", patterns: '"*"', types: '"minor", "patch"' },
+];
+
+test("every bun entry groups its minor and patch updates", () => {
+    const own = bunEntries(join(ROOT, ".github/dependabot.yml"));
+    assert.equal(own.length, directories("bun").length);
+    for (const block of own.filter((entry) => entry.includes(TEMPLATES))) {
+        assert.deepEqual(groupsOf(block), GROUPS, block.split("\n")[1]);
+    }
+});
+
+test("every template's bun entry groups its minor and patch updates", () => {
+    for (const layer of LAYERS) {
+        const file = join(ROOT, TEMPLATES, layer, ".github/dependabot.yml");
+        if (!existsSync(file)) continue;
+        for (const block of bunEntries(file)) {
+            assert.deepEqual(groupsOf(block), GROUPS, layer);
+        }
+    }
+});
+
+test("every layer with workflows is watched where they are", () => {
+    for (const layer of LAYERS) {
+        const workflows = `${TEMPLATES}/${layer}/.github/workflows`;
+        if (!existsSync(join(ROOT, workflows))) continue;
+        assert.ok(
+            directories("github-actions").includes(`/${workflows}`),
+            layer,
+        );
+    }
+});
+
+test("every directory Dependabot is given exists", () => {
+    for (const { directory } of entries()) {
+        assert.ok(existsSync(join(ROOT, directory)), directory);
+    }
+});
+
+// A directory that exists but holds nothing for its ecosystem is read without
+// error too: github-actions reads the `uses:` lines of the YAML directly in
+// it, and bun the `bun.lock` there.
+test("every directory holds what its ecosystem reads", () => {
+    for (const { ecosystem, directory } of entries()) {
+        const dir = join(ROOT, directory);
+        if (ecosystem === "bun") {
+            assert.ok(existsSync(join(dir, "bun.lock")), directory);
+        } else if (ecosystem === "github-actions") {
+            // `/` is the one directory whose workflows are in `.github/`.
+            const workflows =
+                directory === "/" ? join(dir, ".github/workflows") : dir;
+            const used = readdirSync(workflows)
+                .filter((file) => /\.ya?ml$/.test(file))
+                .some((file) =>
+                    /^\s*(?:- )?uses: /m.test(
+                        readFileSync(join(workflows, file), "utf8"),
+                    ),
+                );
+            assert.ok(used, `${directory} has no workflow that uses an action`);
+        } else {
+            // A new ecosystem needs its own rule of what it reads.
+            assert.fail(`no content rule for ecosystem ${ecosystem}`);
+        }
+    }
+});
+
+// A scoped header is not ignored, so a long bump title fails the 50
+// character limit. Dependabot's own sign-off trailer is what the ignore
+// requires as well.
+test("Dependabot's commit titles pass commitlint", () => {
+    const lint = (/** @type {string} */ message) =>
+        spawnSync(join(ROOT, "node_modules/.bin/commitlint"), {
+            cwd: ROOT,
+            encoding: "utf8",
+            input: `${message}\n\nSigned-off-by: dependabot[bot] <support@github.com>\n`,
+        });
+    for (const prefix of new Set(entries().map((entry) => entry.prefix))) {
+        const result = lint(
+            `${prefix}: bump actions/checkout from 6 to 7 in /templates/cloudflare/.github/workflows`,
+        );
+        assert.equal(result.status, 0, prefix + result.stdout);
+    }
+    const grouped = lint("build: Bump the shared-config group with 3 updates");
+    assert.equal(grouped.status, 0, grouped.stdout);
+    assert.notEqual(
+        lint("ci(template): bump actions/checkout from 6 to 7 in /x").status,
+        0,
+    );
+});

@@ -23,3 +23,88 @@ updates:
           interval: weekly
       commit-message:
           prefix: ci
+
+    # A template's workflows are read from their own directory: Dependabot
+    # scans a directory other than `/` itself, not its `.github/workflows`.
+    # The prefixes carry no scope because commitlint ignores a Dependabot
+    # commit only when its header is an unscoped `build: bump` or `ci: bump`.
+    - package-ecosystem: bun
+      directory: /packages/create-repo/templates/bun
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: build
+      groups:
+          shared-config:
+              patterns: ["@chewygumxx/*"]
+              update-types: ["minor", "patch"]
+          dependencies:
+              patterns: ["*"]
+              update-types: ["minor", "patch"]
+
+    - package-ecosystem: github-actions
+      directory: /packages/create-repo/templates/bun/.github/workflows
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: ci
+
+    - package-ecosystem: bun
+      directory: /packages/create-repo/templates/typescript
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: build
+      groups:
+          shared-config:
+              patterns: ["@chewygumxx/*"]
+              update-types: ["minor", "patch"]
+          dependencies:
+              patterns: ["*"]
+              update-types: ["minor", "patch"]
+
+    - package-ecosystem: bun
+      directory: /packages/create-repo/templates/typescript-publish
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: build
+      groups:
+          shared-config:
+              patterns: ["@chewygumxx/*"]
+              update-types: ["minor", "patch"]
+          dependencies:
+              patterns: ["*"]
+              update-types: ["minor", "patch"]
+
+    - package-ecosystem: github-actions
+      directory: /packages/create-repo/templates/typescript-publish/.github/workflows
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: ci
+
+    - package-ecosystem: bun
+      directory: /packages/create-repo/templates/cloudflare
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: build
+      groups:
+          shared-config:
+              patterns: ["@chewygumxx/*"]
+              update-types: ["minor", "patch"]
+          dependencies:
+              patterns: ["*"]
+              update-types: ["minor", "patch"]
+      ignore:
+          # @cloudflare/vitest-plugin peers on given Vitest majors alone.
+          - dependency-name: "vitest"
+            update-types: ["version-update:semver-major"]
+
+    - package-ecosystem: github-actions
+      directory: /packages/create-repo/templates/cloudflare/.github/workflows
+      schedule:
+          interval: weekly
+      commit-message:
+          prefix: ci

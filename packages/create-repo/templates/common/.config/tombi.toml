@@ -1,0 +1,14 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema tombi://www.schemastore.org/tombi.json
+
+#
+#
+# ~chewygumxx/repo-tmpl.git
+# ::: :/.config/tombi.toml
+#
+#
+
+# https://tombi-toml.github.io/tombi/docs/configuration
+#
+extends = [ "./node_modules/@chewygumxx/tombi-config/tombi.toml" ]

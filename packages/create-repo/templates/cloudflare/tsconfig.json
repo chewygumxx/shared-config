@@ -1,0 +1,22 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig.json",
+    "extends": "@chewygumxx/tsconfig/bun",
+    "compilerOptions": {
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true,
+        "allowImportingTsExtensions": true,
+        "types": [
+            "bun",
+            "@cloudflare/workers-types",
+            "./worker-configuration.d.ts",
+            "@cloudflare/vitest-plugin/types"
+        ]
+    },
+    "include": [
+        "src",
+        "test",
+        "vitest.config.ts",
+        "worker-configuration.d.ts",
+        ".commitlintrc.mts"
+    ]
+}

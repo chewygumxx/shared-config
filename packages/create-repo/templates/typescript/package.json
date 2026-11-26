@@ -1,0 +1,62 @@
+{
+    "name": "repo-tmpl",
+    "private": true,
+    "description": "Repository Template",
+    "keywords": [
+        "repo",
+        "template",
+        "repository"
+    ],
+    "homepage": "https://github.com/chewygumxx/repo-tmpl",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/chewygumxx/repo-tmpl.git"
+    },
+    "license": "GPL-3.0-only",
+    "type": "module",
+    "scripts": {
+        "check": "mise run check --all",
+        "prepare": "test ! -d node_modules/skills || DO_NOT_TRACK=1 skills experimental_sync --yes --agent claude-code codex"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/cz-git"
+        }
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.6.8",
+        "@chewygumxx/actionlint-config": "^1.0.2",
+        "@chewygumxx/biome-config": "^1.2.0",
+        "@chewygumxx/commitlint-config": "^1.1.1",
+        "@chewygumxx/cspell-config": "^1.0.2",
+        "@chewygumxx/editorconfig-checker-config": "^1.0.1",
+        "@chewygumxx/hk-config": "0.2.1",
+        "@chewygumxx/markdownlint-cli2-config": "^1.1.0",
+        "@chewygumxx/mise-tasks-config": "0.2.0",
+        "@chewygumxx/prettier-config": "^1.0.1",
+        "@chewygumxx/remark-preset": "^1.1.0",
+        "@chewygumxx/secretlint-rule-preset": "^1.0.1",
+        "@chewygumxx/shellcheck-config": "^1.0.1",
+        "@chewygumxx/skill-creating-bun-repositories": "0.0.2",
+        "@chewygumxx/tombi-config": "0.0.2",
+        "@chewygumxx/tsconfig": "^1.0.1",
+        "@chewygumxx/yamllint-config": "^1.0.1",
+        "@commitlint/cli": "^21.2.4",
+        "@types/bun": "^1.4.5",
+        "commitizen": "^4.3.2",
+        "cspell": "^10.5.2",
+        "cz-git": "^1.14.0",
+        "knip": "^6.47.0",
+        "markdownlint-cli2": "^0.24.2",
+        "prettier": "^3.10.1",
+        "remark-cli": "^12.0.1",
+        "secretlint": "^13.0.7",
+        "skills": "^1.9.0",
+        "sort-package-json": "^4.1.0",
+        "sync-header-metadata": "^2.4.3",
+        "typescript": "^7.0.2"
+    },
+    "engines": {
+        "bun": ">=1.4"
+    }
+}

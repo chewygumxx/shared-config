@@ -1,0 +1,10 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig.json",
+    "extends": "@chewygumxx/tsconfig/bun",
+    "compilerOptions": {
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true,
+        "allowImportingTsExtensions": true
+    },
+    "include": ["src", ".commitlintrc.mts"]
+}

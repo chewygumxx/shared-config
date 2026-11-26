@@ -15,6 +15,11 @@ import type { UserConfig } from "cz-git";
 const config = defineConfig({
     scopes: [
         {
+            name: "create-repo",
+            fullName: "Repository scaffolder",
+            description: "@chewygumxx/create-repo",
+        },
+        {
             name: "commitlint",
             fullName: "commitlint",
             description: "@chewygumxx/commitlint-config",

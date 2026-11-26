@@ -4,5 +4,13 @@
     "compilerOptions": {
         "allowImportingTsExtensions": true
     },
-    "include": [".commitlintrc.mts", "packages/*/*.js", "packages/*/*.d.ts"]
+    "include": [
+        ".commitlintrc.mts",
+        "packages/*/*.js",
+        "packages/*/*.d.ts",
+        "packages/create-repo/bin/*.js",
+        "packages/create-repo/lib/*.js",
+        "packages/create-repo/scripts/*.js",
+        "packages/create-repo/test/*.js"
+    ]
 }

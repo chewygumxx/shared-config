@@ -1,0 +1,42 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise-task.json
+
+#
+#
+# ~chewygumxx/repo-tmpl.git
+# ::: :/.config/mise/tasks.toml
+#
+#
+
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+#
+
+
+[install]
+extends = "cgxx:install"
+
+[commit]
+extends = "cgxx:commit"
+
+["commit:lint"]
+extends = "cgxx:commit:lint"
+alias   = "lint:commit"
+
+[format]
+extends = "cgxx:format"
+
+[lint]
+extends = "cgxx:lint"
+
+[check]
+extends = "cgxx:check"
+
+[act]
+extends = "cgxx:act"
+alias   = [ "exec-ci", "exec-gh-act", "exec-gh-actions" ]
+
+[skills]
+description = "Link the skills the devDependencies provide into the agents' directories"
+run         = "DO_NOT_TRACK=1 bun run skills experimental_sync --yes --agent claude-code codex"

@@ -17,6 +17,9 @@
         "packages/commitlint-config": {
             "component": "commitlint-config"
         },
+        "packages/create-repo": {
+            "component": "create-repo"
+        },
         "packages/cspell-config": {
             "component": "cspell-config"
         },

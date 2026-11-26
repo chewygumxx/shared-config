@@ -43,8 +43,9 @@ that each repository's local hooks and its CI apply the same rules.
 | [`@chewygumxx/hk-config`](packages/hk-config)                                     | hk steps that lint and format, imported by `hk.pkl`        |
 | [`@chewygumxx/mise-tasks-config`](packages/mise-tasks-config)                     | `cgxx:` mise task templates that hand work to hk           |
 
-`bun create @chewygumxx/repo` lives in its own repository,
-[`chewygumxx/create-repo`](https://github.com/chewygumxx/create-repo).
+`bun create @chewygumxx/repo` is the
+[repository scaffolder](packages/create-repo). Its templates use the shared
+configuration packages in this workspace.
 
 Shared CI lives in
 [`chewygumxx/.github`](https://github.com/chewygumxx/.github); new repositories
@@ -103,6 +104,10 @@ maintainer to authenticate with 2FA. [npm trusted publishing][npm-trust]
 A trusted publisher can be added only to a package that exists, so
 `@chewygumxx/hk-config` and `@chewygumxx/mise-tasks-config` are first
 published by hand, then given their trusted publisher like the rest.
+
+For `@chewygumxx/create-repo`, move its existing npm trusted publisher to
+this repository's `publish.yaml` and follow the template dependency release
+steps in the [scaffolder README](packages/create-repo/README.md).
 
 Merging the release pull request approves publication. Release Please creates
 a GitHub release with notes and a `<package>@<version>` tag for each package.

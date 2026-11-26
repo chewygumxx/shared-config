@@ -28,8 +28,16 @@ jobs:
         with:
             ref: ${{ github.sha }}
 
+    templates:
+        if: startsWith(github.event.release.tag_name, 'create-repo@')
+        uses: ./.github/workflows/create-repo.yaml
+        with:
+            ref: ${{ github.sha }}
+            registry: true
+
     publish:
-        needs: check
+        needs: [check, templates]
+        if: ${{ !cancelled() && needs.check.result == 'success' && (needs.templates.result == 'success' || needs.templates.result == 'skipped') }}
         runs-on: ubuntu-latest
 
         permissions:

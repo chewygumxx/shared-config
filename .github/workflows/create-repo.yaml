@@ -1,0 +1,55 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.github/workflows/create-repo.yaml
+#
+
+name: Create Repo
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+    workflow_dispatch: {}
+    workflow_call:
+        inputs:
+            ref:
+                type: string
+                required: true
+            registry:
+                type: boolean
+                default: false
+
+permissions:
+    contents: read
+
+jobs:
+    verify:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ inputs.ref || github.sha }}
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+
+            - name: Install Workspace Dependencies
+              run: bun ci
+
+            - name: Verify Generated Repositories
+              env:
+                  MISE_GITHUB_TOKEN: ${{ github.token }}
+                  USE_REGISTRY: ${{ inputs.registry }}
+              run: |
+                  if [ "$USE_REGISTRY" = true ]; then
+                      mise run templates:verify --registry
+                  else
+                      mise run templates:verify
+                  fi

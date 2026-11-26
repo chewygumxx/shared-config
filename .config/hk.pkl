@@ -20,14 +20,14 @@
 
 amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
 
-import "../node_modules/@chewygumxx/hk-config/steps.pkl" as shared
+import "./../node_modules/@chewygumxx/hk-config/steps.pkl" as shared
 
 local cgxx = (shared) {
     extraInputs = List("packages/**")
 }
 
 local lockfile = new Step {
-    check = "bun scripts/check-workspace-versions.mjs"
+    check = "bun run scripts/check-workspace-versions.mjs"
 }
 
 hooks {
@@ -63,7 +63,7 @@ hooks {
     ["commit-msg"] {
         steps {
             ["commitlint"] {
-                check = "mise run lint:commit \"{{ commit_msg_file }}\""
+                check = "mise run commit:lint \"{{ commit_msg_file }}\""
             }
         }
     }

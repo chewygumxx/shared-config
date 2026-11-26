@@ -5,19 +5,30 @@
 #
 #
 # ~chewygumxx/shared-config.git
-# ::: :/.config/mise/tasks/standard.task.toml
+# ::: :/.config/mise/tasks.toml
 #
 #
 
 #
 # https://mise.jdx.dev/tasks/task-configuration.html
 #
-# Each task extends a cgxx: template from @chewygumxx/mise-tasks-config,
-# linked into .config/mise/conf.d/.
-#
+
 
 [install]
 extends = "cgxx:install"
+
+[commit]
+extends = "cgxx:commit"
+
+["commit:lint"]
+extends = "cgxx:commit:lint"
+alias   = "lint:commit"
+
+[format]
+extends = "cgxx:format"
+
+[lint]
+extends = "cgxx:lint"
 
 [test]
 extends = "cgxx:test"
@@ -25,3 +36,6 @@ run     = "bun test ./packages/*/test.js"
 
 [check]
 extends = "cgxx:check"
+
+[act]
+extends = "cgxx:act"

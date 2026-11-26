@@ -1,0 +1,62 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/mise-tasks-config/validate.task.toml
+#
+#
+
+
+[vars]
+cgxx_usage_file_git_status = """
+flag "-s --staged" \
+    help="Select the staged files alone" \
+    conflicts="--all" \
+    bool_value=#true
+flag "-a --all" \
+    help="Select every file git does not ignore" \
+    conflicts="--staged" \
+    bool_value=#true
+"""
+cgxx_usage_hk_step         = """
+flag "-S --step <step>" \
+    help="Run only the named hk step" \
+    var=#true
+"""
+
+[task_templates."cgxx:lint"]
+description = "Run every linter and format check through hk"
+run         = "bun run cgxx-hk check"
+alias       = "l"
+usage       = """
+{{ vars.cgxx_usage_file_git_status }}
+{{ vars.cgxx_usage_hk_step }}
+"""
+
+[task_templates."cgxx:format"]
+description = "Apply every formatter through hk"
+run         = "bun run cgxx-hk fix"
+alias       = [ "f", "fmt" ]
+usage       = """
+{{ vars.cgxx_usage_file_git_status }}
+{{ vars.cgxx_usage_hk_step }}
+"""
+
+[task_templates."cgxx:test"]
+description = "Run the tests"
+run         = "bun test"
+alias       = "t"
+
+[task_templates."cgxx:check"]
+description = "Lint and test"
+alias       = "c"
+usage       = """
+{{ vars.cgxx_usage_file_git_status }}
+"""
+depends     = [
+    "lint {% if usage.staged %}--staged{% elif usage.all %}--all{% endif %}",
+    "test",
+]

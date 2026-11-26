@@ -1,0 +1,37 @@
+# vim:set expandtab shiftwidth=4 filetype=toml:
+# SPDX-License-Identifier: GPL-3.0-only
+#:schema https://mise.jdx.dev/schema/mise.json
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/packages/mise-tasks-config/std.task.toml
+#
+#
+
+#
+# https://mise.jdx.dev/tasks/task-configuration.html
+#
+# Templates for standard development tasks. Link this file into
+# .config/mise/conf.d/ to make the templates available to mise.
+#
+
+
+[task_templates."cgxx:install"]
+description = "Install the locked dependency tree"
+run         = "bun ci"
+alias       = "i"
+
+[task_templates."cgxx:commit"]
+description = "Compose a commit with cz-git"
+run         = "bun run git-cz"
+alias       = [ "cz", "czg" ]
+
+[task_templates."cgxx:commit:lint"]
+description = "Lint a commit message file with commitlint"
+run         = 'bun run commitlint --edit "$usage_file"'
+usage       = 'arg "<file>" help="The commit message file"'
+
+[task_templates."cgxx:act"]
+description = "Run CI locally with act"
+file        = "git::https://github.com/chewygumxx/.github.git//tasks/act?ref=v1"

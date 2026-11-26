@@ -11,31 +11,35 @@
 
 min_version = "2026.11.6"
 
+[settings]
+experimental = true  # Remote tasks eg. act
+
 [tools]
-bun                                              = "1.4"
-node                                             = "24"
-"aqua:jdx/hk"                                    = "2.13.0"
-"aqua:astral-sh/uv"                              = "0.12.19"
-"pypi:yamllint"                                  = { version = "1.38.0", depends = [ "aqua:astral-sh/uv" ] }
-"aqua:tombi-toml/tombi"                          = "1.11.3"
-"aqua:koalaman/shellcheck"                       = "0.11.0"
-"aqua:mvdan/sh"                                  = "3.14.1"
-"aqua:editorconfig-checker/editorconfig-checker" = "4.0.2"
-"aqua:rhysd/actionlint"                          = "1.7.12"
+# Runtimes
+bun  = "1.4.5"
+node = "24"
+npm  = "latest"
+sh   = "3.14.1"
+uv   = "0.12.19"
+
+# Lint and Format
+actionlint           = "1.7.12"
+editorconfig-checker = "4.0.2"
+shellcheck           = "0.11.0"
+tombi                = "1.11.3"
+yamllint             = { version = "1.38.0", depends = [ "uv" ] }
+
+# Utility
+hk = "2.14.0"
 
 [env]
-# A change to these, the configuration packages among them, makes lint and
-# format select every file.
+# Changes to shared configuration can affect checks on every file.
 CGXX_WIDEN_ON = "bun.lock .config packages .biome.json .editorconfig .markdownlint-cli2.jsonc .secretlintrc.json"
 
-[hooks]
-# The hooks import the shared hk steps, which bun ci installs first. CI
-# installs the packages itself, from a lockfile a release may yet refresh.
-postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
+[[hooks.postinstall]]
+run = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
 
 [task_config]
-includes = [ ".config/mise/tasks/*.task.toml" ]
-
-[settings]
-# Remote file tasks, such as act-cached, are experimental.
-experimental = true
+includes = [
+    ".config/mise/tasks.toml",
+]

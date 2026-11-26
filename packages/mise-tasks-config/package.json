@@ -16,15 +16,17 @@
     "license": "GPL-3.0-only",
     "type": "module",
     "exports": {
-        ".": "./tasks.toml",
-        "./tasks.toml": "./tasks.toml"
+        ".": "./std.task.toml",
+        "./std.task.toml": "./std.task.toml",
+        "./validate.task.toml": "./validate.task.toml"
     },
     "bin": {
         "cgxx-hk": "bin/cgxx-hk"
     },
     "files": [
         "bin",
-        "tasks.toml"
+        "std.task.toml",
+        "validate.task.toml"
     ],
     "publishConfig": {
         "access": "public",

@@ -28,21 +28,21 @@ anything; the work goes to the tool made for it, `lint` and `format` to
 [hk](https://hk.jdx.dev) with the steps of
 [`@chewygumxx/hk-config`](../hk-config).
 
-| Template           | Alias | Runs                                       |
-| ------------------ | ----- | ------------------------------------------ |
-| `cgxx:install`     | `i`   | `bun ci`                                   |
-| `cgxx:lint`        | `l`   | hk's check hook                            |
-| `cgxx:format`      | `f`   | hk's fix hook, leaving fixes unstaged      |
-| `cgxx:test`        | `t`   | Nothing until the repository gives `run`   |
-| `cgxx:check`       | `c`   | `lint` and `test`                          |
-| `cgxx:lint:commit` |       | commitlint on a commit message file        |
-| `cgxx:commit`      |       | The commitizen prompt                      |
-| `cgxx:act`         |       | The repository's hidden `act-cached` task  |
+| Template           | Aliases     | Runs                                  |
+| ------------------ | ----------- | ------------------------------------- |
+| `cgxx:install`     | `i`         | `bun ci`                              |
+| `cgxx:lint`        | `l`         | hk's check hook                       |
+| `cgxx:format`      | `f`, `fmt`  | hk's fix hook, leaving fixes unstaged |
+| `cgxx:test`        | `t`         | `bun test`                            |
+| `cgxx:check`       | `c`         | `lint` and `test`                     |
+| `cgxx:commit:lint` |             | commitlint on a commit message file   |
+| `cgxx:commit`      | `cz`, `czg` | Commitizen with the cz-git adapter    |
+| `cgxx:act`         |             | The shared remote act task            |
 
-`lint`, `format` and `check` act on the changed files: staged, unstaged and
-untracked. `--staged` selects the staged files alone and `--all` every file
-git does not ignore. `lint` and `format` take `-S <step>` to run one hk step.
-Every step runs, however many fail.
+`lint`, `format` and `check` select changed files by default. Use `-s` or
+`--staged` to select staged files and `--all` to include every file git does
+not ignore. Use `-S <step>` with `lint` or `format` to run one hk step. Every
+selected step runs even if another fails.
 
 A change to a path in `$CGXX_WIDEN_ON`, by default `bun.lock`,
 `.config/hk.pkl` and `.config/mise`, selects every file, as it can change the
@@ -54,12 +54,14 @@ to every file in the index, so untracked files stay out.
 ```sh
 bun add --dev --exact @chewygumxx/mise-tasks-config @chewygumxx/hk-config
 mkdir -p .config/mise/conf.d
-ln -s ../../../node_modules/@chewygumxx/mise-tasks-config/tasks.toml .config/mise/conf.d/50-cgxx.toml
+ln -s ../../../node_modules/@chewygumxx/mise-tasks-config/std.task.toml .config/mise/conf.d/50-cgxx-std.toml
+ln -s ../../../node_modules/@chewygumxx/mise-tasks-config/validate.task.toml .config/mise/conf.d/60-cgxx-validate.toml
 ```
 
-mise reads templates from a configuration file, not an included task file,
-hence the link, which mise ignores until the package is installed. Then
-extend a template for each task:
+mise loads task templates through the links in `.config/mise/conf.d/` once
+the package is installed. When upgrading from `tasks.toml`, replace its link
+with the two above and update any `cgxx:lint:commit` reference to
+`cgxx:commit:lint`. Extend a template for each task.
 
 ```toml
 [install]
@@ -73,11 +75,15 @@ extends = "cgxx:format"
 
 [test]
 extends = "cgxx:test"
-run     = "bun test"
 
 [check]
 extends = "cgxx:check"
 ```
+
+To use `cgxx:commit`, install `commitizen` and `cz-git` and set
+`config.commitizen.path` in `package.json` to `./node_modules/cz-git`.
+Install `@commitlint/cli` to use `cgxx:commit:lint`. Enable mise's
+`experimental` setting if you use `cgxx:act`.
 
 Until the package is installed no task loads, as each extends a template
 that does not yet exist, so `mise install` installs the packages, then hk's

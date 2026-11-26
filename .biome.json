@@ -1,12 +1,7 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
     "extends": ["@chewygumxx/biome-config/configs/recommended"],
     "files": {
-        "includes": [
-            "!**/.claude/settings*.json",
-            "!**/*.yaml",
-            "!**/*.yml",
-            "!**/*.md"
-        ]
+        "includes": ["!**/*.yaml", "!**/*.yml", "!**/*.md"]
     }
 }

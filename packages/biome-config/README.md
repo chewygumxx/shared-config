@@ -43,19 +43,22 @@ Both paths also work with Biome 2.6.
 The shared file is named `config.json` rather than `biome.json` so that Biome
 does not treat it as a nested configuration inside this repository.
 
-Claude Code's `.claude/settings.json` and `.claude/settings.local.json` are
-excluded, as Claude Code rewrites them in its own style. A repository that sets
-`files.includes` replaces the shared list, so repeat the exclusion. With
-Biome 2.6, a list containing only exclusions uses the default file selection.
+The shared config excludes `settings*.json` in directories whose names contain
+`claude`, root-level `skills-lock.json` and `secrets.json`, and
+`packages/cli/assets/pi/vendor`.
+
+With Biome 2.6, a list containing only exclusions adds to the shared
+exclusions. For example, to also exclude `dist`:
 
 ```json
 {
   "files": {
-    "includes": ["!**/.claude/settings*.json", "!dist"]
+    "includes": ["!dist"]
   }
 }
 ```
 
-For Biome 2.5.14, start the `includes` list with `"**"`.
+If the list starts with a positive pattern such as `"**"`, repeat any shared
+exclusions you want to keep. Biome 2.5.14 requires that positive pattern.
 
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

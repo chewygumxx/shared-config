@@ -1,4 +1,5 @@
 {
+    "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
     "vcs": {
         "enabled": true,
         "clientKind": "git",
@@ -6,7 +7,13 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!**/.claude/settings*.json"]
+        "includes": [
+            "**",
+            "!**/*claude*/settings*.json",
+            "!skills-lock.json",
+            "!secrets.json",
+            "!packages/cli/assets/pi/vendor"
+        ]
     },
     "formatter": {
         "enabled": true,

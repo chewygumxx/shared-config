@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/hk-config",
-    "version": "0.2.1",
+    "version": "0.3.0",
     "description": "Shared hk steps that lint and format chewygumxx repositories",
     "keywords": [
         "hk",

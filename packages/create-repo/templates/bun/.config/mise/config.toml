@@ -16,11 +16,11 @@ experimental = true  # Remote tasks eg. act
 
 [tools]
 # Runtimes
-bun  = "1.4.5"
-node = "24"
-npm  = "latest"
-sh   = "3.14.1"
-uv   = "0.12.19"
+bun   = "1.4.5"
+node  = "24"
+npm   = "latest"
+shfmt = "3.14.1"
+uv    = "0.12.19"
 
 # Lint and Format
 actionlint           = "1.7.12"

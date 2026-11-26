@@ -22,7 +22,7 @@ import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { parse } from "jsonc-parser";
-import { compose, TASKS_LINKS } from "../lib/template.js";
+import { compose, RENAMED, TASKS_LINKS } from "../lib/template.js";
 import { combinations, label, TEMPLATES } from "../lib/templates.js";
 
 const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
@@ -40,16 +40,18 @@ const ROOT = fileURLToPath(new URL("../../..", import.meta.url));
 function templateViews() {
     return combinations().map(({ template, features }) => {
         const sources = compose(TEMPLATES[template].layers(new Set(features)));
-        /** @param {string} file */
-        const stored = (file) => (file === ".gitignore" ? "_gitignore" : file);
+        const generated = new Map(
+            [...sources].map(([file, source]) => [
+                RENAMED[file] ?? file,
+                source,
+            ]),
+        );
         return {
             name: label(template, features),
-            files: [...sources.keys()].map((file) =>
-                file === "_gitignore" ? ".gitignore" : file,
-            ),
+            files: [...generated.keys()],
             read: (file) =>
                 readFileSync(
-                    sources.get(stored(file)) ?? assert.fail(`no ${file}`),
+                    generated.get(file) ?? assert.fail(`no ${file}`),
                     "utf8",
                 ),
         };

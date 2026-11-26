@@ -33,7 +33,6 @@ local lockfile = new Step {
 // Template layers are composed and checked as independent repositories.
 local templates = "packages/create-repo/templates"
 local templateFiles = List("\(templates)/**")
-local templateTombi = List("\(templates)/common/.config/tombi.toml")
 
 local materialized = new Step {
     check = """
@@ -66,7 +65,6 @@ hooks {
     ["check"] {
         steps = (cgxx.lint) {
             ["biome"] { exclude = templateFiles }
-            ["tombi"] { exclude = templateTombi }
             ["packages"] {
                 check = "bun run cgxx-lint-packages packages/*/"
             }
@@ -79,7 +77,6 @@ hooks {
         stage = false
         steps = (cgxx.format) {
             ["biome"] { exclude = templateFiles }
-            ["tombi"] { exclude = templateTombi }
             ["sort_package_json"] = sortPackageJson
         }
     }

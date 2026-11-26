@@ -39,8 +39,12 @@ export const TEMPLATES_DIR = fileURLToPath(
     new URL("../templates", import.meta.url),
 );
 
-/** @type {Record<string, string>} Stored name to real name. */
-export const RENAMED = { _gitignore: ".gitignore" };
+/** @type {Record<string, string>} Stored name to generated name. */
+export const RENAMED = {
+    _gitignore: ".gitignore",
+    // The package-relative extends path resolves in the generated repository.
+    ".config/tombi.toml.in": ".config/tombi.toml",
+};
 
 /** @type {string} This package's version, recorded in the first commit. */
 export const VERSION = JSON.parse(

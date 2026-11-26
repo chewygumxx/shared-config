@@ -12,9 +12,9 @@
 
 import { test } from "bun:test";
 import assert from "node:assert/strict";
+import { defineConfig, types } from "@chewygumxx/commitlint-config";
 import lint from "@commitlint/lint";
 import load from "@commitlint/load";
-import { defineConfig } from "./index.js";
 
 /**
  * Lints `message` as commitlint's CLI would, under this package's config
@@ -63,4 +63,27 @@ test("a BREAKING CHANGE footer passes", async () => {
 test("a breaking header still checks its type and scope", async () => {
     const report = await check("nope(other)!: Publish shared hk steps");
     assert.deepEqual(errors(report).sort(), ["scope-enum", "type-enum"]);
+});
+
+test("custom types drive lint rules and prompt choices", () => {
+    const config = defineConfig({
+        types: [
+            { name: "ops", fullName: "Operations", description: "Maintenance" },
+        ],
+    });
+    assert.deepEqual(config.rules?.["type-enum"], [2, "always", ["ops"]]);
+    assert.deepEqual(config.prompt?.questions?.type?.enum, {
+        ops: { title: "Operations", description: "Maintenance" },
+    });
+});
+
+test("an empty type list uses the shared types", () => {
+    const names = types.map((type) => type.name);
+    assert.ok(names.includes("perf"));
+    assert.ok(names.includes("release"));
+    assert.deepEqual(defineConfig({ types: [] }).rules?.["type-enum"], [
+        2,
+        "always",
+        names,
+    ]);
 });

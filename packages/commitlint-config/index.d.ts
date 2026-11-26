@@ -18,6 +18,8 @@ export interface Enumerable {
 }
 
 export interface Options {
+    /** Permitted types; when empty or omitted, use the shared types. */
+    types?: Enumerable[];
     /** Permitted scopes; when empty or omitted, any scope is accepted. */
     scopes?: Enumerable[];
 }

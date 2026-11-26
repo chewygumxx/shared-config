@@ -21,7 +21,7 @@ tags:
 
 # @chewygumxx/commitlint-config
 
-Conventional Commits with a 50-character header, a 72-character body, a fixed
+Conventional Commits with a 50-character header, a 72-character body, a shared
 list of types and an optional list of scopes. Dependabot's signed-off version
 bumps are exempt.
 
@@ -41,7 +41,8 @@ export default defineConfig({
 ```
 
 Without `scopes`, any scope is accepted, and
-`extends: ["@chewygumxx/commitlint-config"]` works too. The `types` list is
-exported for reuse.
+`extends: ["@chewygumxx/commitlint-config"]` works too. Pass a nonempty list of
+`types` to `defineConfig` to replace the shared types in the lint rules and
+commit choices. The shared `types` list is exported for reuse.
 
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

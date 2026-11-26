@@ -8,6 +8,10 @@
 //
 //
 
+//
+// https://commitlint.js.org/reference/configuration.html
+//
+
 // @ts-check
 
 import { fileURLToPath } from "node:url";
@@ -23,49 +27,43 @@ export const types = [
     {
         name: "feat",
         fullName: "Feature",
-        description: "Implementing new functionality/tool",
+        description: "New functionality implementation",
     },
     {
         name: "fix",
         fullName: "Fix",
-        description: "Correct misconfiguration",
-    },
-    {
-        name: "tweak",
-        fullName: "Tweak",
-        description: "Minor preference adjustment",
+        description: "Malfunction correction",
     },
 
     {
         name: "chore",
         fullName: "Chore",
-        description: "Repository maintenance, organisation and management",
-    },
-    {
-        name: "style",
-        fullName: "Style",
-        description: "Formatting, whitespace, indentation",
+        description: "Repository administration",
     },
     {
         name: "docs",
         fullName: "Docs",
-        description: "Documentation and comments",
+        description: "Documentation and inline comments (excludes AGENTS.md)",
     },
     {
-        name: "ai",
-        fullName: "Agents",
-        description: "Agentic assets",
+        name: "build",
+        fullName: "Build",
+        description: "Development environment and utility specification",
+    },
+    {
+        name: "test",
+        fullName: "Test",
+        description: "Integrity assertion and validation architecture",
+    },
+    {
+        name: "style",
+        fullName: "Style",
+        description: "Inline formatting and whitespace amendment",
     },
     {
         name: "ci",
         fullName: "CI",
-        description: "Continuous integration/deployment",
-    },
-
-    {
-        name: "refactor",
-        fullName: "Refactor",
-        description: "Purely structural",
+        description: "Declarative configuration and execution of CI",
     },
     {
         name: "perf",
@@ -73,19 +71,41 @@ export const types = [
         description: "Performance improvement",
     },
     {
-        name: "build",
-        fullName: "Build",
-        description: "Compilation, toolchain and dependencies",
+        // Consider whether this may be subsumed build/docs
+        name: "ai",
+        fullName: "Agent",
+        description: "Agentic assets eg. skills, hooks, mcp, AGENTS.md",
+    },
+
+    {
+        // This is too similar to refactor.
+        // It's intended for changing URLs, appearance settings and configuration of programmatic
+        // function in a manner too minor to be considered a feature or fix.
+        name: "tweak",
+        fullName: "Tweak",
+        description:
+            "Adjustment that neither adds, nor fixes, functional operation (eg. config key=val)",
     },
     {
-        name: "test",
-        fullName: "Test",
-        description: "Test utilities eg. JSONschema validation",
+        // This is too similar to tweak.
+        // It's intended for code restructure, simplification, and technical debt control.
+        name: "refactor",
+        fullName: "Refactor",
+        description:
+            "Structural re-arrangement of code that does not affect function",
     },
     {
+        // I don't remember ever using this
         name: "revert",
         fullName: "Revert",
-        description: "It's rewind time, rollback",
+        description: "It's rewind time, rollback to previous commit",
+    },
+    {
+        // Proposed new commit type
+        // Current convention: 'chore: Release 1.2.3'
+        name: "release",
+        fullName: "Release",
+        description: "Publish a new release",
     },
 ];
 
@@ -111,13 +131,14 @@ function promptQuestionEnum(enumerable) {
 }
 
 /**
- * Builds the shared configuration, restricting scopes to `options.scopes`.
+ * Builds the shared configuration with optional type and scope lists.
  * With no scopes given, any scope is accepted.
  *
  * @param {Options} [options]
  * @returns {UserConfig}
  */
-export function defineConfig({ scopes = [] } = {}) {
+export function defineConfig({ types: customTypes, scopes = [] } = {}) {
+    const configuredTypes = customTypes?.length ? customTypes : types;
     return {
         // Resolved here, against this package's own dependencies, so the
         // consuming repository need not install the preset itself.
@@ -147,7 +168,11 @@ export function defineConfig({ scopes = [] } = {}) {
 
         rules: {
             "header-max-length": [lvl.err, "always", 50],
-            "type-enum": [lvl.err, "always", types.map((type) => type.name)],
+            "type-enum": [
+                lvl.err,
+                "always",
+                configuredTypes.map((type) => type.name),
+            ],
             "scope-delimiter-style": [lvl.err, "always", delimiters],
             "scope-enum": [
                 lvl.err,
@@ -180,7 +205,7 @@ export function defineConfig({ scopes = [] } = {}) {
             questions: {
                 type: {
                     description: "Select Type",
-                    enum: promptQuestionEnum(types),
+                    enum: promptQuestionEnum(configuredTypes),
                 },
                 scope: {
                     description: "Select Scope",

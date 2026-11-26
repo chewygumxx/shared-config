@@ -18,7 +18,7 @@
 // .config/mise/config.toml.
 //
 
-amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Config.pkl"
 
 import "./../node_modules/@chewygumxx/hk-config/steps.pkl" as shared
 
@@ -30,24 +30,26 @@ local lockfile = new Step {
     check = "bun run scripts/check-workspace-versions.mjs"
 }
 
+local sortPackageJson = (cgxx.sort_package_json) {
+    prefix = "bun run"
+    check = "sort-package-json --check package.json packages/*/package.json"
+    fix = "sort-package-json package.json packages/*/package.json"
+}
+
 hooks {
     ["check"] {
         steps = (cgxx.lint) {
             ["packages"] {
                 check = "bun run cgxx-lint-packages packages/*/"
             }
-            ["sort_package_json"] {
-                check = "bun run sort-package-json --check package.json packages/*/package.json"
-            }
+            ["sort_package_json"] = sortPackageJson
             ["lockfile"] = lockfile
         }
     }
     ["fix"] {
         stage = false
         steps = (cgxx.format) {
-            ["sort_package_json"] {
-                fix = "bun run sort-package-json package.json packages/*/package.json"
-            }
+            ["sort_package_json"] = sortPackageJson
         }
     }
     ["pre-commit"] {

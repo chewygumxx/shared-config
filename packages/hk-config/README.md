@@ -28,6 +28,9 @@ formats with, in one Pkl file. hk selects the files each step runs on
 in hooks, and skips a step whose files and configuration have not changed
 since it last passed.
 
+The shared steps extend [hk's built-ins](https://hk.jdx.dev/builtins) where
+available and apply the repository's tool options and cache inputs.
+
 | Step                | Checks                                     | Fixes |
 | ------------------- | ------------------------------------------ | ----- |
 | `actionlint`        | GitHub workflows                           |       |
@@ -59,14 +62,14 @@ optional peer dependencies, run with `bun run`; pin the rest with mise:
 
 ```sh
 bun add --dev --exact @chewygumxx/hk-config
-mise use aqua:jdx/hk@2.13.0 aqua:koalaman/shellcheck aqua:mvdan/sh
+mise use aqua:jdx/hk@2.14.0 aqua:koalaman/shellcheck aqua:mvdan/sh
 ```
 
 Import the steps into `.config/hk.pkl`, amending the hk configuration at the
 version they are written for:
 
 ```pkl
-amends "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Config.pkl"
 
 import "../node_modules/@chewygumxx/hk-config/steps.pkl" as cgxx
 
@@ -82,6 +85,9 @@ hooks {
 Steps read their configuration from the other `@chewygumxx` packages in
 `node_modules`, and from `.config/prettierrc.json` and
 `.config/remarkrc.json`.
+
+When upgrading from the 2.13.0 schema, update the consumer's `Config.pkl`
+import and hk installation to match the 2.14.0 package used by `steps.pkl`.
 
 `hk.pkl` cannot be read until the package is installed, so install it before
 the hooks, as with mise's
@@ -108,6 +114,11 @@ steps = (cgxx.lint) {
     ["mine"] { check = "./scripts/check-mine" }
 }
 ```
+
+When overriding a command that inherits a `bun run` prefix, write the
+command starting with the CLI name, or set `prefix = null` to supply the
+whole invocation yourself. Use a string prefix for shell commands and an
+argv list for structured commands.
 
 A step's cache keys on its files, its configuration, `bun.lock` and
 `.config/mise/config.toml`. Add inputs for every step by amending the module:

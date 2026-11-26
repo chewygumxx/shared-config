@@ -15,9 +15,12 @@
 // node_modules and maps the steps it wants into its hooks; `lint` and
 // `format` collect them all. hk selects the files: changed, staged, or all.
 // CLIs installed with Bun run through `bun run`; the rest are mise tools.
+// Upstream tests run in scratch directories. Steps that need the installed
+// npm tools or shared configs omit the upstream fixtures.
 //
 
-import "package://github.com/jdx/hk/releases/download/v2.13.0/hk@2.13.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Builtins.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.14.0/hk@2.14.0#/Config.pkl"
 
 /// The published configuration packages, as Bun installs them.
 hidden configs: String = "node_modules/@chewygumxx"
@@ -32,10 +35,20 @@ hidden extraInputs: List<String> = List()
 
 local function inputs(own: List<String>): List<String> = own + commonInputs + extraInputs
 
-local shellFiles = List(
-    new Config.FileSelector { glob = List("**/*.sh", "**/*.bash") },
-    new Config.FileSelector { types = List("sh", "bash") },
-)
+local bun = List("bun", "run")
+
+// Replace the file placeholder with local options and/or explicit paths.
+local function withFileArguments(spec: Config.CommandSpec, args: List<String>): Config.CommandSpec = (spec) {
+    command = (spec.command as Config.Command) {
+        argv = super.argv.flatMap((arg) -> if (arg == "{{files}}") args else List(arg))
+    }
+}
+
+local function withMarkdownlintCli2(spec: Config.CommandSpec): Config.CommandSpec = (spec) {
+    command = (spec.command as Config.Command) {
+        argv = List("markdownlint-cli2") + super.argv.drop(1)
+    }
+}
 
 local shellcheckOpts = "--rcfile=\(configs)/shellcheck-config/config.shellcheckrc"
 
@@ -43,17 +56,24 @@ local shellcheckOpts = "--rcfile=\(configs)/shellcheck-config/config.shellcheckr
 // Lint: file by file
 // -------------------
 
-actionlint: Config.Step = new {
-    glob = List(".github/workflows/*.yaml", ".github/workflows/*.yml")
-    check = "actionlint -config-file \(configs)/actionlint-config/config.yaml {{files}}"
+actionlint: Config.Step = (Builtins.actionlint) {
+    check = withFileArguments(super.check as Config.CommandSpec, List(
+        "-config-file", "\(configs)/actionlint-config/config.yaml", "{{files}}",
+    ))
+    tests = new {}
     env { ["SHELLCHECK_OPTS"] = shellcheckOpts }
     cache = true
     cache_inputs = inputs(List(".github/workflows/**"))
 }
 
-editorconfig: Config.Step = new {
+editorconfig: Config.Step = (Builtins.editorconfig_checker) {
+    types = null
     glob = "**/*"
-    check = "editorconfig-checker -config \(configs)/editorconfig-checker-config/config.json {{files}}"
+    check = withFileArguments(super.check as Config.CommandSpec, List(
+        "-config", "\(configs)/editorconfig-checker-config/config.json", "{{files}}",
+    ))
+    fix = null
+    tests = new Mapping<String, Config.StepTest> {}
     cache = true
     cache_inputs = inputs(List("**/*", ".editorconfig"))
 }
@@ -79,24 +99,25 @@ secretlint: Config.Step = new {
     cache_inputs = inputs(List("**/*", ".secretlintrc.json"))
 }
 
-shellcheck: Config.Step = new {
-    match_any = shellFiles
-    check = "shellcheck {{files}}"
+shellcheck: Config.Step = (Builtins.shellcheck) {
+    check_diff = null
+    check_after_diff = false
+    tests = super.tests.filter((_, test) -> test.run != "diff")
     env { ["SHELLCHECK_OPTS"] = shellcheckOpts }
     cache = true
     cache_inputs = inputs(List("**/*"))
 }
 
-cspell: Config.Step = new {
+cspell: Config.Step = (Builtins.cspell) {
+    types = null
     glob = "**/*"
-    check = "bun run cspell --no-progress --no-summary --no-must-find-files {{files}}"
+    prefix = bun
+    tests = new {}
     cache = true
     cache_inputs = inputs(List("**/*", ".config/cspell.json"))
 }
 
-yamllint: Config.Step = new {
-    glob = List("**/*.yaml", "**/*.yml")
-    check = "yamllint --strict {{files}}"
+yamllint: Config.Step = (Builtins.yamllint) {
     env { ["YAMLLINT_CONFIG_FILE"] = "\(configs)/yamllint-config/config.yaml" }
     cache = true
     cache_inputs = inputs(List("**/*.yaml", "**/*.yml"))
@@ -106,42 +127,62 @@ yamllint: Config.Step = new {
 // Lint and format: file by file
 // ---------------------------------
 
-biome: Config.Step = new {
+biome: Config.Step = (Builtins.biome) {
     glob = "**/*"
-    check = "bun run biome ci --no-errors-on-unmatched --files-ignore-unknown=true {{files}}"
-    fix = "bun run biome format --write --no-errors-on-unmatched --files-ignore-unknown=true {{files}}"
+    prefix = bun
+    local fileArgs = List("--no-errors-on-unmatched", "--files-ignore-unknown=true", "{{files}}")
+    // Check with CI severity and leave lint fixes to an explicit Biome invocation.
+    check = (super.check as Config.CommandSpec) {
+        command = new Config.Command {
+            argv = List("biome", "ci") + fileArgs
+        }
+        effect = "read"
+    }
+    fix = (super.fix as Config.CommandSpec) {
+        command = new Config.Command {
+            argv = List("biome", "format", "--write") + fileArgs
+        }
+    }
+    tests = new {}
     cache = true
     cache_inputs = inputs(List("**/*", ".biome.json", ".biome.jsonc", "biome.json", "biome.jsonc"))
 }
 
-markdownlint: Config.Step = new {
+markdownlint: Config.Step = (Builtins.markdown_lint) {
     glob = "**/*.md"
-    check = "bun run markdownlint-cli2 {{files}}"
-    fix = "bun run markdownlint-cli2 --fix {{files}}"
+    prefix = bun
+    check = withMarkdownlintCli2(super.check as Config.CommandSpec)
+    fix = withMarkdownlintCli2(super.fix as Config.CommandSpec)
+    tests = new {}
     cache = true
     cache_inputs = inputs(List("**/*.md", ".markdownlint-cli2.jsonc"))
 }
 
-shfmt: Config.Step = new {
-    match_any = shellFiles
-    check = "shfmt -d {{files}}"
-    fix = "shfmt -w {{files}}"
+shfmt: Config.Step = (Builtins.shfmt) {
+    match_any = Builtins.shellcheck.match_any
+    tests = super.tests.filter((name, _) -> !name.contains("zsh"))
     cache = true
     cache_inputs = inputs(List("**/*", ".editorconfig"))
 }
 
-tombi: Config.Step = new {
-    glob = "**/*.toml"
+tombi: Config.Step = (Builtins.tombi_format) {
+    // Keep format and strict lint under one step and avoid fetching schemas.
     check = "tombi format --check --offline -- {{files}} && tombi lint --error-on-warnings --offline -- {{files}}"
-    fix = "tombi format --offline -- {{files}}"
+    check_diff = null
+    fix = withFileArguments(super.fix as Config.CommandSpec, List("--offline", "--", "{{files}}"))
+    tests = super.tests.filter((_, test) -> test.run != "diff")
     cache = true
     cache_inputs = inputs(List("**/*.toml", ".config/tombi.toml"))
 }
 
-prettier: Config.Step = new {
+prettier: Config.Step = (Builtins.prettier) {
     glob = List("**/*.yaml", "**/*.yml")
-    check = "bun run prettier --config .config/prettierrc.json --check {{files}}"
-    fix = "bun run prettier --config .config/prettierrc.json --write --log-level warn {{files}}"
+    prefix = bun
+    local configArgs = List("--config", ".config/prettierrc.json")
+    check = withFileArguments(super.check as Config.CommandSpec, configArgs + List("{{files}}"))
+    check_list_files = withFileArguments(super.check_list_files as Config.CommandSpec, configArgs + List("{{files}}"))
+    fix = withFileArguments(super.fix as Config.CommandSpec, configArgs + List("--log-level", "warn", "{{files}}"))
+    tests = new {}
     cache = true
     cache_inputs = inputs(List("**/*.yaml", "**/*.yml", ".editorconfig", ".config/prettierrc.json"))
 }
@@ -150,14 +191,27 @@ prettier: Config.Step = new {
 // Whole project
 // ----------------------
 
-tsc: Config.Step = new {
-    check = "bun run tsc"
+tsc: Config.Step = (Builtins.tsc) {
+    glob = null
+    workspace_indicator = null
+    prefix = "bun run"
+    check = (super.check as Config.CommandSpec) {
+        command = (super.command as String).replaceAll("{{workspace_indicator}}", "tsconfig.json")
+    }
+    tests = new {}
     cache = true
     cache_inputs = inputs(List("**/*.js", "**/*.mjs", "**/*.ts", "**/*.mts", "**/*.d.ts", "**/tsconfig*.json", "**/package.json"))
 }
 
-knip: Config.Step = new {
-    check = "bun run knip"
+knip: Config.Step = (Builtins.knip) {
+    types = null
+    workspace_indicator = null
+    prefix = "bun run"
+    check = (super.check as Config.CommandSpec) {
+        command = (super.command as String).replaceAll("{{workspace}}", ".")
+    }
+    fix = null
+    tests = new Mapping<String, Config.StepTest> {}
     cache = true
     cache_inputs = inputs(List("**/*"))
 }
@@ -170,9 +224,11 @@ packages: Config.Step = new {
     cache_inputs = inputs(List("**/*"))
 }
 
-sort_package_json: Config.Step = new {
-    check = "bun run sort-package-json --check package.json"
-    fix = "bun run sort-package-json package.json"
+sort_package_json: Config.Step = (Builtins.sort_package_json) {
+    glob = null
+    prefix = bun
+    check = withFileArguments(super.check as Config.CommandSpec, List("package.json"))
+    fix = withFileArguments(super.fix as Config.CommandSpec, List("package.json"))
     exclusive = true
     cache = true
     cache_inputs = inputs(List("**/package.json"))

@@ -5,6 +5,7 @@
     "homepage": "https://github.com/chewygumxx/shared-config",
     "repository": "github:chewygumxx/shared-config",
     "license": "GPL-3.0-only",
+    "author": "chewygumxx <cgumxx@pm.me> (https://github.com/chewygumxx)",
     "workspaces": [
         "packages/*"
     ],
@@ -40,8 +41,5 @@
         "sync-header-metadata": "^2.4.3",
         "typescript": "^7.0.2",
         "unified": "^11.0.5"
-    },
-    "engines": {
-        "bun": ">=1.4"
     }
 }

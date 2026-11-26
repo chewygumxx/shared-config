@@ -26,7 +26,7 @@
         "@chewygumxx/hk-config": "workspace:*",
         "@chewygumxx/mise-tasks-config": "workspace:*",
         "@commitlint/cli": "^21.2.3",
-        "@types/bun": "^1.4.2",
+        "@types/bun": "^1.4.5",
         "commitizen": "^4.3.2",
         "cspell": "^10.5.1",
         "cz-git": "^1.14.0",

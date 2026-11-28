@@ -142,8 +142,7 @@ test("husky is gone; hk installs the hooks from mise", () =>
         );
     }));
 
-// 0.x: every functional change is breaking, so a range would take one in;
-// and hk-config names one Biome.
+// The 0.x shared packages and the Biome CLI are pinned for each template.
 test("the shared hk steps, mise tasks and Biome are pinned exactly", () =>
     eachView(({ read }) => {
         const { devDependencies: deps } = JSON.parse(read("package.json"));

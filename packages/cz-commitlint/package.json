@@ -28,7 +28,7 @@
         "index.d.ts"
     ],
     "dependencies": {
-        "@commitlint/cz-commitlint": "^21.2.3",
+        "@commitlint/cz-commitlint": "^21.2.4",
         "@commitlint/load": "^21.2.3",
         "@commitlint/types": "^21.2.3"
     },

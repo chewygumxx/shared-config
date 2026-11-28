@@ -14,14 +14,3 @@
 
 # Node
 node_modules/
-/.templates/
-
-# Herdr
-.herdr/
-
-# Claude
-.claude.json
-/.remember/
-/.superpowers/
-/.claude/worktrees/
-

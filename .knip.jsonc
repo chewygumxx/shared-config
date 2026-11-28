@@ -11,7 +11,10 @@
     "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
     "workspaces": {
         ".": {
-            "entry": ["scripts/*.test.mjs"]
+            "entry": [
+                "scripts/*.test.mjs",
+                "scripts/check-workspace-versions.mjs"
+            ]
         },
         "packages/commitlint-config": {
             "entry": ["test.js"]

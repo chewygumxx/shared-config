@@ -34,6 +34,7 @@
         "markdownlint-cli2": "^0.24.2",
         "prettier": "^3.10.1",
         "publint": "^0.3.25",
+        "release-please": "17.6.0",
         "remark-cli": "^12.0.1",
         "remark-stringify": "^11.0.0",
         "secretlint": "^14.1.0",

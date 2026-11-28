@@ -1,6 +1,6 @@
 ---
 ctime: 2026-11-20
-mtime: 2026-11-20
+mtime: 2026-11-29
 spdx: GPL-3.0-only
 title: "@chewygumxx/mise-tasks-config"
 description: >-
@@ -22,30 +22,31 @@ tags:
 
 # @chewygumxx/mise-tasks-config
 
-The `cgxx:` [mise](https://mise.jdx.dev) task templates behind every
-chewygumxx repository's standard tasks. mise stays the one place to run
-anything; the work goes to the tool made for it, `lint` and `format` to
+The `cgxx:` [mise](https://mise.jdx.dev) templates define standard tasks
+for chewygumxx repositories. The `lint` and `format` tasks run
 [hk](https://hk.jdx.dev) with the steps of
 [`@chewygumxx/hk-config`](../hk-config).
 
-| Template           | Aliases     | Runs                                  |
-| ------------------ | ----------- | ------------------------------------- |
-| `cgxx:install`     | `i`         | `bun ci`                              |
-| `cgxx:lint`        | `l`         | hk's check hook                       |
-| `cgxx:format`      | `f`, `fmt`  | hk's fix hook, leaving fixes unstaged |
-| `cgxx:test`        | `t`         | `bun test`                            |
-| `cgxx:check`       | `c`         | `lint` and `test`                     |
-| `cgxx:commit:lint` |             | commitlint on a commit message file   |
-| `cgxx:commit`      | `cz`, `czg` | Commitizen with the cz-git adapter    |
-| `cgxx:act`         |             | The shared remote act task            |
+| Template | Aliases | Runs |
+| --- | --- | --- |
+| `cgxx:install` | `i` | `bun ci` |
+| `cgxx:install:vendir` | `vendir` | `vendir sync` using `.config/vendir.yml` |
+| `cgxx:lint` | `l` | hk's check hook |
+| `cgxx:format` | `f`, `fmt` | hk's fix hook, leaving fixes unstaged |
+| `cgxx:test` | `t` | `bun test` |
+| `cgxx:check` | `c` | `lint` and `test` |
+| `cgxx:commit:lint` | | commitlint on a commit message file |
+| `cgxx:commit` | `cm`, `cz`, `czg` | Commitizen with the cz-git adapter |
+| `cgxx:act` | | The shared remote act task |
 
-`lint`, `format` and `check` select changed files by default. Use `-s` or
-`--staged` to select staged files and `--all` to include every file git does
-not ignore. Use `-S <step>` with `lint` or `format` to run one hk step. Every
-selected step runs even if another fails.
+Lint and format select changed files by default. `check` passes its file
+selection to lint and also runs the tests. Use `--staged` to select staged
+files or `--all` to include every file Git tracks or leaves unignored. Use
+`--step <name>` with lint or format to run one hk step. Every selected step
+runs even if another fails.
 
-hk shows warnings and failure diagnostics by default. Pass `--verbose` to
-`mise run lint` or `mise run format` to see hk debug output.
+Lint and format run hk quietly by default, with warnings and failure
+diagnostics visible. Pass `--verbose` to either task for hk debug output.
 
 A change to a path in `$CGXX_WIDEN_ON`, by default `bun.lock`,
 `.config/hk.pkl` and `.config/mise`, selects every file, as it can change the
@@ -88,15 +89,16 @@ To use `cgxx:commit`, install `commitizen` and `cz-git` and set
 Install `@commitlint/cli` to use `cgxx:commit:lint`. Enable mise's
 `experimental` setting if you use `cgxx:act`.
 
-Until the package is installed no task loads, as each extends a template
-that does not yet exist, so `mise install` installs the packages, then hk's
-hooks, which read them. CI installs the packages itself, from a lockfile a
-release may yet refresh:
+The task templates load after `bun ci` installs the packages. Add this
+hook to `.config/mise/config.toml` to install dependencies and Git hooks
+when running `mise install` locally.
 
 ```toml
-[hooks]
-postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
+[[hooks.postinstall]]
+run = 'test -n "${CI-}" || { bun ci && hk install --mise; }'
 ```
+
+In CI, run `mise exec -- bun ci` after `mise install`.
 
 ## Extending
 

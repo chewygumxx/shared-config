@@ -1,6 +1,6 @@
 ---
 ctime: 2026-11-20
-mtime: 2026-11-20
+mtime: 2026-11-29
 spdx: GPL-3.0-only
 title: "@chewygumxx/hk-config"
 description: >-
@@ -89,12 +89,14 @@ Steps read their configuration from the other `@chewygumxx` packages in
 When upgrading from the 2.13.0 schema, update the consumer's `Config.pkl`
 import and hk installation to match the 2.14.0 package used by `steps.pkl`.
 
-`hk.pkl` cannot be read until the package is installed, so install it before
-the hooks, as with mise's
-`postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'`.
+Run `bun ci` before `hk install --mise` so `hk.pkl` can load the shared
+steps. The [mise setup](../mise-tasks-config#usage) shows how to run both
+on `mise install`.
 
-The shared mise tasks run hk quietly by default. For a direct invocation
-outside mise, use `hk check --quiet` or `hk fix --quiet`.
+The shared mise tasks run hk quietly by default. Warnings and failure
+diagnostics remain visible. Use `mise run lint --verbose` or
+`mise run format --verbose` for hk debug output. For a direct invocation,
+use `hk check --quiet` or `hk fix --quiet`.
 
 ## Extending
 

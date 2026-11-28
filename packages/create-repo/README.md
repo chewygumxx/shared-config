@@ -1,6 +1,6 @@
 ---
 ctime: 2026-09-29
-mtime: 2026-11-21
+mtime: 2026-11-29
 spdx: GPL-3.0-only
 title: "@chewygumxx/create-repo"
 description: >-
@@ -71,8 +71,9 @@ Every template sets a repository up as
 - **hk** runs the steps of `@chewygumxx/hk-config`, by `.config/hk.pkl`:
   `lint` and `format` are its `check` and `fix` hooks, and its git hooks run
   `mise run check --staged` before a commit and commitlint on its message.
-  With no flag a task selects the changed files; `--staged` the staged
-  files; `--all` every file.
+  Lint and format select changed files by default and report warnings and
+  failures. Use `--staged` for staged files, `--all` for all tracked and
+  unignored files, or `--verbose` for hk debug output.
 - The configurations the steps read: the shared `@chewygumxx` packages,
   `.config/cspell.json`, `.config/prettierrc.json`, `.config/remarkrc.json`,
   `.config/tombi.toml`, `.biome.json`, `.markdownlint-cli2.jsonc`,
@@ -87,10 +88,11 @@ Every template sets a repository up as
   the setup to them: the `skills` CLI links it into `.agents/skills/` and
   `.claude/skills/` on every install, and `skills-lock.json` records it.
 
-`@chewygumxx/hk-config` and `@chewygumxx/mise-tasks-config` are pinned
-exactly, as is Biome, which hk-config names: below 1.0.0, every functional
-change to either is breaking. The other shared configurations take caret
-ranges.
+The templates pin `@chewygumxx/hk-config` and
+`@chewygumxx/mise-tasks-config` to exact versions. The Biome CLI matches
+the schema version in `@chewygumxx/biome-config`. The bundled Bun lockfiles
+record the exact versions installed by each template, including packages
+whose manifests use caret ranges.
 
 `--template` chooses one, `standard` by default, and `--with` turns on its
 optional features; `--help` lists both. A package version always creates
@@ -124,21 +126,24 @@ only regular files, and the copy makes both mise template links in `.config/mise
 
 ## Development
 
-From the workspace root, run `bun run check` for lint and tests,
-`mise run templates:materialize` to inspect the composed templates, or
-`mise run templates:verify` to exercise all four combinations from the
-packed CLI. Verification uses workspace builds of the shared packages and
-creates local repositories in a temporary directory.
+From the workspace root, run `mise run templates:materialize` to inspect
+the composed templates in `.templates/` or `mise run templates:verify`
+to exercise all four combinations from the packed CLI. The verifier uses
+packed workspace configs and checks a fresh clone of every generated
+repository. Add `--template typescript` to focus on a template and its
+feature combinations, or `--registry` to test the bundled pins from npm.
 
 The templates keep the `chewygumxx/repo-tmpl` identity until the CLI
 initialises them. The root `.gitattributes` preserves their headers.
 
 ## Releasing
 
-Release Please tracks this workspace as `create-repo`. Update the template
-pins and refresh each template layer's `bun.lock` after releasing its
-shared configuration packages. Run `mise run templates:verify --registry`
-to verify the packed CLI with the exact dependencies a consumer installs.
+After shared configurations publish, Refresh Template Pins updates the
+bundled manifests and lockfiles, verifies the packed CLI against npm and
+opens a PR. Merging the pins PR starts a separate `create-repo` release.
+Release CI verifies the exact scaffolder tarball before Publish sends it
+to npm. See the [maintainer runbook](../../MAINTAINERS.md#release-refreshed-templates)
+for the local preview and recovery commands.
 
 ## Flags
 

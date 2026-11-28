@@ -93,6 +93,9 @@ import and hk installation to match the 2.14.0 package used by `steps.pkl`.
 the hooks, as with mise's
 `postinstall = 'test -n "${CI-}" || { bun ci && hk install --mise; }'`.
 
+The shared mise tasks run hk quietly by default. For a direct invocation
+outside mise, use `hk check --quiet` or `hk fix --quiet`.
+
 ## Extending
 
 Pick steps one by one rather than all of them:

@@ -31,7 +31,7 @@ bun add --dev @chewygumxx/biome-config
 
 ```json
 {
-  "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.9/schema.json",
   "extends": ["@chewygumxx/biome-config/configs/recommended"]
 }
 ```

@@ -10,7 +10,7 @@ import { setTimeout as delay } from "node:timers/promises";
 import { releaseManifest } from "./release-proposal.mjs";
 
 export const branch = "main";
-const releaseBranch = "release-please--branches--main";
+export const releaseBranch = "release-please--branches--main";
 
 async function requireSameReleaseFiles(api, approved, merged) {
     const [before, after] = await Promise.all([

@@ -8,7 +8,11 @@
 
 import { GitHub, Manifest } from "release-please";
 import { run } from "../packages/create-repo/lib/run.js";
-import { branch, requireReleaseApproval } from "./release-approval.mjs";
+import {
+    branch,
+    releaseBranch,
+    requireReleaseApproval,
+} from "./release-approval.mjs";
 import { bunLockfilePlugin, releaseManifest } from "./release-proposal.mjs";
 
 const repository = process.env.GITHUB_REPOSITORY;
@@ -27,14 +31,25 @@ const api = async (path) => {
 const { stdout: head } = await run("git", ["rev-parse", "HEAD"], {
     capture: true,
 });
+const base = head.trim();
 const confirmBase = async () => {
     const { object } = await api(`git/ref/heads/${branch}`);
-    if (object.sha !== head.trim())
+    if (object.sha !== base)
         throw new Error(
             "main advanced during release preparation. Run Release Please again.",
         );
 };
 await confirmBase();
+
+const pullQueries = new URLSearchParams({
+    state: "open",
+    base: branch,
+    head: `${owner}:${releaseBranch}`,
+});
+const [existing] = await api(`pulls?${pullQueries}`);
+const existingCommit = existing
+    ? await api(`git/commits/${existing.head.sha}`)
+    : undefined;
 
 const github = await GitHub.create({
     owner,
@@ -47,6 +62,12 @@ const manifest = await Manifest.fromManifest(
     branch,
     ".config/release-please.json",
     releaseManifest,
+    // A new base can change bun.lock while leaving the release notes intact.
+    {
+        alwaysUpdate: Boolean(
+            existingCommit && existingCommit.parents[0]?.sha !== base,
+        ),
+    },
 );
 manifest.plugins.push(bunLockfilePlugin(github, branch, confirmBase));
 

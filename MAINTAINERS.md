@@ -50,10 +50,10 @@ and any conflicts.
 Use `--json` for automation or `--main` to inspect released versions
 when another release PR is open.
 
-Merge the release PR after CI and the release preflight pass on its latest
-commit. The preflight checks the proposed workspace names and versions,
-the lockfile, the remote Git tags, and the npm registry. If a tag already
-exists, use a fresh version. A conventional commit touching the affected
+Merge the release PR once it is current with main and CI and the release
+preflight pass on its latest commit. The preflight checks the workspace
+versions, the lockfile, remote Git tags, and npm. If a tag already exists,
+use a fresh version. A conventional commit touching the affected
 package can set the proposed version with a `Release-As: <version>`
 footer. Check the resulting proposal before merging.
 

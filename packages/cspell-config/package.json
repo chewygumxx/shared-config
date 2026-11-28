@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/cspell-config",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Shared CSpell configuration and word list",
     "keywords": [
         "cspell",

@@ -1,6 +1,6 @@
 {
     "name": "@chewygumxx/mise-tasks-config",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "description": "Shared mise task templates that run hk for chewygumxx repositories",
     "keywords": [
         "mise",

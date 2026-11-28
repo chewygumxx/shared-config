@@ -64,4 +64,6 @@ mise install
 mise run check --all
 ```
 
+See the [maintainer runbook](MAINTAINERS.md) for focused checks and releases.
+
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

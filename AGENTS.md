@@ -15,6 +15,9 @@ title: Repository Agentic Instructions
 This repository consists of published npm packages intended for utilisation
 as base configuration.
 
+See the [maintainer runbook](MAINTAINERS.md) for local checks, releases, and
+recovery.
+
 ## Commit Granularity and Message Linting
 
 Continuously granularly commit as you work. Compose single-line commit messages

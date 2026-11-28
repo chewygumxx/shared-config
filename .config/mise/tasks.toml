@@ -16,6 +16,11 @@
 
 [install]
 extends = "cgxx:install"
+depends = [ "install:vendir" ]
+
+["install:vendir"]
+extends = "cgxx:install:vendir"
+hide    = true
 
 [commit]
 extends = "cgxx:commit"

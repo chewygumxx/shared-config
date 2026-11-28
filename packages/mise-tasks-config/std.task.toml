@@ -22,10 +22,22 @@ description = "Install the locked dependency tree"
 run         = "bun ci"
 alias       = "i"
 
+[task_templates."cgxx:install:vendir"]
+description = "Sync vendor sources via vendir"
+run         = """
+repo_path="$(git rev-parse --show-toplevel)"
+vendir sync \
+    --chdir "$repo_path" \
+    --file "$repo_path"/.config/vendir.yml \
+    --lock-file "$repo_path"/.config/vendir.lock.yml \
+    --yes
+"""
+alias       = "vendir"
+
 [task_templates."cgxx:commit"]
 description = "Compose a commit with cz-git"
 run         = "bun run git-cz"
-alias       = [ "cz", "czg" ]
+alias       = [ "cm", "cz", "czg" ]
 
 [task_templates."cgxx:commit:lint"]
 description = "Lint a commit message file with commitlint"

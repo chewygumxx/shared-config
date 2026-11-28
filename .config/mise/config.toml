@@ -31,6 +31,7 @@ yamllint             = { version = "1.38.0", depends = [ "uv" ] }
 
 # Utility
 hk = "2.14.0"
+vendir = "0.47.0"
 
 [env]
 # Changes to shared configuration can affect checks on every file.

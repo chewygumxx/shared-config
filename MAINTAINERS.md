@@ -59,10 +59,16 @@ footer. Check the resulting proposal before merging.
 
 After merge, Release Please checks that CI passed on the exact PR head and
 merge commit and that the release files still match the approved proposal.
-It then creates the GitHub releases. Each release starts the corresponding
-Publish workflow, which publishes to npm with Trusted Publishing. The job
-summary records npm acceptance. The registry job waits for the exact tarball
-and checks its integrity.
+On the merge commit, CI runs the repository checks, packs each release
+workspace, and checks the resulting tarballs. The scaffolder tarball also
+runs through the registry template matrix. CI uploads the verified bundle
+before Release Please creates the GitHub releases.
+
+Each release starts Publish, which retrieves its tarball from the successful
+CI run for that commit and verifies its digest before Trusted Publishing.
+The job summary records npm acceptance. The registry job waits for the
+tarball and compares both the registry integrity value and the downloaded
+bytes with the digest from CI.
 
 If npm accepted a publish but still returns 404, check
 `mise run release:status --main` and the Publish run. The registry job
@@ -73,14 +79,19 @@ its logs and check the tag and registry before retrying.
 
 If release approval is waiting on CI, rerun the failed CI jobs for the SHA
 reported by Release Please. When they pass, rerun Release Please with
-`gh workflow run release-please.yaml --ref main`.
+`gh workflow run release-please.yaml --ref main`. To retry Publish, use
+the original run so it picks up the verified artifact for its tag commit.
+If the bundle is missing, rerun CI for that same commit while GitHub still
+allows reruns, then retry Publish.
 
 ## Rehearse a release
 
 Run `gh workflow run release-rehearsal.yaml --ref main` to rehearse a
 release on GitHub Actions. The rehearsal also runs when release tooling
-changes. It prepares fixture versions and their lockfile, packs the two
-packages, and checks the proposal and registry retries on a second runner.
+changes. It prepares fixture versions and their lockfile and runs the
+release packing and validation code. A second runner checks the proposal,
+downloads the same tarballs, dry-runs npm publishing, and verifies
+registry retries and integrity.
 The workflow uses read-only permissions and saves its outputs as an artifact.
 
 ## Release refreshed templates

@@ -43,9 +43,10 @@ with `bun install --lockfile-only --ignore-scripts`.
 
 ## Release shared packages
 
-Release Please proposes versions on the release PR and refreshes the root
-Bun lockfile there. With `gh` authenticated, run
-`mise run release:status` to see the proposed versions and any conflicts.
+Release Please prepares the package manifests, release manifest, and root
+Bun lockfile together in CI and proposes them in one commit. With `gh`
+authenticated, run `mise run release:status` to see the proposed versions
+and any conflicts.
 Use `--json` for automation or `--main` to inspect released versions
 when another release PR is open.
 
@@ -56,10 +57,12 @@ exists, use a fresh version. A conventional commit touching the affected
 package can set the proposed version with a `Release-As: <version>`
 footer. Check the resulting proposal before merging.
 
-After merge, Release Please publishes the GitHub releases. Each release
-starts the corresponding Publish workflow, which publishes to npm with
-Trusted Publishing. The Publish job summary records npm acceptance. The
-registry job waits for the exact tarball and checks its integrity.
+After merge, Release Please checks that CI passed on the exact PR head and
+merge commit and that the release files still match the approved proposal.
+It then creates the GitHub releases. Each release starts the corresponding
+Publish workflow, which publishes to npm with Trusted Publishing. The job
+summary records npm acceptance. The registry job waits for the exact tarball
+and checks its integrity.
 
 If npm accepted a publish but still returns 404, check
 `mise run release:status --main` and the Publish run. The registry job
@@ -67,6 +70,18 @@ retries for up to 15 minutes. If it times out, use
 `gh run rerun <run-id> --failed` on that Publish run to retry the registry
 job using the successful publish's outputs. If publish itself failed, read
 its logs and check the tag and registry before retrying.
+
+If release approval is waiting on CI, rerun the failed CI jobs for the SHA
+reported by Release Please. When they pass, rerun Release Please with
+`gh workflow run release-please.yaml --ref main`.
+
+## Rehearse a release
+
+Run `gh workflow run release-rehearsal.yaml --ref main` to rehearse a
+release on GitHub Actions. The rehearsal also runs when release tooling
+changes. It prepares fixture versions and their lockfile, packs the two
+packages, and checks the proposal and registry retries on a second runner.
+The workflow uses read-only permissions and saves its outputs as an artifact.
 
 ## Release refreshed templates
 

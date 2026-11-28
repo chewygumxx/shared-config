@@ -7,11 +7,15 @@
 //
 
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
 import { mkdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { run } from "../packages/create-repo/lib/run.js";
 import { registryState, waitForRegistry } from "./npm-registry.mjs";
+import {
+    npmResult,
+    packReleaseArtifacts,
+    selectReleaseTarball,
+} from "./release-artifacts.mjs";
 import {
     applyReleaseChanges,
     bunLockfilePlugin,
@@ -19,7 +23,7 @@ import {
     withDetachedCheckout,
 } from "./release-proposal.mjs";
 
-const paths = ["packages/cspell-config", "packages/biome-config"];
+const paths = ["packages/commitlint-config", "packages/create-repo"];
 
 function updateJson(path, key, value) {
     return {
@@ -79,39 +83,12 @@ async function prepare(output) {
             { cwd, capture: true },
         );
         await Bun.write(join(output, "release.patch"), patch);
-        const packages = [];
-        for (const path of paths) {
-            const { stdout } = await run(
-                "npm",
-                [
-                    "pack",
-                    "--json",
-                    "--ignore-scripts",
-                    "--workspace",
-                    path,
-                    "--pack-destination",
-                    output,
-                ],
-                { cwd, capture: true },
-            );
-            const packed = JSON.parse(stdout);
-            const [{ name, version, filename, integrity }] = Array.isArray(
-                packed,
-            )
-                ? packed
-                : Object.values(packed);
-            packages.push({ path, name, version, filename, integrity });
-            console.log(`Packed ${name}@${version}`);
-        }
-        await Bun.write(
-            join(output, "packages.json"),
-            JSON.stringify(packages),
-        );
+        await packReleaseArtifacts(cwd, "HEAD", output);
     });
 }
 
 async function verify(output) {
-    const packages = await Bun.file(join(output, "packages.json")).json();
+    const { packages } = await Bun.file(join(output, "packages.json")).json();
     assert.deepEqual(
         packages.map(({ path }) => path),
         paths,
@@ -130,24 +107,32 @@ async function verify(output) {
         "HEAD",
     ]);
 
-    for (const { path, name, version, filename, integrity } of packages) {
-        const tarball = join(output, filename);
+    const { stdout: head } = await run("git", ["rev-parse", "HEAD"], {
+        capture: true,
+    });
+    for (const { path, version } of packages) {
+        const tag = `${path.split("/").at(-1)}@${version}`;
+        const { tarball, name, filename, integrity } =
+            await selectReleaseTarball(process.cwd(), output, head.trim(), tag);
         const { stdout } = await run(
-            "tar",
-            ["-xOzf", tarball, "package/package.json"],
+            "npm",
+            [
+                "publish",
+                tarball,
+                "--dry-run",
+                "--offline",
+                "--json",
+                "--ignore-scripts",
+                "--tag",
+                "rehearsal",
+            ],
             { capture: true },
         );
-        const packed = JSON.parse(stdout);
-        const workspace = await Bun.file(`${path}/package.json`).json();
-        assert.equal(name, workspace.name);
-        assert.equal(version, workspace.version);
-        assert.equal(packed.name, name);
-        assert.equal(packed.version, version);
+        const result = npmResult(stdout);
+        assert.equal(result.name, name);
+        assert.equal(result.version, version);
+        assert.equal(result.integrity, integrity);
         const bytes = await Bun.file(tarball).arrayBuffer();
-        const digest = createHash("sha512")
-            .update(Buffer.from(bytes))
-            .digest("base64");
-        assert.equal(integrity, `sha512-${digest}`);
 
         const metadata = `https://registry.npmjs.org/${encodeURIComponent(name)}/${version}`;
         const url = `https://registry.npmjs.org/${name}/-/${filename}`;
@@ -169,7 +154,8 @@ async function verify(output) {
             return new Response(bytes);
         };
         await waitForRegistry([{ name, version }], {
-            read: (name, version) => registryState(name, version, request),
+            read: (name, version) =>
+                registryState(name, version, request, integrity),
             interval: 1,
             timeout: 1000,
         });

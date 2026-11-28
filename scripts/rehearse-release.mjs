@@ -94,7 +94,12 @@ async function prepare(output) {
                 ],
                 { cwd, capture: true },
             );
-            const [{ name, version, filename, integrity }] = JSON.parse(stdout);
+            const packed = JSON.parse(stdout);
+            const [{ name, version, filename, integrity }] = Array.isArray(
+                packed,
+            )
+                ? packed
+                : Object.values(packed);
             packages.push({ path, name, version, filename, integrity });
             console.log(`Packed ${name}@${version}`);
         }

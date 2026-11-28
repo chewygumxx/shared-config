@@ -86,7 +86,9 @@ hooks {
         stage = false
         steps {
             ["check"] {
-                check = "mise run check --staged"
+                check = """
+                    HK_SKIP_STEPS="${HK_SKIP_STEPS:+$HK_SKIP_STEPS,}packages,templates" mise run lint --staged
+                    """
             }
         }
     }

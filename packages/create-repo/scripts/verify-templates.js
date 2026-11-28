@@ -13,7 +13,7 @@ import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { run } from "../lib/run.js";
-import { combinations } from "../lib/templates.js";
+import { combinations, getTemplate } from "../lib/templates.js";
 
 const workspace = fileURLToPath(new URL("../../..", import.meta.url));
 const packageDir = fileURLToPath(new URL("..", import.meta.url));
@@ -61,7 +61,13 @@ async function useWorkspaceConfigs(templates, scratch) {
     }
 }
 
-const { values } = parseArgs({ options: { registry: { type: "boolean" } } });
+const { values } = parseArgs({
+    options: { registry: { type: "boolean" }, template: { type: "string" } },
+});
+const scenarios =
+    values.template === undefined
+        ? combinations()
+        : combinations({ [values.template]: getTemplate(values.template) });
 const scratch = await mkdtemp(join(tmpdir(), "create-repo-verify-"));
 try {
     const env = {
@@ -89,45 +95,50 @@ try {
     if (!values.registry)
         await useWorkspaceConfigs(join(installed, "templates"), scratch);
 
-    for (const { template, features } of combinations()) {
+    for (const { template, features } of scenarios) {
         const name = [template, ...features].join("-");
-        const dir = join(scratch, name);
-        await run(
-            "bun",
-            [
-                join(installed, "bin", "create-repo.js"),
-                name,
-                "--template",
-                template,
-                "--with",
-                features.join(","),
-                "--description",
-                "A generated repository for validation.",
-                "--topics",
-                "ci",
-                "--scopes",
-                "api",
-                "--owner",
-                "example",
-                "--dir",
-                dir,
-                "--no-metadata",
-                "--dry-run",
-                "--yes",
-            ],
-            { env },
-        );
+        const scenario = await mkdtemp(join(scratch, `${name}-`));
+        try {
+            const dir = join(scenario, name);
+            await run(
+                "bun",
+                [
+                    join(installed, "bin", "create-repo.js"),
+                    name,
+                    "--template",
+                    template,
+                    "--with",
+                    features.join(","),
+                    "--description",
+                    "A generated repository for validation.",
+                    "--topics",
+                    "ci",
+                    "--scopes",
+                    "api",
+                    "--owner",
+                    "example",
+                    "--dir",
+                    dir,
+                    "--no-metadata",
+                    "--dry-run",
+                    "--yes",
+                ],
+                { env },
+            );
 
-        const clone = join(scratch, `${name}-fresh`);
-        await run("git", ["clone", "--quiet", dir, clone], { env });
-        const local = {
-            cwd: clone,
-            env: { ...env, GITHUB_REPOSITORY: `example/${name}` },
-        };
-        await run("mise", ["trust", "--quiet"], local);
-        await run("mise", ["install"], local);
-        await run("mise", ["exec", "--", "bun", "ci"], local);
-        await run("mise", ["exec", "--", "bun", "run", "check"], local);
+            const clone = join(scenario, `${name}-fresh`);
+            await run("git", ["clone", "--quiet", dir, clone], { env });
+            const local = {
+                cwd: clone,
+                env: { ...env, GITHUB_REPOSITORY: `example/${name}` },
+            };
+            await run("mise", ["trust", "--quiet"], local);
+            await run("mise", ["install"], local);
+            await run("mise", ["exec", "--", "bun", "ci"], local);
+            await run("mise", ["exec", "--", "bun", "run", "check"], local);
+        } finally {
+            await rm(scenario, { recursive: true, force: true });
+        }
     }
 } finally {
     await rm(scratch, { recursive: true, force: true });

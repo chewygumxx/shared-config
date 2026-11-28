@@ -1,6 +1,6 @@
 ---
 ctime: 2026-10-04
-mtime: 2026-11-28
+mtime: 2026-11-29
 spdx: GPL-3.0-only
 title: shared-config
 description: >-
@@ -49,21 +49,32 @@ published packages of this monorepository.
 
 ## Development
 
-This repository dogfoods its own packages through Bun workspaces. Every
-change is implemented here before publish.
-
-`mise` is the main development interface. Its configuration is the normative
-authority for defining:
-
-- DevTool version pinning and capability ownership
-- Tasks governing scripted life cycle execution
-- Ontology/Sources of truth for generated documentation
+This repository uses its own packages through Bun workspaces. Run the
+following from the repository root to install the tools, dependencies and
+Git hooks and check your changes.
 
 ```sh
+mise trust
 mise install
-mise run check --all
+mise run lint
 ```
 
-See the [maintainer runbook](MAINTAINERS.md) for focused checks and releases.
+`mise run lint` checks changed files and `mise run format` applies fixes
+without staging them. Both run hk quietly and report warnings and failures.
+Add `--verbose` for hk debug output.
+
+Pre-commit checks staged changes. CI runs the full test suite, package
+checks and checks on the composed templates. Run `mise run check --all`
+when you need the full check locally.
+
+## Releases
+
+Release Please proposes workspace version and lockfile updates together.
+After the proposal merges, CI verifies the npm tarballs and Publish sends
+those same tarballs to npm. Refresh Template Pins then verifies updated
+template dependencies and opens a separate PR for the scaffolder.
+
+See the [maintainer runbook](MAINTAINERS.md) for focused checks, release
+status, CI rehearsal and recovery.
 
 <!-- vim:set expandtab shiftwidth=2 filetype=markdown foldlevel=3: -->

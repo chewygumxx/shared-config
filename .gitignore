@@ -11,6 +11,7 @@
 # General
 .env*
 *.local.*
+/.templates/
 
 # Node
 node_modules/

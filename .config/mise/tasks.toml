@@ -42,7 +42,7 @@ extends = "cgxx:lint"
 
 [test]
 extends = "cgxx:test"
-run     = "bun test ./packages/*/test.js ./packages/create-repo/test/"
+run     = "bun test ./scripts/*.test.mjs ./packages/*/test.js ./packages/create-repo/test/"
 
 [check]
 extends = "cgxx:check"

@@ -54,7 +54,7 @@ async function select(base, main) {
         "--json",
         "nameWithOwner",
     ]);
-    const [pr] = main
+    const pullRequests = main
         ? []
         : await github([
               "pr",
@@ -66,8 +66,9 @@ async function select(base, main) {
               "--head",
               releaseBranch,
               "--json",
-              "baseRefOid,headRefOid,number,url",
+              "baseRefOid,headRefOid,isCrossRepository,number,url",
           ]);
+    const pr = pullRequests.find(({ isCrossRepository }) => !isCrossRepository);
     if (pr) {
         return {
             source: `release PR #${pr.number}`,
@@ -155,60 +156,62 @@ async function main() {
                 ),
         ),
     ]);
-    const rows = await Promise.all(
-        Object.entries(versions)
-            .filter(([path, version]) => !base || previous[path] !== version)
-            .map(async ([path, version]) => {
-                const component = basename(path);
-                const name = `@chewygumxx/${component}`;
-                const tag = `${component}@${version}`;
-                const workspace = JSON.parse(
-                    await head(`${path}/package.json`),
+    const allRows = await Promise.all(
+        Object.entries(versions).map(async ([path, version]) => {
+            const proposed = Boolean(base && previous[path] !== version);
+            const component = basename(path);
+            const name = `@chewygumxx/${component}`;
+            const tag = `${component}@${version}`;
+            const workspace = JSON.parse(await head(`${path}/package.json`));
+            const lockfileVersion = lockfile.workspaces[path]?.version ?? null;
+            const tagSha = tags.get(`refs/tags/${tag}`) ?? null;
+            const issues = [];
+            if (
+                workspace.name !== name ||
+                workspace.private ||
+                workspace.publishConfig?.access !== "public"
+            ) {
+                issues.push(`Expected public workspace ${name}`);
+            }
+            if (workspace.version !== version)
+                issues.push(
+                    `package.json is ${workspace.version}, expected ${version}`,
                 );
-                const lockfileVersion =
-                    lockfile.workspaces[path]?.version ?? null;
-                const tagSha = tags.get(`refs/tags/${tag}`) ?? null;
-                const issues = [];
-                if (
-                    workspace.name !== name ||
-                    workspace.private ||
-                    workspace.publishConfig?.access !== "public"
-                ) {
-                    issues.push(`Expected public workspace ${name}`);
-                }
-                if (workspace.version !== version)
-                    issues.push(
-                        `package.json is ${workspace.version}, expected ${version}`,
-                    );
-                if (lockfileVersion !== version)
-                    issues.push(
-                        `bun.lock is ${lockfileVersion ?? "missing"}, expected ${version}`,
-                    );
-                if (base && tagSha)
-                    issues.push(`Git tag ${tag} already exists at ${tagSha}`);
+            if (lockfileVersion !== version)
+                issues.push(
+                    `bun.lock is ${lockfileVersion ?? "missing"}, expected ${version}`,
+                );
+            if (proposed && tagSha)
+                issues.push(`Git tag ${tag} already exists at ${tagSha}`);
 
-                let registry;
+            let registry = null;
+            if (!base || proposed) {
                 try {
                     registry = await registryState(name, version);
-                    if (base && registry !== "missing")
+                    if (proposed && registry !== "missing")
                         issues.push(`npm already lists ${name}@${version}`);
                 } catch (error) {
                     registry = "error";
                     issues.push(error.message);
                 }
-                return {
-                    path,
-                    name,
-                    version,
-                    tag,
-                    tagSha,
-                    registry,
-                    issues,
-                    workspaceVersion: workspace.version,
-                    lockfileVersion,
-                    publish: null,
-                };
-            }),
+            }
+            return {
+                path,
+                name,
+                version,
+                tag,
+                tagSha,
+                registry,
+                issues,
+                proposed,
+                workspaceVersion: workspace.version,
+                lockfileVersion,
+                publish: null,
+            };
+        }),
+    );
+    const rows = allRows.filter(
+        (row) => !base || row.proposed || row.issues.length,
     );
     if (repo && !values.check && !base) await publishStates(repo, rows);
 
@@ -223,8 +226,9 @@ async function main() {
             const publish = row.publish
                 ? `, publish ${row.publish.state} (${row.publish.url})`
                 : "";
+            const registry = row.registry ? `, registry ${row.registry}` : "";
             console.log(
-                `${row.name}@${row.version} | ${tag}, registry ${row.registry}${publish}`,
+                `${row.name}@${row.version} | ${tag}${registry}${publish}`,
             );
             for (const issue of row.issues) console.log(`  ${issue}`);
         }

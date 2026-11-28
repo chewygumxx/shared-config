@@ -54,6 +54,7 @@ luarocks
 mktemp
 modeline
 modelines
+monorepository
 moxide
 mvdan
 nocorrect

@@ -15,12 +15,17 @@
 
 
 [install]
-extends = "cgxx:install"
-depends = [ "install:vendir" ]
+extends      = "cgxx:install"
+depends_post = [ "install:vendir" ]
 
 ["install:vendir"]
-extends = "cgxx:install:vendir"
-hide    = true
+extends      = "cgxx:install:vendir"
+depends_post = [ "format:vendir" ]
+hide         = true
+
+["format:vendir"]
+run  = "bun run prettier --config .config/prettierrc.json --write .config/vendir.lock.yml"
+hide = true
 
 [commit]
 extends = "cgxx:commit"

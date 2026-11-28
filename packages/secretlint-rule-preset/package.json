@@ -30,7 +30,7 @@
         "@secretlint/types": "^13.0.7"
     },
     "peerDependencies": {
-        "secretlint": "^13.0.7"
+        "secretlint": "^13.0.7 || ^14.1.0"
     },
     "engines": {
         "node": ">=24"

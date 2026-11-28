@@ -242,15 +242,22 @@ test("generated mise links track the workspace task templates", () => {
 
 test("standard tasks use the canonical shared templates", () => {
     const own = readFileSync(join(ROOT, ".config/mise/tasks.toml"), "utf8");
-    const definitions = /^\[([^\]]+)\]\nextends = "(cgxx:[^"]+)"$/gm;
-    const expected = [...own.matchAll(definitions)].map((match) => match[0]);
+    const definitions = /^\[([^\]]+)\]\nextends += "(cgxx:[^"]+)"$/gm;
+    const expected = [...own.matchAll(definitions)].filter(
+        ([, , template]) => template !== "cgxx:install:vendir",
+    );
     eachView(({ read }) => {
         const mise = read(".config/mise/config.toml");
         assert.ok(mise.includes('".config/mise/tasks.toml"'));
         const tasks = read(".config/mise/tasks.toml");
         const standard = read(".config/mise/tasks/standard.task.toml");
-        for (const definition of expected) {
-            assert.ok(`${tasks}\n${standard}`.includes(definition), definition);
+        const actual = new Map(
+            [...`${tasks}\n${standard}`.matchAll(definitions)].map(
+                ([, task, template]) => [task, template],
+            ),
+        );
+        for (const [, task, template] of expected) {
+            assert.equal(actual.get(task), template, task);
         }
         assert.match(standard, /^run\s+= ".+"$/m);
     });
@@ -288,12 +295,15 @@ test("hk's version agrees across mise, hk.pkl and the shared steps", () => {
 });
 
 test("template tool pins match the workspace", () => {
-    const toolBlock = (/** @type {string} */ config) =>
-        config.split("[tools]\n")[1]?.split("\n[env]")[0];
+    const toolPins = (/** @type {string} */ config) =>
+        /** @type {{ tools: Record<string, unknown> }} */ (
+            Bun.TOML.parse(config)
+        ).tools;
     const root = readFileSync(join(ROOT, ".config/mise/config.toml"), "utf8");
+    const { vendir, ...sharedTools } = toolPins(root);
     eachView(({ read }) => {
         const mise = read(".config/mise/config.toml");
-        assert.equal(toolBlock(mise), toolBlock(root));
+        assert.deepEqual(toolPins(mise), sharedTools);
         assert.doesNotMatch(mise, /lazy\s*=\s*true/);
         assert.match(mise, /^CGXX_WIDEN_ON = "bun\.lock \.config /m);
     });

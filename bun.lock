@@ -98,14 +98,14 @@
       },
       "peerDependencies": {
         "@arethetypeswrong/cli": "^0.18.5",
-        "@biomejs/biome": "2.6.8",
+        "@biomejs/biome": "2.6.8 || 2.6.9",
         "cspell": "^10.3.6",
         "knip": "^6.40.0",
         "markdownlint-cli2": ">=0.23.3 <0.25.0",
         "prettier": "^3.9.9",
         "publint": "^0.3.25",
         "remark-cli": "^12.0.1",
-        "secretlint": "^13.0.7",
+        "secretlint": "^13.0.7 || ^14.1.0",
         "sort-package-json": "^4.0.0",
         "sync-header-metadata": "^2.4.3",
         "typescript": "^7.0.2",
@@ -179,7 +179,7 @@
         "@secretlint/types": "^13.0.7",
       },
       "peerDependencies": {
-        "secretlint": "^13.0.7",
+        "secretlint": "^13.0.7 || ^14.1.0",
       },
     },
     "packages/shellcheck-config": {

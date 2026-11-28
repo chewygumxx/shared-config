@@ -13,7 +13,11 @@ import { requireReleaseApproval } from "./release-approval.mjs";
 const repository = "example/shared-config";
 const candidates = [{ sha: "merged", pullRequest: { number: 42 } }];
 
-function fixture({ preflight = "success", lock = "approved-lock" } = {}) {
+function fixture({
+    preflight = "success",
+    lock = "approved-lock",
+    expired = false,
+} = {}) {
     const urls = [];
     const api = (path) => {
         urls.push(path);
@@ -61,15 +65,22 @@ function fixture({ preflight = "success", lock = "approved-lock" } = {}) {
                         head_sha: sha,
                         status: "completed",
                         conclusion: "success",
+                        head_repository: { full_name: repository },
                         html_url: `https://example.test/ci/${sha}`,
                     },
                 ],
             };
         }
+        if (path === "actions/runs/merged/artifacts?per_page=100")
+            return {
+                artifacts: [{ id: 9, name: "release-merged-1", expired }],
+            };
         if (path.startsWith("actions/runs/")) {
             const jobs = [{ name: "check / check", conclusion: "success" }];
             if (path.includes("/approved/"))
                 jobs.push({ name: "release-preflight", conclusion: preflight });
+            else
+                jobs.push({ name: "release-artifacts", conclusion: "success" });
             return { jobs };
         }
         throw new Error(`Unexpected fixture request ${path}`);
@@ -97,5 +108,13 @@ test("release approval catches a change to the approved lockfile during merge", 
     await assert.rejects(
         requireReleaseApproval(api, repository, candidates),
         /differ from approved PR head/,
+    );
+});
+
+test("release approval requires a downloadable CI bundle for the merge", async () => {
+    const { api } = fixture({ expired: true });
+    await assert.rejects(
+        requireReleaseApproval(api, repository, candidates),
+        /No verified release artifact for merged/,
     );
 });

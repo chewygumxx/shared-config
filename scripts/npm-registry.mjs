@@ -11,14 +11,22 @@ import { setTimeout as delay } from "node:timers/promises";
 
 const registry = "https://registry.npmjs.org";
 
+class IntegrityError extends Error {}
+
 /**
  * A version can be listed before its tarball is available to install.
  * @param {string} name
  * @param {string} version
  * @param {typeof fetch} [request]
+ * @param {string} [expectedIntegrity]
  * @returns {Promise<"missing" | "processing" | "downloadable">}
  */
-export async function registryState(name, version, request = fetch) {
+export async function registryState(
+    name,
+    version,
+    request = fetch,
+    expectedIntegrity,
+) {
     const metadata = await request(
         `${registry}/${encodeURIComponent(name)}/${encodeURIComponent(version)}`,
         { cache: "no-cache", signal: AbortSignal.timeout(10000) },
@@ -39,6 +47,11 @@ export async function registryState(name, version, request = fetch) {
             `npm returned unexpected metadata for ${name}@${version}`,
         );
     }
+    const hashes = dist.integrity.split(/\s+/);
+    if (expectedIntegrity && !hashes.includes(expectedIntegrity))
+        throw new IntegrityError(
+            `npm metadata for ${name}@${version} does not match the verified CI tarball`,
+        );
 
     const url = new URL(dist.tarball);
     if (url.origin !== registry) {
@@ -59,10 +72,12 @@ export async function registryState(name, version, request = fetch) {
     const hash = createHash("sha512").update(
         Buffer.from(await tarball.arrayBuffer()),
     );
+    const integrity = `sha512-${hash.digest("base64")}`;
     if (
-        !dist.integrity.split(/\s+/).includes(`sha512-${hash.digest("base64")}`)
+        !hashes.includes(integrity) ||
+        (expectedIntegrity && integrity !== expectedIntegrity)
     ) {
-        throw new Error(
+        throw new IntegrityError(
             `npm tarball integrity mismatch for ${name}@${version}`,
         );
     }
@@ -90,8 +105,11 @@ export async function waitForRegistry(
             }),
         );
         for (const result of results) {
-            if (result.status === "rejected")
+            if (result.status === "rejected") {
+                if (result.reason instanceof IntegrityError)
+                    throw result.reason;
                 console.error(result.reason.message);
+            }
         }
         if (!pending.size) return;
         if (Date.now() >= deadline) {
@@ -108,10 +126,13 @@ export async function waitForRegistry(
 
 // The registry job needs only Node and these two arguments.
 if (import.meta.main) {
-    const [name, version] = process.argv.slice(2);
-    if (!name || !version)
+    const [name, version, integrity] = process.argv.slice(2);
+    if (!name || !version || !/^sha512-[A-Za-z0-9+/]{86}==$/.test(integrity))
         throw new Error(
-            "Usage: node scripts/npm-registry.mjs <package> <version>",
+            "Usage: node scripts/npm-registry.mjs <package> <version> <integrity>",
         );
-    await waitForRegistry([{ name, version }]);
+    await waitForRegistry([{ name, version }], {
+        read: (packageName, packageVersion) =>
+            registryState(packageName, packageVersion, fetch, integrity),
+    });
 }

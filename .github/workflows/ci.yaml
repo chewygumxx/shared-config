@@ -39,14 +39,78 @@ jobs:
             metadata-sync: false
             yaml: false
 
+    release-plan:
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        outputs:
+            changed: ${{ steps.versions.outputs.changed }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.sha }}
+                  fetch-depth: 2
+                  persist-credentials: false
+
+            - name: Detect Release Versions
+              id: versions
+              shell: bash
+              run: |
+                  manifest=.config/release-please-manifest.json
+                  previous=$(git show "HEAD^:$manifest" | jq -cS .)
+                  current=$(jq -cS . "$manifest")
+                  if [ "$previous" = "$current" ]; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
     check:
-        needs: standard
+        needs: [standard, release-plan]
         if: ${{ !cancelled() }}
         permissions:
             contents: read
         uses: chewygumxx/.github/.github/workflows/lint.yaml@v1
         with:
-            ref: ${{ needs.standard.outputs.sha }}
+            ref: ${{ needs.release-plan.outputs.changed == 'true' && github.sha || needs.standard.outputs.sha }}
+            script: ${{ needs.release-plan.outputs.changed == 'true' && 'check:release' || 'check' }}
+
+    release-artifacts:
+        needs: [release-plan, check]
+        if: needs.release-plan.outputs.changed == 'true'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            - name: Checkout Checked Release Commit
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.sha }}
+                  fetch-depth: 2
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+              env:
+                  MISE_NO_HOOKS: "1"
+
+            - name: Install Validation Tooling
+              run: bun ci
+
+            - name: Pack and Check Release Tarballs
+              env:
+                  MISE_GITHUB_TOKEN: ${{ github.token }}
+              run: bun scripts/release-artifacts.mjs pack "$RUNNER_TEMP/release" HEAD^
+
+            - name: Upload Verified Tarballs
+              uses: actions/upload-artifact@v7
+              with:
+                  name: release-${{ github.sha }}-${{ github.run_attempt }}
+                  path: ${{ runner.temp }}/release
+                  if-no-files-found: error
+                  retention-days: 30
 
     release-preflight:
         if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'release-please--branches--main'

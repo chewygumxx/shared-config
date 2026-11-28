@@ -11,6 +11,7 @@
     ],
     "scripts": {
         "check": "mise run check --all",
+        "check:release": "HK_SKIP_STEPS=packages mise run check --all",
         "commit": "mise run commit",
         "cz": "mise run cz"
     },

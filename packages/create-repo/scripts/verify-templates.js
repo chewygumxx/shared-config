@@ -9,7 +9,7 @@
 import { existsSync } from "node:fs";
 import { mkdtemp, readdir, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { basename, join } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { run } from "../lib/run.js";
@@ -62,7 +62,11 @@ async function useWorkspaceConfigs(templates, scratch) {
 }
 
 const { values } = parseArgs({
-    options: { registry: { type: "boolean" }, template: { type: "string" } },
+    options: {
+        registry: { type: "boolean" },
+        template: { type: "string" },
+        tarball: { type: "string" },
+    },
 });
 const scenarios =
     values.template === undefined
@@ -80,19 +84,31 @@ try {
         GIT_COMMITTER_NAME: "Create Repo Test",
         GIT_COMMITTER_EMAIL: "create-repo@example.com",
     };
-    const { stdout } = await run(
-        "npm",
-        ["pack", "--json", "--ignore-scripts", "--pack-destination", scratch],
-        { cwd: packageDir, capture: true },
-    );
-    const packed = JSON.parse(stdout);
-    const [artifact] = Array.isArray(packed) ? packed : Object.values(packed);
-    await run("tar", ["-xzf", artifact.filename], { cwd: scratch });
+    let tarball = values.tarball && resolve(values.tarball);
+    if (!tarball) {
+        const { stdout } = await run(
+            "npm",
+            [
+                "pack",
+                "--json",
+                "--ignore-scripts",
+                "--pack-destination",
+                scratch,
+            ],
+            { cwd: packageDir, capture: true },
+        );
+        const packed = JSON.parse(stdout);
+        const [artifact] = Array.isArray(packed)
+            ? packed
+            : Object.values(packed);
+        tarball = join(scratch, artifact.filename);
+    }
+    await run("tar", ["-xzf", tarball], { cwd: scratch });
     const installed = join(scratch, "package");
     await run("bun", ["install", "--production", "--ignore-scripts"], {
         cwd: installed,
     });
-    if (!values.registry)
+    if (!values.registry && !values.tarball)
         await useWorkspaceConfigs(join(installed, "templates"), scratch);
 
     for (const { template, features } of scenarios) {

@@ -6,7 +6,7 @@
 // ::: :/scripts/release-approval.mjs
 //
 
-import { setTimeout as delay } from "node:timers/promises";
+import { requireCI, requireReleaseArtifacts } from "./release-ci.mjs";
 import { releaseManifest } from "./release-proposal.mjs";
 
 export const branch = "main";
@@ -48,48 +48,6 @@ async function requireSameReleaseFiles(api, approved, merged) {
         );
 }
 
-async function requireCI(api, { event, sha, ref, jobs }) {
-    const deadline = Date.now() + 4 * 60 * 1000;
-    const query = new URLSearchParams({
-        event,
-        head_sha: sha,
-        branch: ref,
-        per_page: "10",
-    });
-    while (true) {
-        const {
-            workflow_runs: [ci],
-        } = await api(`actions/workflows/ci.yaml/runs?${query}`);
-        if (ci?.status === "completed") {
-            if (ci.head_sha !== sha || ci.conclusion !== "success")
-                throw new Error(
-                    `CI did not pass for ${sha}. See ${ci.html_url}`,
-                );
-            const { jobs: results } = await api(
-                `actions/runs/${ci.id}/jobs?per_page=100`,
-            );
-            if (
-                !jobs.every((name) =>
-                    results.some(
-                        (job) =>
-                            job.name === name && job.conclusion === "success",
-                    ),
-                )
-            )
-                throw new Error(
-                    `CI for ${sha} is missing required checks. See ${ci.html_url}`,
-                );
-            console.log(`CI approved ${sha} at ${ci.html_url}`);
-            return;
-        }
-        if (Date.now() >= deadline)
-            throw new Error(
-                `Timed out waiting for CI on ${sha}. Run Release Please again after CI passes.`,
-            );
-        await delay(10000);
-    }
-}
-
 export async function requireReleaseApproval(api, repository, candidates) {
     const merges = new Map(
         candidates.map(({ sha, pullRequest }) => [pullRequest.number, sha]),
@@ -113,14 +71,10 @@ export async function requireReleaseApproval(api, repository, candidates) {
                 event: "pull_request",
                 sha: pr.head.sha,
                 ref: releaseBranch,
+                repository,
                 jobs: ["release-preflight", "check / check"],
             }),
-            requireCI(api, {
-                event: "push",
-                sha,
-                ref: branch,
-                jobs: ["check / check"],
-            }),
+            requireReleaseArtifacts(api, repository, sha),
         ]);
     }
 }

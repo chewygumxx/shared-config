@@ -23,30 +23,19 @@ concurrency:
     cancel-in-progress: false
 
 jobs:
-    check:
-        uses: chewygumxx/.github/.github/workflows/lint.yaml@v1
-        with:
-            ref: ${{ github.sha }}
-
-    templates:
-        if: startsWith(github.event.release.tag_name, 'create-repo@')
-        uses: ./.github/workflows/create-repo.yaml
-        with:
-            ref: ${{ github.sha }}
-            registry: true
-
     publish:
-        needs: [check, templates]
-        if: ${{ !cancelled() && needs.check.result == 'success' && (needs.templates.result == 'success' || needs.templates.result == 'skipped') }}
         runs-on: ubuntu-latest
+        timeout-minutes: 10
 
         permissions:
+            actions: read
             contents: read
             id-token: write
 
         outputs:
             name: ${{ steps.package.outputs.name }}
             version: ${{ steps.package.outputs.version }}
+            integrity: ${{ steps.package.outputs.integrity }}
 
         steps:
             - name: Checkout Release Commit
@@ -62,47 +51,40 @@ jobs:
                   registry-url: https://registry.npmjs.org
                   package-manager-cache: false
 
-            - name: Resolve Public Workspace
+            - name: Find Verified Release Bundle
+              id: bundle
+              env:
+                  GH_TOKEN: ${{ github.token }}
+              run: |
+                  source=$(node scripts/release-ci.mjs "$GITHUB_SHA")
+                  jq -er 'select((.runId | type) == "number" and (.artifactId | type) == "number") |
+                      "run=\(.runId)", "artifact=\(.artifactId)"' <<< "$source" >> "$GITHUB_OUTPUT"
+
+            - name: Download Verified Release Bundle
+              uses: actions/download-artifact@v8
+              with:
+                  github-token: ${{ github.token }}
+                  repository: ${{ github.repository }}
+                  run-id: ${{ steps.bundle.outputs.run }}
+                  artifact-ids: ${{ steps.bundle.outputs.artifact }}
+                  path: ${{ runner.temp }}/release
+
+            - name: Identify and Verify the Release Tarball
               id: package
-              shell: bash
               env:
                   TAG: ${{ github.event.release.tag_name }}
               run: |
-                  number='(0|[1-9][0-9]*)'
-                  identifier="(${number}|[0-9]*[a-zA-Z-][a-zA-Z0-9-]*)"
-                  semver="${number}\.${number}\.${number}(-${identifier}(\.${identifier})*)?(\+[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*)?"
-                  if [[ ! $TAG =~ ^[a-z0-9]+(-[a-z0-9]+)*@${semver}$ ]]; then
-                      echo "::error::Expected a <package>@<version> release tag"
-                      exit 1
-                  fi
-
-                  name="${TAG%@*}"
-                  version="${TAG##*@}"
-                  dir="packages/${name}"
-                  manifest="${dir}/package.json"
-                  if [[ ! -f $manifest ]]; then
-                      echo "::error::No workspace package at $dir"
-                      exit 1
-                  fi
-                  if ! jq -e --arg name "@chewygumxx/$name" --arg version "$version" \
-                      '.name == $name and .version == $version' "$manifest" >/dev/null; then
-                      echo "::error::Workspace name or version does not match $TAG"
-                      exit 1
-                  fi
-                  if ! jq -e '(.private == null or .private == false) and .publishConfig.access == "public"' \
-                      "$manifest" >/dev/null; then
-                      echo "::error::Workspace $dir must be public"
-                      exit 1
-                  fi
-                  printf 'dir=%s\nname=%s\nversion=%s\n' "$dir" "@chewygumxx/$name" "$version" >> "$GITHUB_OUTPUT"
+                  package=$(node scripts/release-artifacts.mjs select "$RUNNER_TEMP/release" "$GITHUB_SHA" "$TAG")
+                  jq -er '"name=\(.name)", "version=\(.version)", "integrity=\(.integrity)", "tarball=\(.tarball)"' \
+                      <<< "$package" >> "$GITHUB_OUTPUT"
 
             - name: Publish with npm Trusted Publishing
               env:
-                  DIR: ${{ steps.package.outputs.dir }}
+                  TARBALL: ${{ steps.package.outputs.tarball }}
                   PACKAGE: ${{ steps.package.outputs.name }}@${{ steps.package.outputs.version }}
               run: |
-                  npm publish --workspace "$DIR" --ignore-scripts --provenance
-                  printf 'npm accepted %s for publishing.\n' "$PACKAGE" >> "$GITHUB_STEP_SUMMARY"
+                  npm publish "$TARBALL" --ignore-scripts --provenance
+                  printf 'npm accepted %s from the verified CI bundle.\n' "$PACKAGE" >> "$GITHUB_STEP_SUMMARY"
 
     registry:
         needs: publish
@@ -126,9 +108,10 @@ jobs:
               env:
                   NAME: ${{ needs.publish.outputs.name }}
                   VERSION: ${{ needs.publish.outputs.version }}
+                  INTEGRITY: ${{ needs.publish.outputs.integrity }}
               run: |
-                  if node scripts/npm-registry.mjs "$NAME" "$VERSION"; then
-                      printf '%s@%s is downloadable from npm.\n' "$NAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
+                  if node scripts/npm-registry.mjs "$NAME" "$VERSION" "$INTEGRITY"; then
+                      printf '%s@%s is downloadable from npm and matches the CI tarball.\n' "$NAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
                   else
                       printf 'npm accepted %s@%s. Re-run failed jobs to retry registry verification.\n' "$NAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
                       exit 1

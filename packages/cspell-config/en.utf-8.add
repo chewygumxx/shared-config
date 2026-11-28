@@ -17,6 +17,7 @@ bufferline
 bunfig
 bunx
 cgxx
+chdir
 chewygumxx
 chezmoi
 chezmoiignore
@@ -91,6 +92,7 @@ toplevel
 unfunction
 unparseable
 unsets
+vendir
 vimdoc
 vitest
 winbar

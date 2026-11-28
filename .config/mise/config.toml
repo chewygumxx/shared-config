@@ -30,7 +30,7 @@ tombi                = "1.11.3"
 yamllint             = { version = "1.38.0", depends = [ "uv" ] }
 
 # Utility
-hk = "2.14.0"
+hk     = "2.14.0"
 vendir = "0.47.0"
 
 [env]

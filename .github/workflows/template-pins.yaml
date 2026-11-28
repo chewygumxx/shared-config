@@ -1,0 +1,167 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.github/workflows/template-pins.yaml
+#
+#
+
+name: Refresh Template Pins
+
+on:
+    workflow_run:
+        workflows: [Publish]
+        types: [completed]
+    workflow_dispatch: {}
+
+permissions:
+    contents: read
+
+concurrency:
+    group: template-pins-main
+    cancel-in-progress: false
+
+jobs:
+    refresh:
+        if: >-
+            github.ref == 'refs/heads/main' &&
+            (github.event_name == 'workflow_dispatch' ||
+                (github.event.workflow_run.conclusion == 'success' &&
+                    github.event.workflow_run.event == 'release' &&
+                    github.event.workflow_run.head_repository.full_name == github.repository &&
+                    !startsWith(github.event.workflow_run.head_branch, 'create-repo@')))
+        runs-on: ubuntu-latest
+        timeout-minutes: 30
+        outputs:
+            base: ${{ steps.pins.outputs.base }}
+            artifact: ${{ steps.patch.outputs.artifact-id }}
+
+        steps:
+            - name: Checkout Main
+              uses: actions/checkout@v7
+              with:
+                  ref: main
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+
+            - name: Install Workspace Dependencies
+              run: bun ci
+
+            - name: Update Released Pins
+              id: pins
+              run: |
+                  bun scripts/update-template-pins.mjs
+                  echo "base=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+                  if git diff --quiet -- packages/create-repo/templates; then
+                      echo "changed=false" >> "$GITHUB_OUTPUT"
+                  else
+                      echo "changed=true" >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Verify Packed Templates Against npm
+              if: steps.pins.outputs.changed == 'true'
+              env:
+                  MISE_GITHUB_TOKEN: ${{ github.token }}
+              run: mise run templates:verify --registry
+
+            - name: Save Verified Pins
+              if: steps.pins.outputs.changed == 'true'
+              run: |
+                  git diff --binary --no-textconv --no-ext-diff -- \
+                      ':(glob)packages/create-repo/templates/*/package.json' \
+                      ':(glob)packages/create-repo/templates/*/bun.lock' > "$RUNNER_TEMP/template-pins.patch"
+
+            - name: Upload Verified Pins
+              if: steps.pins.outputs.changed == 'true'
+              id: patch
+              uses: actions/upload-artifact@v7
+              with:
+                  name: template-pins-${{ github.run_attempt }}
+                  path: ${{ runner.temp }}/template-pins.patch
+                  if-no-files-found: error
+                  retention-days: 7
+
+    propose:
+        needs: refresh
+        if: needs.refresh.outputs.artifact != ''
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Verified Base
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ needs.refresh.outputs.base }}
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Download Verified Pins
+              uses: actions/download-artifact@v8
+              with:
+                  artifact-ids: ${{ needs.refresh.outputs.artifact }}
+                  path: ${{ runner.temp }}/template-pins
+
+            - name: Stage Verified Pins
+              run: |
+                  git apply --index \
+                      --include='packages/create-repo/templates/*/package.json' \
+                      --include='packages/create-repo/templates/*/bun.lock' \
+                      "$RUNNER_TEMP/template-pins/template-pins.patch"
+                  if git diff --cached --quiet; then
+                      echo "No template pins in the verified patch" >&2
+                      exit 1
+                  fi
+
+            - name: Mint App Token
+              id: app
+              uses: actions/create-github-app-token@v3
+              with:
+                  client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+                  private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+
+            - name: Open or Update Pull Request
+              shell: bash
+              env:
+                  GH_TOKEN: ${{ steps.app.outputs.token }}
+                  SLUG: ${{ steps.app.outputs.app-slug }}
+                  REPO: ${{ github.repository }}
+              run: |
+                  branch=automation/template-pins
+                  ref="refs/heads/$branch"
+                  pr=$(gh pr list --repo "$REPO" --base main --head "$branch" --json url --jq '.[0].url // empty')
+                  old=$(git ls-remote --heads origin "$ref" | cut -f1)
+                  if [[ -n $old ]]; then
+                      git fetch --no-tags origin "$ref"
+                      old=$(git rev-parse FETCH_HEAD)
+                  fi
+                  if [[ -n $old && -n $pr ]] && git diff --quiet "$old" -- packages/create-repo/templates; then
+                      printf 'Template pins already proposed in %s\n' "$pr" >> "$GITHUB_STEP_SUMMARY"
+                      exit 0
+                  fi
+
+                  id=$(gh api "/users/${SLUG}[bot]" --jq .id)
+                  git config user.name "${SLUG}[bot]"
+                  git config user.email "${id}+${SLUG}[bot]@users.noreply.github.com"
+                  # Use the verified tree from main and retain the existing PR history.
+                  parents=(-p HEAD)
+                  if [[ -n $old ]] && ! git merge-base --is-ancestor "$old" HEAD; then
+                      parents+=(-p "$old")
+                  fi
+                  commit=$(git commit-tree "$(git write-tree)" "${parents[@]}" \
+                      -m "fix(create-repo): Refresh the bundled config pins")
+                  git -c credential.helper= -c 'credential.helper=!gh auth git-credential' \
+                      push origin "$commit:$ref"
+
+                  if [[ -z $pr ]]; then
+                      pr=$(gh pr create --repo "$REPO" --base main --head "$branch" \
+                          --title "fix(create-repo): Refresh the bundled config pins" --body-file - <<'EOF'
+                  Update the bundled manifests and lockfiles to the released shared configurations.
+                  The packed templates were installed and checked against npm before opening this pull request.
+                  EOF
+                  )
+                  fi
+                  printf 'Template pin pull request %s\n' "$pr" >> "$GITHUB_STEP_SUMMARY"

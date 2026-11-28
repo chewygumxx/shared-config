@@ -70,3 +70,8 @@ flag "--main" help="Inspect remote main even when a release PR is open"
 flag "--check" help="Fail if a proposed version is inconsistent or already used"
 '''
 run         = "bun scripts/release-status.mjs {% if usage.json %}--json{% endif %} {% if usage.main %}--main{% endif %} {% if usage.check %}--check{% endif %}"
+
+["templates:update-pins"]
+description = "Refresh bundled manifests and lockfiles from released packages"
+usage       = 'flag "--dry-run" help="Show planned shared package updates"'
+run         = "bun scripts/update-template-pins.mjs {% if usage.dry_run %}--dry-run{% endif %}"

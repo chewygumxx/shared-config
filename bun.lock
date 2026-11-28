@@ -57,7 +57,7 @@
     },
     "packages/create-repo": {
       "name": "@chewygumxx/create-repo",
-      "version": "4.2.1",
+      "version": "4.2.2",
       "bin": {
         "create-repo": "bin/create-repo.js",
       },

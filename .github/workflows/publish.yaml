@@ -44,6 +44,10 @@ jobs:
             contents: read
             id-token: write
 
+        outputs:
+            name: ${{ steps.package.outputs.name }}
+            version: ${{ steps.package.outputs.version }}
+
         steps:
             - name: Checkout Release Commit
               uses: actions/checkout@v7
@@ -90,9 +94,42 @@ jobs:
                       echo "::error::Workspace $dir must be public"
                       exit 1
                   fi
-                  echo "dir=$dir" >> "$GITHUB_OUTPUT"
+                  printf 'dir=%s\nname=%s\nversion=%s\n' "$dir" "@chewygumxx/$name" "$version" >> "$GITHUB_OUTPUT"
 
             - name: Publish with npm Trusted Publishing
               env:
                   DIR: ${{ steps.package.outputs.dir }}
-              run: npm publish --workspace "$DIR" --ignore-scripts --provenance
+                  PACKAGE: ${{ steps.package.outputs.name }}@${{ steps.package.outputs.version }}
+              run: |
+                  npm publish --workspace "$DIR" --ignore-scripts --provenance
+                  printf 'npm accepted %s for publishing.\n' "$PACKAGE" >> "$GITHUB_STEP_SUMMARY"
+
+    registry:
+        needs: publish
+        runs-on: ubuntu-latest
+        timeout-minutes: 18
+
+        steps:
+            - name: Checkout Release Commit
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.sha }}
+                  persist-credentials: false
+
+            - name: Set Up Node
+              uses: actions/setup-node@v7
+              with:
+                  node-version: "24"
+                  package-manager-cache: false
+
+            - name: Verify npm Tarball
+              env:
+                  NAME: ${{ needs.publish.outputs.name }}
+                  VERSION: ${{ needs.publish.outputs.version }}
+              run: |
+                  if node scripts/npm-registry.mjs "$NAME" "$VERSION"; then
+                      printf '%s@%s is downloadable from npm.\n' "$NAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
+                  else
+                      printf 'npm accepted %s@%s. Re-run failed jobs to retry registry verification.\n' "$NAME" "$VERSION" >> "$GITHUB_STEP_SUMMARY"
+                      exit 1
+                  fi

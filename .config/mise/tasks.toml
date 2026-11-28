@@ -61,3 +61,12 @@ flag "--registry" help="Use the registry pins and lockfiles as bundled"
 flag "--template <template>" help="Verify one template and all its features"
 '''
 run         = "bun packages/create-repo/scripts/verify-templates.js {% if usage.registry %}--registry{% endif %} {% if usage.template %}--template {{ usage.template | quote }}{% endif %}"
+
+["release:status"]
+description = "Report proposed releases or the npm status of released packages"
+usage       = '''
+flag "--json" help="Write machine-readable output"
+flag "--main" help="Inspect remote main even when a release PR is open"
+flag "--check" help="Fail if a proposed version is inconsistent or already used"
+'''
+run         = "bun scripts/release-status.mjs {% if usage.json %}--json{% endif %} {% if usage.main %}--main{% endif %} {% if usage.check %}--check{% endif %}"

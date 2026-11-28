@@ -47,3 +47,28 @@ jobs:
         uses: chewygumxx/.github/.github/workflows/lint.yaml@v1
         with:
             ref: ${{ needs.standard.outputs.sha }}
+
+    release-preflight:
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.head_ref == 'release-please--branches--main'
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout Proposed Release
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+              env:
+                  MISE_NO_HOOKS: "1"
+
+            - name: Check Proposed Versions
+              env:
+                  BASE_SHA: ${{ github.event.pull_request.base.sha }}
+              run: bun scripts/release-status.mjs --check --base "$BASE_SHA"

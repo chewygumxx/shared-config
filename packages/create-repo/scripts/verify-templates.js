@@ -128,6 +128,8 @@ try {
 
             const clone = join(scenario, `${name}-fresh`);
             await run("git", ["clone", "--quiet", dir, clone], { env });
+            // Free the first install before installing into the fresh clone.
+            await rm(dir, { recursive: true, force: true });
             const local = {
                 cwd: clone,
                 env: { ...env, GITHUB_REPOSITORY: `example/${name}` },

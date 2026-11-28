@@ -15,10 +15,11 @@ const registry = "https://registry.npmjs.org";
  * A version can be listed before its tarball is available to install.
  * @param {string} name
  * @param {string} version
+ * @param {typeof fetch} [request]
  * @returns {Promise<"missing" | "processing" | "downloadable">}
  */
-export async function registryState(name, version) {
-    const metadata = await fetch(
+export async function registryState(name, version, request = fetch) {
+    const metadata = await request(
         `${registry}/${encodeURIComponent(name)}/${encodeURIComponent(version)}`,
         { cache: "no-cache", signal: AbortSignal.timeout(10000) },
     );
@@ -45,7 +46,7 @@ export async function registryState(name, version) {
             `npm tarball for ${name}@${version} is outside the registry`,
         );
     }
-    const tarball = await fetch(url, {
+    const tarball = await request(url, {
         redirect: "error",
         signal: AbortSignal.timeout(10000),
     });
@@ -68,16 +69,22 @@ export async function registryState(name, version) {
     return "downloadable";
 }
 
-/** @param {{ name: string, version: string }[]} packages */
-export async function waitForRegistry(packages) {
+/**
+ * @param {{ name: string, version: string }[]} packages
+ * @param {{ read?: typeof registryState, interval?: number, timeout?: number }} [options]
+ */
+export async function waitForRegistry(
+    packages,
+    { read = registryState, interval = 20000, timeout = 15 * 60 * 1000 } = {},
+) {
     const pending = new Map(
         packages.map(({ name, version }) => [name, version]),
     );
-    const deadline = Date.now() + 15 * 60 * 1000;
+    const deadline = Date.now() + timeout;
     while (pending.size) {
         const results = await Promise.allSettled(
             [...pending].map(async ([name, version]) => {
-                const state = await registryState(name, version);
+                const state = await read(name, version);
                 console.log(`${name}@${version} | ${state}`);
                 if (state === "downloadable") pending.delete(name);
             }),
@@ -95,7 +102,7 @@ export async function waitForRegistry(packages) {
                 `npm tarball verification timed out for ${versions.join(", ")}`,
             );
         }
-        await delay(20000);
+        await delay(interval);
     }
 }
 

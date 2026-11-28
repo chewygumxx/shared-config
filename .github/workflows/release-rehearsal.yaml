@@ -1,0 +1,96 @@
+# vim:set expandtab shiftwidth=4 filetype=yaml foldlevel=3:
+# SPDX-License-Identifier: GPL-3.0-only
+
+#
+#
+# ~chewygumxx/shared-config.git
+# ::: :/.github/workflows/release-rehearsal.yaml
+#
+#
+
+name: Release Rehearsal
+
+on:
+    push:
+        branches: [main]
+        paths:
+            - ".github/workflows/**"
+            - ".config/release-please*.json"
+            - "scripts/*release*.mjs"
+            - "scripts/check-workspace-versions.mjs"
+            - "scripts/npm-registry.mjs"
+            - "bun.lock"
+            - "package.json"
+    pull_request:
+        paths:
+            - ".github/workflows/**"
+            - ".config/release-please*.json"
+            - "scripts/*release*.mjs"
+            - "scripts/check-workspace-versions.mjs"
+            - "scripts/npm-registry.mjs"
+            - "bun.lock"
+            - "package.json"
+    workflow_dispatch: {}
+
+permissions:
+    contents: read
+
+jobs:
+    prepare:
+        runs-on: ubuntu-latest
+        outputs:
+            artifact: ${{ steps.pack.outputs.artifact-id }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.sha }}
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+              env:
+                  MISE_NO_HOOKS: "1"
+
+            - name: Install Release Tooling
+              run: bun install --frozen-lockfile --ignore-scripts
+
+            - name: Prepare and Pack Fixture Versions
+              run: bun scripts/rehearse-release.mjs prepare "$RUNNER_TEMP/rehearsal"
+
+            - name: Upload Release Artifacts
+              id: pack
+              uses: actions/upload-artifact@v7
+              with:
+                  name: release-rehearsal-${{ github.run_attempt }}
+                  path: ${{ runner.temp }}/rehearsal
+                  if-no-files-found: error
+                  retention-days: 7
+
+    verify:
+        needs: prepare
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  ref: ${{ github.sha }}
+                  persist-credentials: false
+
+            - name: Set Up mise
+              uses: jdx/mise-action@v4
+              env:
+                  MISE_NO_HOOKS: "1"
+
+            - name: Download Release Artifacts
+              uses: actions/download-artifact@v8
+              with:
+                  artifact-ids: ${{ needs.prepare.outputs.artifact }}
+                  path: ${{ runner.temp }}/rehearsal
+
+            - name: Verify the Proposal and Registry Retry
+              run: |
+                  git apply --index "$RUNNER_TEMP/rehearsal/release.patch"
+                  bun scripts/rehearse-release.mjs verify "$RUNNER_TEMP/rehearsal"

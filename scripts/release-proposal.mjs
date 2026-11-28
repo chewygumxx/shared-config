@@ -13,7 +13,7 @@ import { run } from "../packages/create-repo/lib/run.js";
 
 export const releaseManifest = ".config/release-please-manifest.json";
 
-async function withDetachedCheckout(work) {
+export async function withDetachedCheckout(work) {
     const scratch = await mkdtemp(join(tmpdir(), "release-proposal-"));
     const cwd = join(scratch, "checkout");
     let added = false;
@@ -34,7 +34,7 @@ async function withDetachedCheckout(work) {
     }
 }
 
-async function applyReleaseChanges(cwd, changes) {
+export async function applyReleaseChanges(cwd, changes) {
     for (const [path, { content, originalContent }] of changes) {
         const file = Bun.file(join(cwd, path));
         if ((await file.text()) !== originalContent)

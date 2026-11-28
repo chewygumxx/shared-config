@@ -12,7 +12,7 @@
 .env*
 *.local.*
 /.templates/
-/vendor/**
+/vendor/
 
 # Node
 node_modules/

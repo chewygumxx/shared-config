@@ -44,6 +44,9 @@ anything; the work goes to the tool made for it, `lint` and `format` to
 not ignore. Use `-S <step>` with `lint` or `format` to run one hk step. Every
 selected step runs even if another fails.
 
+hk shows warnings and failure diagnostics by default. Pass `--verbose` to
+`mise run lint` or `mise run format` to see hk debug output.
+
 A change to a path in `$CGXX_WIDEN_ON`, by default `bun.lock`,
 `.config/hk.pkl` and `.config/mise`, selects every file, as it can change the
 result for any of them. Under `--staged`, only a staged change widens, and

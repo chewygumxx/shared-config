@@ -20,7 +20,7 @@ $usage_staged for staged files, $usage_all for every file git does not ignore,
 and $usage_step for the hk steps to run. A change to a path in $CGXX_WIDEN_ON
 selects every file, or every file in the index with --staged. The default paths
 are bun.lock, .config/hk.pkl and .config/mise. Every selected step runs even if
-another step fails.
+another step fails. Set $usage_verbose to true to show hk debug output.
 EOF
     exit 2
 }
@@ -77,6 +77,12 @@ fi
 for step in $steps; do
     set -- "$@" --step "$step"
 done
+
+if [ "${usage_verbose:-false}" = true ]; then
+    set -- "$@" --verbose
+else
+    set -- "$@" --quiet
+fi
 
 set -- "$@" --no-fail-fast
 [ "$hook" = check ] || set -- "$@" --no-stage

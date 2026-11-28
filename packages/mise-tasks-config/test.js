@@ -105,37 +105,43 @@ async function withLockChange(stage, body) {
 }
 
 test("no flag selects the changed files", () => {
-    assert.deepEqual(run("check"), ["check --no-fail-fast"]);
+    assert.deepEqual(run("check"), ["check --quiet --no-fail-fast"]);
 });
 
 test("--staged selects the staged files", () => {
     assert.deepEqual(run("check", { usage_staged: "true" }), [
-        "check --staged --no-fail-fast",
+        "check --staged --quiet --no-fail-fast",
     ]);
 });
 
 test("--all selects every file", () => {
     assert.deepEqual(run("check", { usage_all: "true" }), [
-        "check --all --no-fail-fast",
+        "check --all --quiet --no-fail-fast",
     ]);
 });
 
 test("fix never stages, and steps are passed on", () => {
     assert.deepEqual(run("fix", { usage_step: "biome tombi" }), [
-        "fix --step biome --step tombi --no-fail-fast --no-stage",
+        "fix --step biome --step tombi --quiet --no-fail-fast --no-stage",
+    ]);
+});
+
+test("--verbose shows hk debug output", () => {
+    assert.deepEqual(run("check", { usage_verbose: "true" }), [
+        "check --verbose --no-fail-fast",
     ]);
 });
 
 test("a changed lockfile widens to every file", async () => {
     await withLockChange(false, () => {
-        assert.deepEqual(run("check"), ["check --all --no-fail-fast"]);
+        assert.deepEqual(run("check"), ["check --all --quiet --no-fail-fast"]);
     });
 });
 
 test("a staged lockfile widens --staged to the index alone", async () => {
     await withLockChange(true, () => {
         assert.deepEqual(run("check", { usage_staged: "true" }), [
-            "check --files0-from - --no-fail-fast",
+            "check --files0-from - --quiet --no-fail-fast",
             "a.md",
             "bun.lock",
         ]);
@@ -145,7 +151,7 @@ test("a staged lockfile widens --staged to the index alone", async () => {
 test("an unstaged lockfile leaves --staged narrow", async () => {
     await withLockChange(false, () => {
         assert.deepEqual(run("check", { usage_staged: "true" }), [
-            "check --staged --no-fail-fast",
+            "check --staged --quiet --no-fail-fast",
         ]);
     });
 });

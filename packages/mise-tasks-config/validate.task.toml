@@ -9,6 +9,11 @@
 #
 #
 
+[env]
+# hk's Git hooks run through mise without going through cgxx-hk.
+CLX_NO_PROGRESS = '{{ env.CLX_NO_PROGRESS | default(value="1") }}'
+CLX_TEXT_MODE   = '{{ env.CLX_TEXT_MODE | default(value="1") }}'
+HK_LOG          = '{{ env.HK_LOG | default(value="warn") }}'
 
 [vars]
 cgxx_usage_file_git_status = """
@@ -25,6 +30,9 @@ cgxx_usage_hk_step         = """
 flag "-S --step <step>" \
     help="Run only the named hk step" \
     var=#true
+flag "-v --verbose" \
+    help="Show hk debug output" \
+    bool_value=#true
 """
 
 [task_templates."cgxx:lint"]
